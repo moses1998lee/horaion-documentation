@@ -3,36 +3,38 @@
 > **Genesis Workforce Management Platform - System Architecture**
 
 ## Table of Contents
-- [Overview](#overview)
-- [System Context](#system-context)
-- [Application Architecture](#application-architecture)
-- [Security Architecture](#security-architecture)
-- [Data Flow Patterns](#data-flow-patterns)
-- [Async Processing](#async-processing)
-- [Architectural Decisions](#architectural-decisions)
 
----
+* [Overview](02_SYSTEM_ARCHITECTURE.md#overview)
+* [System Context](02_SYSTEM_ARCHITECTURE.md#system-context)
+* [Application Architecture](02_SYSTEM_ARCHITECTURE.md#application-architecture)
+* [Security Architecture](02_SYSTEM_ARCHITECTURE.md#security-architecture)
+* [Data Flow Patterns](02_SYSTEM_ARCHITECTURE.md#data-flow-patterns)
+* [Async Processing](02_SYSTEM_ARCHITECTURE.md#async-processing)
+* [Architectural Decisions](02_SYSTEM_ARCHITECTURE.md#architectural-decisions)
+
+***
 
 ## Overview
 
 Genesis is built on **Spring Boot 3.4.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
-- **Multi-tenancy**: Supporting multiple companies with data isolation
-- **Scalability**: Async processing for long-running operations
-- **Security**: JWT-based authentication with AWS Cognito
-- **Extensibility**: Plugin-like module system for new features
+
+* **Multi-tenancy**: Supporting multiple companies with data isolation
+* **Scalability**: Async processing for long-running operations
+* **Security**: JWT-based authentication with AWS Cognito
+* **Extensibility**: Plugin-like module system for new features
 
 ### Core Design Principles
+
 1. **Domain-Driven Design**: Business logic organized by domain modules
 2. **API-First**: RESTful APIs with OpenAPI documentation
 3. **Security by Default**: All endpoints authenticated unless explicitly public
 4. **Observability**: Comprehensive logging with request tracing
 
----
+***
 
 ## System Context
 
 Genesis integrates with several external systems to provide complete workforce management capabilities.
-
 
 ```mermaid
 graph TB
@@ -136,18 +138,17 @@ graph TB
 
 > **Diagram Explanation**: This high-level overview shows the three main tiers of the Genesis ecosystem: **User Roles** (who interacts with the system), the core **Genesis API**, and **External Services** (AWS infrastructure and Schedule Engine) that provide essential capabilities.
 
-
 ### External Dependencies
 
-| System | Purpose | Protocol | Notes |
-|--------|---------|----------|-------|
-| **AWS Cognito** | User authentication, user pool management | AWS SDK | JWT token provider |
-| **Schedule Engine** | Optimization algorithm for shift scheduling | REST API (Feign) | Timeout: 45 minutes |
-| **AWS SES** | Transactional emails (welcome, notifications) | AWS SDK | Async via SQS |
-| **AWS SQS/SNS** | Event-driven messaging | AWS SDK | Decouples heavy operations |
-| **PostgreSQL** | Primary data store | JDBC | HikariCP connection pool |
+| System              | Purpose                                       | Protocol         | Notes                      |
+| ------------------- | --------------------------------------------- | ---------------- | -------------------------- |
+| **AWS Cognito**     | User authentication, user pool management     | AWS SDK          | JWT token provider         |
+| **Schedule Engine** | Optimization algorithm for shift scheduling   | REST API (Feign) | Timeout: 45 minutes        |
+| **AWS SES**         | Transactional emails (welcome, notifications) | AWS SDK          | Async via SQS              |
+| **AWS SQS/SNS**     | Event-driven messaging                        | AWS SDK          | Decouples heavy operations |
+| **PostgreSQL**      | Primary data store                            | JDBC             | HikariCP connection pool   |
 
----
+***
 
 ## Application Architecture
 
@@ -240,14 +241,14 @@ graph TB
 
 > **Diagram Explanation**: Unlike traditional layered architectures (Controller -> Service -> Repository), Vertical Slices group code by **feature**. This diagram illustrates how the 'Employee' and 'Schedule' modules are self-contained with their own full stack of components, promoting modularity and reducing cross-domain coupling.
 
-
 **Benefits of Vertical Slices:**
-- **Cohesion**: All code for a feature is in one place
-- **Independence**: Modules can evolve separately
-- **Testability**: Each module can be tested in isolation
-- **Ownership**: Clear boundaries for team ownership
 
----
+* **Cohesion**: All code for a feature is in one place
+* **Independence**: Modules can evolve separately
+* **Testability**: Each module can be tested in isolation
+* **Ownership**: Clear boundaries for team ownership
+
+***
 
 ## Security Architecture
 
@@ -297,32 +298,29 @@ sequenceDiagram
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration** (creating a Cognito user), to **Confirmation** (verifying email), to **Login** (exchanging credentials for JWTs), and finally making **Authenticated Requests** using the Bearer token.
 
 **Step-by-Step Breakdown:**
-1.  **Register**: User submits details; API creates a Cognito user (Unconfirmed) and a local Employee record.
-2.  **Confirm**: User enters the verification code sent to their email to activate their Cognito account.
-3.  **Login**: User authenticates with email/password and receives JWTs (Access, ID, Refresh).
-4.  **Access**: User includes the `Access Token` in the Authorization header to call protected API endpoints.
 
+1. **Register**: User submits details; API creates a Cognito user (Unconfirmed) and a local Employee record.
+2. **Confirm**: User enters the verification code sent to their email to activate their Cognito account.
+3. **Login**: User authenticates with email/password and receives JWTs (Access, ID, Refresh).
+4. **Access**: User includes the `Access Token` in the Authorization header to call protected API endpoints.
 
 ### Security Configuration
 
 The `SecurityConfiguration` class defines:
 
 1. **Public Endpoints** (no authentication required):
-   - `/actuator/health` - Health checks
-   - `/auth/**` - Registration, login, confirmation
-   - `/swagger-ui/**` - API documentation
-
+   * `/actuator/health` - Health checks
+   * `/auth/**` - Registration, login, confirmation
+   * `/swagger-ui/**` - API documentation
 2. **Protected Endpoints** (JWT required):
-   - All other endpoints require valid JWT in `Authorization: Bearer <token>` header
-
+   * All other endpoints require valid JWT in `Authorization: Bearer <token>` header
 3. **IP Whitelisting**:
-   - Engine callback endpoints (`/schedule/update-status`) validate source IP
-   - Configured via `ENGINE_ALLOWED_IPS` environment variable
-
+   * Engine callback endpoints (`/schedule/update-status`) validate source IP
+   * Configured via `ENGINE_ALLOWED_IPS` environment variable
 4. **JWT Validation**:
-   - Signature verification using Cognito's public keys (JWKS)
-   - Expiration check
-   - Audience (`aud`) and issuer (`iss`) validation
+   * Signature verification using Cognito's public keys (JWKS)
+   * Expiration check
+   * Audience (`aud`) and issuer (`iss`) validation
 
 ### Authorization Model
 
@@ -348,8 +346,7 @@ graph TD
 
 > **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed: validating the signature, extracting claims (User ID, Email, Groups), and populating the Spring Security Context to authorize execution in the Controller and Service layers.
 
-
----
+***
 
 ## Data Flow Patterns
 
@@ -392,12 +389,12 @@ sequenceDiagram
 > **Diagram Explanation**: A standard request lifecycle: The **Controller** validates DTOs, the **Service** applies business logic and uses **Mappers** to convert between DTOs and Entities, while **LogAspect** automatically handles auditing at the boundaries.
 
 **Step-by-Step Breakdown:**
-1.  **Request**: Client sends data (Payload) to the API Endpoint.
-2.  **Validation**: Controller validates the input (e.g., checking required fields).
-3.  **Processing**: Service layer executes business logic and converts DTOs to Entities.
-4.  **Persistence**: Repository saves the data to the database using Hibernate/JPA.
-5.  **Response**: The system converts the saved data back to a Response DTO and returns it.
 
+1. **Request**: Client sends data (Payload) to the API Endpoint.
+2. **Validation**: Controller validates the input (e.g., checking required fields).
+3. **Processing**: Service layer executes business logic and converts DTOs to Entities.
+4. **Persistence**: Repository saves the data to the database using Hibernate/JPA.
+5. **Response**: The system converts the saved data back to a Response DTO and returns it.
 
 ### Error Handling Flow
 
@@ -430,8 +427,7 @@ graph TD
 
 > **Diagram Explanation**: The centralized exception handling mechanism: All exceptions thrown in the application are caught by the **GlobalExceptionHandler**, which logs the error and converts it into a standardized JSON error response with the appropriate HTTP status code.
 
-
----
+***
 
 ## Async Processing
 
@@ -497,11 +493,11 @@ sequenceDiagram
 > **Diagram Explanation**: The asynchronous optimization process: A client initiates a request, which immediately returns 'Accepted'. In the background, the service aggregates data, calls the external **Schedule Engine** (with a long timeout), and updates the database upon completion or failure.
 
 **Step-by-Step Breakdown:**
-1.  **Initiate**: Client requests a schedule. API creates a "PENDING" record and immediately returns `202 Accepted`.
-2.  **Process**: A background thread gathers necessary data (Employees, Rules, Shifts).
-3.  **Optimize**: The system calls the external Schedule Engine (up to 45 min wait).
-4.  **Complete**: Engine returns the result. The system saves the schedule and notifies the user via Webhook.
 
+1. **Initiate**: Client requests a schedule. API creates a "PENDING" record and immediately returns `202 Accepted`.
+2. **Process**: A background thread gathers necessary data (Employees, Rules, Shifts).
+3. **Optimize**: The system calls the external Schedule Engine (up to 45 min wait).
+4. **Complete**: Engine returns the result. The system saves the schedule and notifies the user via Webhook.
 
 ### Timeout Configuration
 
@@ -525,7 +521,7 @@ feign:
         retryer: never     # No retries for idempotency
 ```
 
----
+***
 
 ## Architectural Decisions
 
@@ -538,13 +534,14 @@ feign:
 **Decision**: Organize code by business features (modules), with each module containing all necessary layers.
 
 **Consequences**:
-- ✅ Easier to locate all code for a feature
-- ✅ Modules can be developed independently
-- ✅ Clearer ownership boundaries
-- ❌ Some code duplication across modules
-- ❌ Requires discipline to avoid cross-module dependencies
 
----
+* ✅ Easier to locate all code for a feature
+* ✅ Modules can be developed independently
+* ✅ Clearer ownership boundaries
+* ❌ Some code duplication across modules
+* ❌ Requires discipline to avoid cross-module dependencies
+
+***
 
 ### ADR-002: AWS Cognito for Authentication
 
@@ -555,13 +552,14 @@ feign:
 **Decision**: Use AWS Cognito as the identity provider, with JWT tokens for API authentication.
 
 **Consequences**:
-- ✅ Managed service (no custom auth logic)
-- ✅ Built-in security features (MFA, password policies)
-- ✅ Scalable and reliable
-- ❌ AWS vendor lock-in
-- ❌ Additional cost for Cognito usage
 
----
+* ✅ Managed service (no custom auth logic)
+* ✅ Built-in security features (MFA, password policies)
+* ✅ Scalable and reliable
+* ❌ AWS vendor lock-in
+* ❌ Additional cost for Cognito usage
+
+***
 
 ### ADR-003: AOP for Cross-Cutting Logging
 
@@ -572,15 +570,16 @@ feign:
 **Decision**: Implement `LogAspect` using Spring AOP to automatically log method entry, exit, duration, and errors.
 
 **Consequences**:
-- ✅ Consistent logging format
-- ✅ No boilerplate in business code
-- ✅ Request tracing with MDC
-- ❌ Small performance overhead
-- ❌ Debugging can be harder (proxy wrapping)
+
+* ✅ Consistent logging format
+* ✅ No boilerplate in business code
+* ✅ Request tracing with MDC
+* ❌ Small performance overhead
+* ❌ Debugging can be harder (proxy wrapping)
 
 **Implementation**: See `com.resetrix.genesis.shared.aspects.LogAspect`
 
----
+***
 
 ### ADR-004: External Optimization Engine
 
@@ -591,13 +590,14 @@ feign:
 **Decision**: Delegate schedule generation to an external optimization engine via REST API.
 
 **Consequences**:
-- ✅ Separation of concerns (API vs. optimization)
-- ✅ Can scale optimization independently
-- ✅ Easier to swap optimization algorithms
-- ❌ Network latency and reliability concerns
-- ❌ Need to handle long-running operations (async)
 
----
+* ✅ Separation of concerns (API vs. optimization)
+* ✅ Can scale optimization independently
+* ✅ Easier to swap optimization algorithms
+* ❌ Network latency and reliability concerns
+* ❌ Need to handle long-running operations (async)
+
+***
 
 ### ADR-005: Flyway for Database Migrations
 
@@ -608,29 +608,26 @@ feign:
 **Decision**: Use Flyway for all schema migrations with `validate-on-migrate` enabled.
 
 **Consequences**:
-- ✅ Version control for database schema
-- ✅ Automatic migration on startup
-- ✅ Rollback support
-- ❌ Requires careful migration script authoring
-- ❌ Failed migrations can block startup
+
+* ✅ Version control for database schema
+* ✅ Automatic migration on startup
+* ✅ Rollback support
+* ❌ Requires careful migration script authoring
+* ❌ Failed migrations can block startup
 
 **Migration Files**: `src/main/resources/db/migrations/V*.sql`
 
----
+***
 
 ## Next Steps
 
 For implementation details, see:
-- [TECHNICAL.md](TECHNICAL.md) - Data models, API patterns, error handling
-- [MODULES.md](MODULES.md) - Individual module documentation
-- [OPERATIONS.md](OPERATIONS.md) - Deployment and monitoring
 
+* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models, API patterns, error handling
+* [MODULES.md](../compiled/technical_documentation/MODULES.md) - Individual module documentation
+* [OPERATIONS.md](../compiled/technical_documentation/OPERATIONS.md) - Deployment and monitoring
 
-
----
-
-
-
+***
 
 ## 2.5 Module Dependencies
 
@@ -683,6 +680,7 @@ graph TD
 ```
 
 > **Diagram Notes**:
-> - **Schedule Module**: Orchestrates the scheduling process, pulling data from Shifts, Forecasts, and Rules.
-> - **Core Hierarchy**: Enforces the strict `Company -> Branch -> Department` organizational structure.
-> - **Shared Layer**: Provides cross-cutting utilities (Exceptions, Constants, AOP Aspects) used by valid feature modules.
+>
+> * **Schedule Module**: Orchestrates the scheduling process, pulling data from Shifts, Forecasts, and Rules.
+> * **Core Hierarchy**: Enforces the strict `Company -> Branch -> Department` organizational structure.
+> * **Shared Layer**: Provides cross-cutting utilities (Exceptions, Constants, AOP Aspects) used by valid feature modules.
