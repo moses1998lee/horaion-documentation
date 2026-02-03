@@ -99,7 +99,7 @@ public void processAsyncCognitoCreation(String jobId) {
 | **Creating Cognito User** | `generalTaskExecutor` | ⚡ **Fast (1-2s)**. External API call, but relatively quick. |
 | **System Cleanup** | `generalTaskExecutor` | 🧹 **Background Maintenance**. Low priority. |
 
-> **Analogy**: Think of `scheduleTaskExecutor` as the "Heavy Cargo Lane" on the highway, and `generalTaskExecutor` as the "Fast Lane". If you put a slow truck in the fast lane, traffic jams ensued.
+> **Thread Pool Isolation**: We employ separate thread pools to prevent resource contention. The `scheduleTaskExecutor` is configured for low-throughput, long-duration tasks, ensuring that a backlog of schedule requests does not block high-priority, short-duration tasks (like email notifications) handled by the `generalTaskExecutor`.
 
 ---
 

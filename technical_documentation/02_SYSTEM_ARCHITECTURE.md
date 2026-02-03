@@ -152,14 +152,15 @@ graph TB
     *   **Data Layer**: Translates Java objects into SQL queries for the database.
 4.  **External Services**: Dependancies we don't host ourselves (AWS for auth, AI Engine for math).
 
-### 📖 Story Mode: The Journey of a Button Click
-*Scenario: A Manager clicks "Approve Schedule" on their iPad.*
-1.  **The Click**: The iPad sends a secure message (`POST /approve`) to the internet.
-2.  **The Traffic Cop (Gateway)**: The Load Balancer catches the message. It checks, "Is this server too busy?" and forwards it to the healthiest **Application Server**.
-3.  **The Bouncer (Web Layer)**: The App Server's first line of defense checks the ID card (JWT Token). "Are you really the Manager?"
-4.  **The Brain (Business Layer)**: The `ScheduleService` takes over. It checks the rules: "Is the schedule actually complete? Is it already approved?"
-5.  **The Memory (Data Layer)**: The Service tells the `Repository` to permanently save the new status in the **Database**.
-6.  **The Reply**: The server sends a "200 OK" back up the chain, and the Manager's iPad flashes a green checkmark.
+### Request Lifecycle Flow
+The following sequence describes the path of a standard API request (e.g., Schedule Approval):
+
+1.  **Client Initiation**: The client (Web or Mobile) transmits a secure HTTP request (`POST /approve`) to the public endpoint.
+2.  **Gateway Routing**: The **Load Balancer** intercepts the traffic, evaluates server health, and routes the request to an available Application Server instance.
+3.  **Security Verification**: Upon entry, the **Web Layer** validates the JWT Authorization header to ensure the user possesses the necessary permissions (Principal/Role).
+4.  **Business Processing**: The **Service Layer** executes the business logic, enforcing domain rules (e.g., "Cannot approve an incomplete schedule").
+5.  **Data Persistence**: Validated state changes are transacted to the **Database** via the Repository layer.
+6.  **Response**: The server returns a standard HTTP 200 OK response to the client, confirming the operation's success.
 
 ### External Dependencies
 

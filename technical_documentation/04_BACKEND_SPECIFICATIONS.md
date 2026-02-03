@@ -382,13 +382,14 @@ sequenceDiagram
 
 > **Diagram Explanation**: Detailing the critical async hand-off: The API quickly acknowledges the request, while a background thread handles the potentially long-running optimization task to avoid blocking the client.
 
-### 📖 Story Mode: The 45-Minute Wait
-*Scenario: Generating the roster for the upcoming holiday season.*
-1.  **The Request**: You hit "Generate". The API explicitly says, "I hear you, but this will take a while" (Status 202 Accepted).
-2.  **The Hand-off**: The Main Thread goes back to handling other users. A **Background Worker Thread** wakes up and picks up your request.
-3.  **The Gather**: The Worker visits every module—collecting Employee Availability, Shift Templates, and Union Rules.
-4.  **The Crunch (External)**: It bundles this data and ships it to the **Optimization Engine**. It then sits and waits... for up to 45 minutes. It does not timeout. It just holds the line open ("Long Polling").
-5.  **The Result**: Finally, the Engine replies with the perfect schedule. The Worker saves it to the database and marks the status as `COMPLETED`. Next time you refresh your page, it's there.
+### Asynchronous Optimization Workflow
+The schedule generation process involves a long-running computational task that is decoupled from the main HTTP thread to ensure system stability.
+
+1.  **Request Initiation**: The client initiates a generation request. The API immediately responds with `202 Accepted`, indicating the process has started.
+2.  **Thread Delegation**: The operation is offloaded to a dedicated **Background Worker Thread**, releasing the HTTP connection.
+3.  **Data Aggregation**: The worker aggregates necessary context (Employee Constraints, Shift Templates, Union Rules) from multiple modules.
+4.  **External Processing**: The aggregated dataset is transmitted to the external **Optimization Engine**. The worker maintains an open connection (Long Polling) for up to 45 minutes to await the result.
+5.  **Completion & Persistence**: Upon receiving the optimized schedule, the worker persists the solution to the database and updates the Schedule status to `COMPLETED`.
 
 **Logic Breakdown**:
 1.  **User Request**: "Please build the schedule."

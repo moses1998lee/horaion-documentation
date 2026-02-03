@@ -100,15 +100,12 @@ erDiagram
 3.  **Department ➔ Employee**: Employees are assigned to a single Department, which acts as their scheduling unit.
 4.  **Department ➔ Schedule**: Schedules are created *per department*, not per branch or company.
 
-### 📖 Story Mode: Tenant Isolation
-*Scenario: Two companies, "CoffeeCo" and "BurgerInc", use Genesis.*
-*   **The Wall**: Every table has a `company_id`. When CoffeeCo's manager logs in, the `LogAspect` attaches a "CoffeeCo Goggles" filter to every query.
-*   **The Hierarchy**:
-    *   CoffeeCo creates a "Downtown" Branch.
-    *   Inside that, they create a "Kitchen" Department.
-    *   They hire "John Doe". John is linked to Kitchen -> Downtown -> CoffeeCo.
-*   **The Safety**: If BurgerInc tries to look up "John Doe" using his ID, the database says "Who? Never heard of him," because the `company_id` doesn't match.
-*   **The Nukes**: If CoffeeCo cancels their subscription, we delete the Root Company. The Database cascades this delete down, wiping all their Branches, Departments, and Staff instantly. BurgerInc creates on untouched.
+### Multi-Tenancy Architecture
+The database employs a shared-schema multi-tenancy model to ensure strict data isolation between organizations.
+
+*   **Row-Level Isolation**: All major entities utilize a `company_id` discriminator column. A global Aspect-Oriented Programming (AOP) filter automatically injects the authenticated user's Company ID into every JPQL query, ensuring users can only access data belonging to their organization.
+*   **Hierarchical Structure**: The `Company` entity serves as the root. All child entities (`Branch`, `Department`, `Employee`) are linked via foreign keys.
+*   **Cascade Deletion**: A hard deletion of the creation Root (`Company`) triggers a database-level cascade, removing all associated child records (Sites, Personnel, Schedules) to maintain referential integrity.
 
 ### Core Entities
 
