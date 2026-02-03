@@ -237,22 +237,22 @@ docker-compose up -d
 
 ### Environment Variables Reference
 
-| Variable                    | Required | Default | Description                                    |
-| --------------------------- | -------- | ------- | ---------------------------------------------- |
-| `APPLICATION_PORT`          | No       | `8080`  | HTTP server port                               |
-| `POSTGRES_DB_HOST`          | Yes      | -       | PostgreSQL hostname                            |
-| `POSTGRES_DB_PORT`          | No       | `5432`  | PostgreSQL port                                |
-| `POSTGRES_DB_NAME`          | Yes      | -       | Database name                                  |
-| `POSTGRES_DB_USER`          | Yes      | -       | Database username                              |
-| `POSTGRES_DB_PASS`          | Yes      | -       | Database password                              |
-| `DB_POOL_SIZE`              | No       | `20`    | HikariCP max pool size                         |
-| `DB_POOL_MIN_IDLE`          | No       | `5`     | HikariCP min idle connections                  |
-| `AWS_REGION`                | Yes      | -       | AWS region for SDK                             |
-| `AWS_COGNITO_USER_POOL_ID`  | Yes      | -       | Cognito user pool ID                           |
-| `AWS_COGNITO_CLIENT_ID`     | Yes      | -       | Cognito app client ID                          |
-| `AWS_COGNITO_CLIENT_SECRET` | Yes      | -       | Cognito app client secret                      |
-| `SCHEDULE_ENGINE_HOST`      | Yes      | -       | External optimization engine URL               |
-| `ENGINE_ALLOWED_IPS`        | Yes      | -       | Comma-separated IP ranges for engine callbacks |
+| Variable | Required | Default | Description | Impact of Misconfiguration |
+|---|---|---|---|---|
+| `APPLICATION_PORT` | No | `8080` | HTTP server port | Port conflicts if set to an occupied port. |
+| `POSTGRES_DB_HOST` | Yes | - | PostgreSQL hostname | App crashes immediately on startup (Connection Refused). |
+| `POSTGRES_DB_PORT` | No | `5432` | PostgreSQL port | Connection failure if DB is non-standard. |
+| `POSTGRES_DB_NAME` | Yes | - | Database name | App cannot find tables ("relation does not exist"). |
+| `POSTGRES_DB_USER` | Yes | - | Database username | Auth failure (password authentication failed). |
+| `POSTGRES_DB_PASS` | Yes | - | Database password | Auth failure. |
+| `DB_POOL_SIZE` | No | `20` | Max active DB connections | **Too Low**: High latency under load (requests wait for connection).<br/>**Too High**: DB CPU spikes, diminishing returns. |
+| `DB_POOL_MIN_IDLE` | No | `5` | Min idle connections | **Too Low**: Latency spike on sudden traffic bursts (waiting for new connection creation). |
+| `AWS_REGION` | Yes | - | AWS region (e.g. `us-east-1`) | Cognito calls fail with 400 Bad Request if mismatches User Pool. |
+| `AWS_COGNITO_USER_POOL_ID` | Yes | - | User Pool ID | All logins fail. |
+| `AWS_COGNITO_CLIENT_ID` | Yes | - | App Client ID | Client cannot initiate auth flow. |
+| `AWS_COGNITO_CLIENT_SECRET` | Yes | - | App Client Secret | Token exchange fails (Unauthorized key). |
+| `SCHEDULE_ENGINE_HOST` | Yes | - | Optimization Engine URL | Schedule generation fails immediately. |
+| `ENGINE_ALLOWED_IPS` | Yes | - | Whitelisted IP ranges | **Security Risk**: If empty or `0.0.0.0/0`, anyone can fake an engine callback and inject corrupt schedules. |
 
 ### Application Profiles
 

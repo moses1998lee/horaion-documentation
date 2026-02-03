@@ -90,10 +90,16 @@ public void processAsyncCognitoCreation(String jobId) {
 
 ### When to Use Which Executor
 
-| Executor | Use For | Duration | Examples |
-|----------|---------|----------|----------|
-| scheduleTaskExecutor | Long-running operations | 15-30 minutes | Schedule generation |
-| generalTaskExecutor | Medium operations | 1-5 minutes | Cognito creation, webhooks |
+### When to Use Which Executor
+
+| Scenario | Recommended Executor | Why? |
+|---|---|---|
+| **Generating a Schedule** | `scheduleTaskExecutor` | 🕒 **Very Long Duration (15-45m)**. These tasks need a separate lane so they don't clog up the system for quick tasks. |
+| **Sending Emails** | `generalTaskExecutor` | ⚡ **Fast (1-5s)**. High volume, low latency. |
+| **Creating Cognito User** | `generalTaskExecutor` | ⚡ **Fast (1-2s)**. External API call, but relatively quick. |
+| **System Cleanup** | `generalTaskExecutor` | 🧹 **Background Maintenance**. Low priority. |
+
+> **Analogy**: Think of `scheduleTaskExecutor` as the "Heavy Cargo Lane" on the highway, and `generalTaskExecutor` as the "Fast Lane". If you put a slow truck in the fast lane, traffic jams ensued.
 
 ---
 
@@ -124,10 +130,12 @@ public Request.Options feignRequestOptions() {
 - **Read timeout**: 45 minutes (2,700,000 ms)
 - **Follow redirects**: Enabled
 
-**Why 45 minutes?**
-- Optimization engine takes 15-30 minutes
-- Provides buffer for edge cases
-- Prevents premature timeout failures
+**Why 45 minutes? (The "Long Polling" Strategy)**
+*   **The Problem**: The Optimization Engine solves complex NP-hard problems (Shift assignments with constraints). This isn't instant. It usually takes 15-30 minutes.
+*   **The Risk**: If we set a standard timeout (e.g., 30 seconds), the connection would drop while the engine is still thinking. We would lose the result.
+*   **The Fix**: We set a massive `2,700,000ms` (45 min) timeout to keep the line open until the engine replies.
+
+> **Warning**: Do not lower this value unless the Engine's performance characteristics change drastically. Premature timeouts will cause "Zombie Schedules" (engine finishes work, but API has already given up).
 
 ### Retry Configuration
 
@@ -187,6 +195,15 @@ maxLifetime: 1,800,000 ms     (30 minutes)
 autoCommit: false
 readOnly: false
 ```
+
+### Symptoms of Misconfiguration
+
+| Setting | Symptom if Wrong |
+|---|---|
+| **`maximumPoolSize` (Too Low)** | **Timeout Exceptions**: `SQLTransientConnectionException: Connection is not available, request timed out after 30000ms`. Requests pile up waiting for a free connection. |
+| **`maximumPoolSize` (Too High)** | **Database CPU Spike**: The database spends more time context-switching between connections than executing queries. Performance degrades. |
+| **`leakDetectionThreshold` (Enabled)** | **Memory Overhead**: If left on in Production, the detailed stack trace tracking consumes significant heap memory. |
+| **`maxLifetime` > Database Timeout** | **Dead Connections**: If Hikari keeps a connection longer than the Database allows (e.g. AWS RDS defaults to 1 hour), the app tries to use a closed connection and fails. *Rule: maxLifetime must be < DB-side timeout.* |
 
 ### PostgreSQL Optimizations
 
