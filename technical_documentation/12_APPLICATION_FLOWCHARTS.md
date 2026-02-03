@@ -70,6 +70,13 @@ flowchart TD
     DBDetail --> DetailResp(["Return Employee JSON"])
 ```
 
+> **Diagram Explanation**: A decision tree for fetching data.
+
+**Logic Flow**:
+1.  **User Request**: Do they want to see *everyone* (List) or *one person* (Detail)?
+2.  **List View**: The system gets a "Page" of 20 employees. Filters (like "Department=Sales") are applied here.
+3.  **Detail View**: The system checks "Does ID 5 exist?". If yes, return it. If no, show a 404 error.
+
 ---
 
 ### 3. Employee Update Flow
@@ -99,6 +106,14 @@ flowchart TD
     Save --> Return(["Return Updated JSON"])
 ```
 
+> **Diagram Explanation**: The safety checks performed when you edit a profile.
+
+**Validation Steps**:
+1.  **Form Check**: Did you send valid JSON? (No? -> 400 Error).
+2.  **Existence Check**: Does this person actually exist? (No? -> 404 Error).
+3.  **Uniqueness Check**: Did you change their Employee Code to one that someone else already has? (Yes? -> 409 Conflict).
+4.  **Success**: If all clear, save to DB and return the new data.
+
 ---
 
 ### 4. Employee Create Flow (Single)
@@ -124,6 +139,14 @@ flowchart TD
     Exists -->|Yes| Save[(Save to DB)]
     Save --> Return(["Return 201 Created"])
 ```
+
+> **Diagram Explanation**: Creating a new user manually (one-by-one).
+
+**Key Difference from Excel Upload**:
+*   This flow resolves relationships (Dept, Role) *immediately* and fails if they are wrong.
+*   **Step 1**: Check if Employee Code is unique.
+*   **Step 2**: Find the IDs for the named Department and Role.
+*   **Step 3**: Save. (Note: Cognito account creation is a separate step).
 
 ---
 

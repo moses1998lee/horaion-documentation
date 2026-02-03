@@ -88,7 +88,12 @@ graph TB
     style Emp fill:#e8f5e8
 ```
 
-> **Diagram Explanation**: A dependency graph showing the relationship between core modules. **Core Modules** (Auth, Company, etc.) form the foundation, **Employee Management** relies on them, and complex **Scheduling** modules consume data from all lower layers.
+> **Diagram Explanation**: A dependency graph showing the relationship between core modules.
+
+**Architecture Tiers**:
+1.  **Core Modules (Blue)**: The foundation. `Company`, `Branch`, and `Auth` set up the structure of the system.
+2.  **Employee Attributes (Green)**: Personnel details. `Employees` have `Roles` and `Leave`.
+3.  **Scheduling (Orange)**: The most complex layer. `Schedules` depend on *everything below them* (Employees, Shifts, Rules, Forecasts).
 
 
 | Module | Package | Primary Entity | Key Endpoints |
@@ -154,7 +159,12 @@ sequenceDiagram
     API-->>User: Access, ID, Refresh tokens
 ```
 
-> **Diagram Explanation**: Visualizes the interaction pattern for user management, highlighting the handshakes between the API and AWS Cognito for user creation, verification, and token issuance.
+> **Diagram Explanation**: The handshake between the User, our API, and AWS Cognito.
+
+**Interactive Steps**:
+1.  **Register**: User asks API to sign up. API forwards this to Cognito.
+2.  **Confirm**: Cognito sends a code to User's email. User enters this code to prove ownership.
+3.  **Login**: User sends password. API checks with Cognito. Cognito returns the keys (JWT Tokens) to access the system.
 
 
 **Special Considerations**:
@@ -292,7 +302,13 @@ sequenceDiagram
     API-->>Admin: 202 Accepted
 ```
 
-> **Diagram Explanation**: The bulk synchronization process: An admin triggers a sync, which iterates through employees missing Cognito accounts, creates them asynchronously, and updates the database, ensuring all staff have login access.
+> **Diagram Explanation**: The bulk synchronization process. Ensuring everyone in the database has a login.
+
+**Process Flow**:
+1.  **Trigger**: Admin clicks "Sync".
+2.  **Search**: System finds employees who have a record but no login account (`cognito_sub` is missing).
+3.  **Loop**: For each missing one, it creates a Cognito account in the background.
+4.  **Feedback**: It updates the database and fires a webhook to let us know it's done.
 
 
 ---
@@ -345,7 +361,14 @@ sequenceDiagram
     Service->>DB: Save schedule_data (JSONB)
 ```
 
-> **Diagram Explanation**: Detailing the critical async hand-off: The API quickly acknowledges the request, while a background thread handles the potentially long-running optimization task to avoid blocking the client.
+> **Diagram Explanation**: The critical async hand-off.
+
+**Logic Breakdown**:
+1.  **User Request**: "Please build the schedule."
+2.  **Immediate Reply**: The system doesn't wait. It replies "Accepted (202)" instantly so the browser doesn't freeze.
+3.  **Background Work**: A hidden worker gathers all the data (Shifts, Rules).
+4.  **Long Wait**: The worker talks to the Engine. This can take 45 minutes.
+5.  **Finish**: When done, the worker saves the result to the DB silently.
 
 
 **Status Lifecycle**:
@@ -525,10 +548,13 @@ graph LR
     style Repositories fill:#e0f2f1,stroke:#004d40
 ```
 
-> **Diagram Notes**:
-> - **Standard Pattern**: Most modules follow a strict `Controller -> Service -> Repository` flow.
-> - **Auth Module**: `AuthService` handles logic without a direct repository (manages AWS Cognito).
-> - **Employee Module**: `EmployeeController` orchestrates both data persistence (`EmployeeService`) and async user provisioning (`CognitoAccountCreationService` -> `WebhookService`).
+> **Diagram Explanation**: The verified flow of data through the code.
+
+**Role Breakdown**:
+*   **Controller (Pink)**: "The Receptionist". Takes the input, checks validity.
+*   **Service (Blue)**: "The Manager". Does the actual thinking and logic.
+*   **Repository (Green)**: "The Archivist". Puts files in the cabinet (Database).
+*   **Special Cases**: `AuthService` doesn't have a Repository because it talks to AWS, not our DB. `EmployeeService` does both (DB + AWS).
 
 ---
 

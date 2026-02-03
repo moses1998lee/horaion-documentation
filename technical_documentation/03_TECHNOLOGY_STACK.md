@@ -44,7 +44,16 @@ graph TD
     style Data fill:#fff3e0,stroke:#e65100
     style Infra fill:#f3e5f5,stroke:#7b1fa2
 ```
- 
+
+> **Diagram Explanation**: This flowchart visualizes the complete technology stack, showing how a user request flows from the visual interface down to the database and infrastructure.
+
+**Step-by-Step Flow**:
+1.  **Frontend Layer (The Interface)**: The user interacts with the web app built in **React 19** and styled with **Tailwind CSS**.
+2.  **REST API**: Actions (like "Get Schedule") are sent as HTTP requests to the Backend.
+3.  **Backend Layer (The Brain)**: **Spring Boot 3.4** running on **Java 21** receives the request. **Spring Security** checks if the user is allowed to perform the action.
+4.  **Data Layer (The Memory)**: The backend uses **JPA** to talk to the **PostgreSQL** database, ensuring data is saved or retrieved safely.
+5.  **Infrastructure (The Tools)**: Side-tasks like sending emails (AWS SES) or logging in (AWS Cognito) are handled by external AWS services.
+
 ---
 
 ## Backend Technology Stack

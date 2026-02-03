@@ -55,6 +55,16 @@ flowchart TD
     style Start fill:#e1f5fe,stroke:#0277bd
 ```
 
+> **Diagram Explanation**: This flowchart shows the exact security checks every request must pass.
+
+**The Gantlet (Step-by-Step)**:
+1.  **Do you have a ticket?**: Check for `Authorization` header. If missing, immediate rejection (401).
+2.  **Is it a Bearer token?**: We only accept `Bearer` type tokens.
+3.  **Is the signature valid?**: We check the digital signature against AWS Cognito's public keys. This proves the token wasn't faked by a hacker.
+4.  **Is it expired?**: Even if valid, if it's too old, we reject it.
+5.  **Is it for us?**: We check the `Audience` to ensure this token was issued for *our* app, not someone else's.
+6.  **Success**: If all clear, we extract the user's ID (`sub`) and Email and let them proceed.
+
 ### Current Implementation
 
 #### Authentication (✅ Implemented)

@@ -91,6 +91,14 @@ erDiagram
     }
 ```
 
+> **Diagram Explanation**: This Entity Relationship Diagram (ERD) illustrates the strict hierarchy of the platform.
+
+**Key Relationships**:
+1.  **Company ➔ Branch**: A Company is the top-level tenant and "owns" multiple Branches (One-to-Many).
+2.  **Branch ➔ Department**: Each Branch contains distinct Departments (e.g., Sales, Warehouse).
+3.  **Department ➔ Employee**: Employees are assigned to a single Department, which acts as their scheduling unit.
+4.  **Department ➔ Schedule**: Schedules are created *per department*, not per branch or company.
+
 ### Core Entities
 
 #### 1. Company
@@ -226,6 +234,14 @@ stateDiagram-v2
     REJECTED --> [*]
     FAILED --> [*]
 ```
+
+> **Diagram Explanation**: This State Diagram shows the lifecycle of a Schedule from creation to approval.
+
+**State Transitions**:
+1.  **Pending**: You just clicked "Create". It's a placeholder.
+2.  **Processing**: The system is currently talking to the AI Engine.
+3.  **Completed**: The AI Engine finished successfully. You can now see the shifts.
+4.  **Approved/Rejected**: A manager reviews the AI's work and makes a final decision.
 
 ---
 

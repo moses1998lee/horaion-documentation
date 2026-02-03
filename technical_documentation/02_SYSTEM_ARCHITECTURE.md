@@ -136,17 +136,31 @@ graph TB
     style AI fill:#0288d1,color:white,stroke:#01579b
 ```
 
-> **Diagram Explanation**: This high-level overview shows the three main tiers of the Genesis ecosystem: **User Roles** (who interacts with the system), the core **Genesis API**, and **External Services** (AWS infrastructure and Schedule Engine) that provide essential capabilities.
+> **Diagram Explanation**: This high-level overview shows the three main tiers of the Genesis ecosystem.
+
+**Component Breakdown**:
+1.  **Client Layer (The User's Device)**:
+    *   **Web App**: The React application used by employees and managers.
+    *   **Mobile App**: Native apps for on-the-go access.
+    *   **Tools**: Postman/Insomnia used by developers to test the API directly.
+2.  **Gateway Layer (The Traffic Cop)**:
+    *   **Load Balancer**: The entry point that distributes traffic, ensuring no single server is overwhelmed.
+3.  **Application Server (The Core)**:
+    *   **Web Layer**: Receives the request, checks security (Filters), and routes it to the right controller.
+    *   **Business Layer**: The actual logic (e.g., "Calculate Demand", "Approve Schedule").
+    *   **Integration Layer**: Helpers that talk to the outside world (Cognito, Webhooks).
+    *   **Data Layer**: Translates Java objects into SQL queries for the database.
+4.  **External Services**: Dependancies we don't host ourselves (AWS for auth, AI Engine for math).
 
 ### External Dependencies
 
-| System              | Purpose                                       | Protocol         | Notes                      |
-| ------------------- | --------------------------------------------- | ---------------- | -------------------------- |
-| **AWS Cognito**     | User authentication, user pool management     | AWS SDK          | JWT token provider         |
-| **Schedule Engine** | Optimization algorithm for shift scheduling   | REST API (Feign) | Timeout: 45 minutes        |
-| **AWS SES**         | Transactional emails (welcome, notifications) | AWS SDK          | Async via SQS              |
-| **AWS SQS/SNS**     | Event-driven messaging                        | AWS SDK          | Decouples heavy operations |
-| **PostgreSQL**      | Primary data store                            | JDBC             | HikariCP connection pool   |
+| System | Purpose | Protocol | Notes |
+| --- | --- | --- | --- |
+| **AWS Cognito** | User authentication, user pool management | AWS SDK | JWT token provider |
+| **Schedule Engine** | Optimization algorithm for shift scheduling | REST API (Feign) | Timeout: 45 minutes |
+| **AWS SES** | Transactional emails (welcome, notifications) | AWS SDK | Async via SQS |
+| **AWS SQS/SNS** | Event-driven messaging | AWS SDK | Decouples heavy operations |
+| **PostgreSQL** | Primary data store | JDBC | HikariCP connection pool |
 
 ***
 
@@ -239,7 +253,16 @@ graph TB
     style SR fill:#e8f5e8
 ```
 
-> **Diagram Explanation**: Unlike traditional layered architectures (Controller -> Service -> Repository), Vertical Slices group code by **feature**. This diagram illustrates how the 'Employee' and 'Schedule' modules are self-contained with their own full stack of components, promoting modularity and reducing cross-domain coupling.
+> **Diagram Explanation**: Unlike traditional layered architectures (Controller -> Service -> Repository), Vertical Slices group code by **feature**. This keeps related code together.
+
+**How to Read This**:
+1.  **Horizontal Boxes**: These represent independent modules (like "Employee" or "Schedule").
+2.  **Vertical Flow**: Inside each box, you see the full stack for *just* that feature:
+    *   **Controller**: Receives the HTTP request.
+    *   **Service**: Do the work.
+    *   **Repository**: Save the data.
+    *   **Mapper/DTO**: Handle data formatting.
+3.  **Cross-Communication**: The dotted line (`Uses`) shows that sometimes one module needs to ask another for help (e.g., "Schedule" needs to know about "Employees"), but they are mostly separate.
 
 **Benefits of Vertical Slices:**
 
@@ -295,7 +318,21 @@ sequenceDiagram
     API-->>Frontend: Response
 ```
 
-> **Diagram Explanation**: This sequence details the security lifecycle: from **Registration** (creating a Cognito user), to **Confirmation** (verifying email), to **Login** (exchanging credentials for JWTs), and finally making **Authenticated Requests** using the Bearer token.
+> **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
+
+**Step-by-Step Flow**:
+1.  **Registration**:
+    *   User enters details -> API creates a "pending" user in AWS Cognito.
+    *   AWS Cognito sends a real email to the user with a code.
+2.  **Confirmation**:
+    *   User enters the code -> API tells Cognito to "verify" the user.
+3.  **Login**:
+    *   User sends Email/Password -> API forwards this to Cognito.
+    *   Cognito checks the password -> returns a **JWT Token**.
+    *   API gives this token to the Frontend.
+4.  **Authenticated Request**:
+    *   For all future requests (like "Get Employees"), the Frontend attaches this Token.
+    *   The API checks the signature ("Is this valid?") before answering.
 
 **Step-by-Step Breakdown:**
 
@@ -344,7 +381,16 @@ graph TD
     Check -->|Denied| Error[403 Forbidden]
 ```
 
-> **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed: validating the signature, extracting claims (User ID, Email, Groups), and populating the Spring Security Context to authorize execution in the Controller and Service layers.
+> **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed to decide "Is this user allowed in?".
+
+**Authentication Logic**:
+1.  **Incoming Request**: Arrives with a header `Authorization: Bearer <token>`.
+2.  **Validate Signature**: The system checks the mathematical signature of the token against AWS's public key. If modified, it rejects it immediately.
+3.  **Extract Claims**: It opens the token to read:
+    *   **Sub**: The User ID.
+    *   **Email**: Who they are.
+    *   **Groups**: Are they an Admin? A Manager?
+4.  **Security Context**: These details are stored in the temporary memory (`SecurityContext`) for the duration of the request so the Controller knows who is calling it.
 
 ***
 
@@ -386,7 +432,18 @@ sequenceDiagram
     Controller-->>Client: 201 Created + response
 ```
 
-> **Diagram Explanation**: A standard request lifecycle: The **Controller** validates DTOs, the **Service** applies business logic and uses **Mappers** to convert between DTOs and Entities, while **LogAspect** automatically handles auditing at the boundaries.
+> **Diagram Explanation**: A standard request lifecycle for saving data (e.g., "Create Employee").
+
+**Step-by-Step Flow**:
+1.  **API Entry**: Client sends a POST request. The **Controller** receives it.
+2.  **Validation**: Controller checks "Is the email valid? Is the name empty?".
+3.  **Service Processing**:
+    *   **LogAspect**: Automatically records "User X started Create Employee".
+    *   **Mapper**: Converts the JSON input (DTO) into a Database Object (Entity).
+    *   **Repository**: Saves the Entity to the database (`INSERT`).
+4.  **Completion**:
+    *   The Service takes the saved data, converts it back to JSON (Response DTO), and returns it.
+    *   **LogAspect**: Records "User X finished in 50ms".
 
 **Step-by-Step Breakdown:**
 
@@ -425,7 +482,16 @@ graph TD
     ServerError --> Client
 ```
 
-> **Diagram Explanation**: The centralized exception handling mechanism: All exceptions thrown in the application are caught by the **GlobalExceptionHandler**, which logs the error and converts it into a standardized JSON error response with the appropriate HTTP status code.
+> **Diagram Explanation**: The centralized exception handling mechanism. It acts as a safety net for the whole application.
+
+**How it Works**:
+1.  **Something Goes Wrong**: A bug occurs, or a user asks for ID 999 (which doesn't exist). An `Exception` is thrown.
+2.  **Global Handler Catches It**: Instead of crashing or showing a raw stack trace, the `GlobalExceptionHandler` typically intercepts it.
+3.  **Categorization**:
+    *   **ResourceNotFound**: Becomes a `404 Not Found`.
+    *   **ValidationException**: Becomes a `400 Bad Request`.
+    *   **RuntimeException**: Becomes a `500 Server Error`.
+4.  **Response**: The user gets a clean JSON error message explaining exactly what went wrong.
 
 ***
 
@@ -490,7 +556,20 @@ sequenceDiagram
     end
 ```
 
-> **Diagram Explanation**: The asynchronous optimization process: A client initiates a request, which immediately returns 'Accepted'. In the background, the service aggregates data, calls the external **Schedule Engine** (with a long timeout), and updates the database upon completion or failure.
+> **Diagram Explanation**: The asynchronous optimization process. This allows the system to do "heavy lifting" (math) without making the user wait.
+
+**Step-by-Step Flow**:
+1.  **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and *immediately* says "OK, we're working on it" (202 Accepted).
+2.  **Background Work**:
+    *   A hidden background thread wakes up.
+    *   It grabs all the necessary data (Rules, Shifts, People).
+3.  **External Engine**:
+    *   This thread sends the problem to the **Schedule Engine** (a separate heavy-duty calculator).
+    *   It waits patiently (up to 45 mins) *without* blocking the main web server.
+4.  **Completion**:
+    *   The Engine replies.
+    *   The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
+5.  **Notification**: A webhook or email tells the user "Your schedule is ready!".
 
 **Step-by-Step Breakdown:**
 
@@ -679,8 +758,13 @@ graph TD
     style DepM fill:#fff3cd,stroke:#856404
 ```
 
-> **Diagram Notes**:
->
-> * **Schedule Module**: Orchestrates the scheduling process, pulling data from Shifts, Forecasts, and Rules.
-> * **Core Hierarchy**: Enforces the strict `Company -> Branch -> Department` organizational structure.
-> * **Shared Layer**: Provides cross-cutting utilities (Exceptions, Constants, AOP Aspects) used by valid feature modules.
+> **Diagram Explanations**: This dependency graph shows the "Rules of Engagement" between modules.
+
+**Understanding the Arrows**:
+*   **Arrow Direction**: `A --> B` means "Module A needs Module B to work".
+*   **Core Hierarchy**:
+    *   **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
+*   **Scheduling Domain**:
+    *   **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
+*   **Shared Layer**:
+    *   Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.

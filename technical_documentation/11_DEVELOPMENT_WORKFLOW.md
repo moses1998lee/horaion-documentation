@@ -64,14 +64,13 @@ gitGraph
    commit id: "Deploy"
 ```
 
-- **Main Branch**: `main` (Production-ready code)
-- **Feature Branches**: `feature/<ticket-id>-<description>` (e.g., `feature/GEN-123-user-auth`)
-- **Process**:
-  1. Create feature branch from `main`.
-  2. Implement changes locally.
-  3. Open Pull Request (PR) to `main`.
-  4. Perform Code Review.
-  5. Merge to `main`.
+> **Diagram Explanation**: This Git graph visualizes our "Feature Branch" workflow. It ensures the main code stays stable while new features are being built.
+
+**The Rules**:
+1.  **Main Branch**: The straight line at the bottom. This code is *always* production-ready.
+2.  **Feature Branch**: When you start a ticket (GEN-123), you "branch off" (the blue line).
+3.  **Work in Isolation**: You make commits (dots) on your blue line. If you break something, `main` is unaffected.
+4.  **Merge Back**: Once reviewed, your blue line merges back into the main line, bringing your new feature with it.
 
 ---
 
@@ -94,6 +93,14 @@ flowchart LR
     style Svr fill:#f3e5f5
     style Run fill:#e0f7fa
 ```
+
+> **Diagram Explanation**: This straightforward pipeline shows how code gets from your laptop to the cloud.
+
+**Step-by-Step Flow**:
+1.  **Build (Laptop)**: You run `docker build` to package your code into a "container" (like a shipping container).
+2.  **Push (Upload)**: You upload this container to a Registry (like a digital harbor).
+3.  **Pull (Server)**: The production server downloads the container from the Registry.
+4.  **Run**: The server starts the container, and your app is live.
 
 **Steps**:
 1.  **Build**: Developers build the Docker image locally.

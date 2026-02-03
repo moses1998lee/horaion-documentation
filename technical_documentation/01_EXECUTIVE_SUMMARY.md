@@ -107,6 +107,17 @@ mindmap
         Deployment
 ```
 
+> **Diagram Explanation**: This mindmap illustrates the complete hierarchy of users who interact with the Genesis platform, categorized by their primary function.
+
+**Detailed Breakdown**:
+1.  **Primary Users (Daily Operations)**:
+    *   **System Admin**: The super-user responsible for configuring the entire organization and managing other users.
+    *   **Dept Manager**: The core operational user who creates schedules and approves shifts.
+    *   **Employee**: The end-user who logs in to view their roster and request time off.
+2.  **Secondary Users (Support & Maintanence)**:
+    *   **HR Personnel**: Handles data entry (like bulk importing employees) and onboarding.
+    *   **Ops Team**: Technical staff who ensure the server is running and deployed correctly.
+
 #### 1. System Administrators
 - **Responsibilities**: Company, branch, department management
 - **Access Level**: Full system access
