@@ -1,0 +1,5 @@
+root: ./technical_documentation
+
+structure:
+  readme: 00_TABLE_OF_CONTENTS.md
+  summary: SUMMARY.md
