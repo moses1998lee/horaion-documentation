@@ -100,6 +100,16 @@ erDiagram
 3.  **Department ➔ Employee**: Employees are assigned to a single Department, which acts as their scheduling unit.
 4.  **Department ➔ Schedule**: Schedules are created *per department*, not per branch or company.
 
+### 📖 Story Mode: Tenant Isolation
+*Scenario: Two companies, "CoffeeCo" and "BurgerInc", use Genesis.*
+*   **The Wall**: Every table has a `company_id`. When CoffeeCo's manager logs in, the `LogAspect` attaches a "CoffeeCo Goggles" filter to every query.
+*   **The Hierarchy**:
+    *   CoffeeCo creates a "Downtown" Branch.
+    *   Inside that, they create a "Kitchen" Department.
+    *   They hire "John Doe". John is linked to Kitchen -> Downtown -> CoffeeCo.
+*   **The Safety**: If BurgerInc tries to look up "John Doe" using his ID, the database says "Who? Never heard of him," because the `company_id` doesn't match.
+*   **The Nukes**: If CoffeeCo cancels their subscription, we delete the Root Company. The Database cascades this delete down, wiping all their Branches, Departments, and Staff instantly. BurgerInc creates on untouched.
+
 ### Core Entities
 
 #### 1. Company

@@ -71,6 +71,13 @@ graph LR
 > 2. **Staging (Digital Ocean)**: The image is first deployed to a Digital Ocean Droplet. This environment mirrors production settings and is used for final verification (QA/UAT).
 > 3. **Production (AWS Lightsail)**: Once verified, the _same_ Docker image is promoted to AWS Lightsail. The production environment can scale horizontally across multiple Lightsail instances to handle user load.
 
+### 📖 Story Mode: From Laptop to Cloud
+*Scenario: Deploying a hotfix for the Login Screen.*
+1.  **Local (The Lab)**: You fix the bug on your laptop. You verify it works on `localhost`.
+2.  **Build (The Container)**: You run `docker build`. This freezes your code, Java version, and OS settings into a "Image". It's like a snapshot of your laptop's environment.
+3.  **Staging (The Rehearsal)**: You upload this Image to Digital Ocean. The QA team tests it. "Does it work in the real world?"
+4.  **Production (The Show)**: Once approved, we define the *exact same Image* to AWS Lightsail. Because it's a container, we are 100% sure it will work exactly like it did in Staging. No "it works on my machine" surprises.
+
 ***
 
 ## Deployment

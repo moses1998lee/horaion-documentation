@@ -152,6 +152,15 @@ graph TB
     *   **Data Layer**: Translates Java objects into SQL queries for the database.
 4.  **External Services**: Dependancies we don't host ourselves (AWS for auth, AI Engine for math).
 
+### 📖 Story Mode: The Journey of a Button Click
+*Scenario: A Manager clicks "Approve Schedule" on their iPad.*
+1.  **The Click**: The iPad sends a secure message (`POST /approve`) to the internet.
+2.  **The Traffic Cop (Gateway)**: The Load Balancer catches the message. It checks, "Is this server too busy?" and forwards it to the healthiest **Application Server**.
+3.  **The Bouncer (Web Layer)**: The App Server's first line of defense checks the ID card (JWT Token). "Are you really the Manager?"
+4.  **The Brain (Business Layer)**: The `ScheduleService` takes over. It checks the rules: "Is the schedule actually complete? Is it already approved?"
+5.  **The Memory (Data Layer)**: The Service tells the `Repository` to permanently save the new status in the **Database**.
+6.  **The Reply**: The server sends a "200 OK" back up the chain, and the Manager's iPad flashes a green checkmark.
+
 ### External Dependencies
 
 | System | Purpose | Protocol | Notes |
