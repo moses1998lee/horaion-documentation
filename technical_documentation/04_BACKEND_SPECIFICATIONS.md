@@ -1,25 +1,27 @@
-# Module Reference
+# Backend Specifications
 
 > **Genesis Workforce Management Platform - Backend Specifications**
 
 ## Table of Contents
-- [Overview](#overview)
-- [Module Catalog](#module-catalog)
-- [Module Details](#module-details)
-- [Inter-Module Communication](#inter-module-communication)
 
----
+* [Overview](04_BACKEND_SPECIFICATIONS.md#overview)
+* [Module Catalog](04_BACKEND_SPECIFICATIONS.md#module-catalog)
+* [Module Details](04_BACKEND_SPECIFICATIONS.md#module-details)
+* [Inter-Module Communication](04_BACKEND_SPECIFICATIONS.md#inter-module-communication)
+
+***
 
 ## Overview
 
 Genesis follows **Vertical Slice Architecture**, where each module is a self-contained feature with its own:
-- **Controllers**: REST API endpoints
-- **Services**: Business logic
-- **Repositories**: Data access
-- **Entities**: JPA domain models
-- **DTOs**: Request/Response data transfer objects
-- **Mappers**: Entity ↔ DTO conversion
-- **Exceptions**: Domain-specific errors
+
+* **Controllers**: REST API endpoints
+* **Services**: Business logic
+* **Repositories**: Data access
+* **Entities**: JPA domain models
+* **DTOs**: Request/Response data transfer objects
+* **Mappers**: Entity ↔ DTO conversion
+* **Exceptions**: Domain-specific errors
 
 ### Module Structure
 
@@ -39,7 +41,7 @@ modules/{module-name}/
     └── {ModuleName}Exception.java   # Custom exceptions
 ```
 
----
+***
 
 ## Module Catalog
 
@@ -111,7 +113,7 @@ graph TB
 | **Rule Answer** | `modules.ruleanswer` | `RuleAnswer` | `/api/v1/rule-answers` |
 | **Leave Availability** | `modules.employeeleaveavailability` | `EmployeeLeaveAvailability` | `/api/v1/leave-requests` |
 
----
+***
 
 ## Module Details
 
@@ -120,12 +122,14 @@ graph TB
 **Purpose**: User authentication and registration using AWS Cognito.
 
 **Key Features**:
-- User registration with email verification
-- Login with JWT token generation
-- Password reset and change
-- Email confirmation flow
+
+* User registration with email verification
+* Login with JWT token generation
+* Password reset and change
+* Email confirmation flow
 
 **Key Endpoints**:
+
 ```
 POST /auth/register          # Create new user in Cognito + Employee record
 POST /auth/confirm           # Confirm email with verification code
@@ -136,6 +140,7 @@ POST /auth/change-password   # Change password for authenticated user
 ```
 
 **Authentication Flow**:
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -168,22 +173,25 @@ sequenceDiagram
 
 
 **Special Considerations**:
-- `cognito_sub` in Employee table links to Cognito user
-- Supports bulk employee creation with async Cognito account creation
-- Webhook callbacks for Cognito account creation status
 
----
+* `cognito_sub` in Employee table links to Cognito user
+* Supports bulk employee creation with async Cognito account creation
+* Webhook callbacks for Cognito account creation status
+
+***
 
 ### 2. Company Module
 
 **Purpose**: Root of the multi-tenant hierarchy.
 
 **Key Features**:
-- Company registration
-- Onboarding status tracking
-- Company-level settings
+
+* Company registration
+* Onboarding status tracking
+* Company-level settings
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/companies              # List all companies (paginated)
 GET    /api/v1/companies/{id}         # Get company by ID
@@ -203,11 +211,13 @@ DELETE /api/v1/companies/{id}         # Soft delete company
 **Purpose**: Physical or logical locations within a company.
 
 **Key Features**:
-- Branch management
-- Branch type categorization (HEADQUARTERS, RETAIL, etc.)
-- Geographic location tracking
+
+* Branch management
+* Branch type categorization (HEADQUARTERS, RETAIL, etc.)
+* Geographic location tracking
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/branches                    # List all branches
 GET    /api/v1/branches/{id}               # Get branch by ID
@@ -217,18 +227,20 @@ PUT    /api/v1/branches/{id}               # Update branch
 DELETE /api/v1/branches/{id}               # Soft delete branch
 ```
 
----
+***
 
 ### 4. Department Module
 
 **Purpose**: Organizational units within branches. Primary scheduling scope.
 
 **Key Features**:
-- Department hierarchy
-- Head of department assignment
-- Department-level budgeting
+
+* Department hierarchy
+* Head of department assignment
+* Department-level budgeting
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/departments                 # List all departments
 GET    /api/v1/departments/{id}            # Get department by ID
@@ -249,13 +261,15 @@ DELETE /api/v1/departments/{id}            # Soft delete department
 **Purpose**: Staff member management with Cognito integration.
 
 **Key Features**:
-- CRUD operations for employees
-- Bulk import via Excel upload
-- Cognito account synchronization
-- Phone number normalization
-- Custom fields via JSONB
+
+* CRUD operations for employees
+* Bulk import via Excel upload
+* Cognito account synchronization
+* Phone number normalization
+* Custom fields via JSONB
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/employees                   # List all employees (paginated)
 GET    /api/v1/employees/{id}              # Get employee by ID
@@ -271,12 +285,14 @@ POST   /api/v1/employees/{id}/create-cognito  # Create Cognito account for one e
 ```
 
 **Special Features**:
-- **Excel Import**: Upload `.xlsx` file to bulk create employees
-- **Async Cognito Creation**: Uses `@Async` to create Cognito accounts in background
-- **Webhook Callbacks**: Notifies external systems when Cognito accounts are created
-- **Phone Normalization**: Automatically formats phone numbers to E.164 format
+
+* **Excel Import**: Upload `.xlsx` file to bulk create employees
+* **Async Cognito Creation**: Uses `@Async` to create Cognito accounts in background
+* **Webhook Callbacks**: Notifies external systems when Cognito accounts are created
+* **Phone Normalization**: Automatically formats phone numbers to E.164 format
 
 **Cognito Sync Flow**:
+
 ```mermaid
 sequenceDiagram
     participant Admin
@@ -318,12 +334,14 @@ sequenceDiagram
 **Purpose**: Schedule generation and approval workflow.
 
 **Key Features**:
-- Schedule creation and management
-- Integration with external optimization engine
-- Approval workflow (PENDING → PROCESSING → COMPLETED → APPROVED)
-- Async schedule generation
+
+* Schedule creation and management
+* Integration with external optimization engine
+* Approval workflow (PENDING → PROCESSING → COMPLETED → APPROVED)
+* Async schedule generation
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/schedules                   # List all schedules
 GET    /api/v1/schedules/{id}              # Get schedule by ID
@@ -336,6 +354,7 @@ DELETE /api/v1/schedules/{id}              # Delete schedule
 ```
 
 **Schedule Generation Flow**:
+
 ```mermaid
 sequenceDiagram
     participant Manager
@@ -372,25 +391,28 @@ sequenceDiagram
 
 
 **Status Lifecycle**:
-- `PENDING`: Schedule created, not yet sent to engine
-- `PROCESSING`: Sent to optimization engine
-- `COMPLETED`: Engine returned result
-- `FAILED`: Engine error or timeout
-- `APPROVED`: Manager approved
-- `REJECTED`: Manager rejected
 
----
+* `PENDING`: Schedule created, not yet sent to engine
+* `PROCESSING`: Sent to optimization engine
+* `COMPLETED`: Engine returned result
+* `FAILED`: Engine error or timeout
+* `APPROVED`: Manager approved
+* `REJECTED`: Manager rejected
+
+***
 
 ### 7. Shift Module
 
 **Purpose**: Define shift templates and time blocks.
 
 **Key Features**:
-- Shift template management
-- Time block configuration
-- Shift type categorization
+
+* Shift template management
+* Time block configuration
+* Shift type categorization
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/shifts                      # List all shifts
 GET    /api/v1/shifts/{id}                 # Get shift by ID
@@ -400,6 +422,7 @@ DELETE /api/v1/shifts/{id}                 # Delete shift
 ```
 
 **Shift Structure**:
+
 ```json
 {
   "id": 1,
@@ -412,18 +435,20 @@ DELETE /api/v1/shifts/{id}                 # Delete shift
 }
 ```
 
----
+***
 
 ### 8. Demand Forecast Module
 
 **Purpose**: Predict staffing requirements.
 
 **Key Features**:
-- Role-based demand forecasting
-- Date range planning
-- Historical data analysis
+
+* Role-based demand forecasting
+* Date range planning
+* Historical data analysis
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/demand-forecasts            # List all forecasts
 GET    /api/v1/demand-forecasts/{id}       # Get forecast by ID
@@ -432,18 +457,20 @@ PUT    /api/v1/demand-forecasts/{id}       # Update forecast
 DELETE /api/v1/demand-forecasts/{id}       # Delete forecast
 ```
 
----
+***
 
 ### 9. Rule Module
 
 **Purpose**: Configure scheduling constraints and business rules.
 
 **Key Features**:
-- Template-based rule system
-- Provider-specific rule configurations
-- Field-level customization
+
+* Template-based rule system
+* Provider-specific rule configurations
+* Field-level customization
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/rules                       # List all rules
 GET    /api/v1/rules/{id}                  # Get rule by ID
@@ -453,23 +480,26 @@ DELETE /api/v1/rules/{id}                  # Delete rule
 ```
 
 **Rule Examples**:
-- Minimum rest period between shifts
-- Maximum consecutive working days
-- Skill-based shift assignments
-- Fairness constraints (equal distribution)
 
----
+* Minimum rest period between shifts
+* Maximum consecutive working days
+* Skill-based shift assignments
+* Fairness constraints (equal distribution)
+
+***
 
 ### 10. Leave Availability Module
 
 **Purpose**: Employee leave request management.
 
 **Key Features**:
-- Leave request submission
-- Approval workflow
-- Leave balance tracking
+
+* Leave request submission
+* Approval workflow
+* Leave balance tracking
 
 **Key Endpoints**:
+
 ```
 GET    /api/v1/leave-requests              # List all leave requests
 GET    /api/v1/leave-requests/{id}         # Get leave request by ID
@@ -479,8 +509,7 @@ PUT    /api/v1/leave-requests/{id}/reject  # Reject leave request
 DELETE /api/v1/leave-requests/{id}         # Cancel leave request
 ```
 
----
-
+***
 
 ## 8. Layered Architecture
 
@@ -556,7 +585,7 @@ graph LR
 *   **Repository (Green)**: "The Archivist". Puts files in the cabinet (Database).
 *   **Special Cases**: `AuthService` doesn't have a Repository because it talks to AWS, not our DB. `EmployeeService` does both (DB + AWS).
 
----
+***
 
 ## Inter-Module Communication
 
@@ -601,7 +630,7 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 }
 ```
 
----
+***
 
 ## Best Practices
 
@@ -613,13 +642,13 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 6. **Log comprehensively**: LogAspect handles this automatically
 7. **Test in isolation**: Each module should have its own test suite
 
----
+***
 
 ## Next Steps
 
-- [TECHNICAL.md](TECHNICAL.md) - Data models and API standards
-- [OPERATIONS.md](OPERATIONS.md) - Deployment and configuration
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System design patterns
+* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models and API standards
+* [OPERATIONS.md](../compiled/technical_documentation/OPERATIONS.md) - Deployment and configuration
+* [ARCHITECTURE.md](../compiled/technical_documentation/ARCHITECTURE.md) - System design patterns
 
 ## Advanced Module Patterns
 
@@ -654,16 +683,18 @@ public class ScheduleService {
 ```
 
 **Advantages**:
-- Simple and straightforward
-- Type-safe compilation
-- Easy to trace dependencies
+
+* Simple and straightforward
+* Type-safe compilation
+* Easy to trace dependencies
 
 **Disadvantages**:
-- Creates coupling between modules
-- Can lead to circular dependencies
-- Harder to test in isolation
 
----
+* Creates coupling between modules
+* Can lead to circular dependencies
+* Harder to test in isolation
+
+***
 
 #### Event-Driven Communication (Future)
 
@@ -719,7 +750,7 @@ public class NotificationService {
 }
 ```
 
----
+***
 
 ### Module Extension Points
 
@@ -810,7 +841,7 @@ public class EmployeeMapper {
 }
 ```
 
----
+***
 
 ## Module-Specific Patterns
 
@@ -855,3 +886,4 @@ public class EmployeeExcelService {
 
 
 
+```

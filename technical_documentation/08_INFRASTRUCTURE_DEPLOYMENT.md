@@ -1,18 +1,16 @@
-# Operations Guide
+# Infrastructure & Deployment
 
 > **Genesis Workforce Management Platform - Infrastructure & Deployment**
 
-
-
-
 ## Table of Contents
-- [Deployment](#deployment)
-- [Configuration](#configuration)
-- [Database Management](#database-management)
-- [Monitoring & Health Checks](#monitoring--health-checks)
-- [Troubleshooting](#troubleshooting)
 
----
+* [Deployment](08_INFRASTRUCTURE_DEPLOYMENT.md#deployment)
+* [Configuration](08_INFRASTRUCTURE_DEPLOYMENT.md#configuration)
+* [Database Management](08_INFRASTRUCTURE_DEPLOYMENT.md#database-management)
+* [Monitoring & Health Checks](08_INFRASTRUCTURE_DEPLOYMENT.md#monitoring--health-checks)
+* [Troubleshooting](08_INFRASTRUCTURE_DEPLOYMENT.md#troubleshooting)
+
+***
 
 ## Deployment Strategy
 
@@ -20,10 +18,10 @@
 
 Genesis employs a dual-cloud strategy to separate testing/staging from production workloads:
 
-| Environment | Platform | Purpose | Access |
-|-------------|----------|---------|--------|
-| **Staging** | **Digital Ocean** | Testing, QA, Staging | Internal Dev Team |
-| **Production** | **AWS Lightsail** | Live User Traffic | End Users, Admins |
+| Environment    | Platform          | Purpose              | Access            |
+| -------------- | ----------------- | -------------------- | ----------------- |
+| **Staging**    | **Digital Ocean** | Testing, QA, Staging | Internal Dev Team |
+| **Production** | **AWS Lightsail** | Live User Traffic    | End Users, Admins |
 
 > **Note**: Current Setup uses manual Docker deployment as per the Bespoke Phase strategy.
 
@@ -68,25 +66,27 @@ graph LR
 ```
 
 > **Diagram Explanation**:
-> 1.  **Build**: The application and configuration are built into a standard **Docker Image**.
-> 2.  **Staging (Digital Ocean)**: The image is first deployed to a Digital Ocean Droplet. This environment mirrors production settings and is used for final verification (QA/UAT).
-> 3.  **Production (AWS Lightsail)**: Once verified, the *same* Docker image is promoted to AWS Lightsail. The production environment can scale horizontally across multiple Lightsail instances to handle user load.
+>
+> 1. **Build**: The application and configuration are built into a standard **Docker Image**.
+> 2. **Staging (Digital Ocean)**: The image is first deployed to a Digital Ocean Droplet. This environment mirrors production settings and is used for final verification (QA/UAT).
+> 3. **Production (AWS Lightsail)**: Once verified, the _same_ Docker image is promoted to AWS Lightsail. The production environment can scale horizontally across multiple Lightsail instances to handle user load.
 
----
+***
 
 ## Deployment
 
 ### Prerequisites
 
-- **Java 21** (Eclipse Temurin or OpenJDK)
-- **PostgreSQL 15+**
-- **Maven 3.8+**
-- **Docker** (optional, for containerized deployment)
-- **AWS Account** (for Cognito, SES, SNS/SQS)
+* **Java 21** (Eclipse Temurin or OpenJDK)
+* **PostgreSQL 15+**
+* **Maven 3.8+**
+* **Docker** (optional, for containerized deployment)
+* **AWS Account** (for Cognito, SES, SNS/SQS)
 
 ### Local Development
 
 #### 1. Clone Repository
+
 ```bash
 git clone <repository-url>
 cd genesis/api_app/genesis-api
@@ -161,7 +161,7 @@ curl http://localhost:8080/actuator/health
 # {"status":"UP"}
 ```
 
----
+***
 
 ### Docker Deployment
 
@@ -226,56 +226,59 @@ volumes:
 ```
 
 Run:
+
 ```bash
 docker-compose up -d
 ```
 
----
+***
 
 ## Configuration
 
 ### Environment Variables Reference
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `APPLICATION_PORT` | No | `8080` | HTTP server port |
-| `POSTGRES_DB_HOST` | Yes | - | PostgreSQL hostname |
-| `POSTGRES_DB_PORT` | No | `5432` | PostgreSQL port |
-| `POSTGRES_DB_NAME` | Yes | - | Database name |
-| `POSTGRES_DB_USER` | Yes | - | Database username |
-| `POSTGRES_DB_PASS` | Yes | - | Database password |
-| `DB_POOL_SIZE` | No | `20` | HikariCP max pool size |
-| `DB_POOL_MIN_IDLE` | No | `5` | HikariCP min idle connections |
-| `AWS_REGION` | Yes | - | AWS region for SDK |
-| `AWS_COGNITO_USER_POOL_ID` | Yes | - | Cognito user pool ID |
-| `AWS_COGNITO_CLIENT_ID` | Yes | - | Cognito app client ID |
-| `AWS_COGNITO_CLIENT_SECRET` | Yes | - | Cognito app client secret |
-| `SCHEDULE_ENGINE_HOST` | Yes | - | External optimization engine URL |
-| `ENGINE_ALLOWED_IPS` | Yes | - | Comma-separated IP ranges for engine callbacks |
+| Variable                    | Required | Default | Description                                    |
+| --------------------------- | -------- | ------- | ---------------------------------------------- |
+| `APPLICATION_PORT`          | No       | `8080`  | HTTP server port                               |
+| `POSTGRES_DB_HOST`          | Yes      | -       | PostgreSQL hostname                            |
+| `POSTGRES_DB_PORT`          | No       | `5432`  | PostgreSQL port                                |
+| `POSTGRES_DB_NAME`          | Yes      | -       | Database name                                  |
+| `POSTGRES_DB_USER`          | Yes      | -       | Database username                              |
+| `POSTGRES_DB_PASS`          | Yes      | -       | Database password                              |
+| `DB_POOL_SIZE`              | No       | `20`    | HikariCP max pool size                         |
+| `DB_POOL_MIN_IDLE`          | No       | `5`     | HikariCP min idle connections                  |
+| `AWS_REGION`                | Yes      | -       | AWS region for SDK                             |
+| `AWS_COGNITO_USER_POOL_ID`  | Yes      | -       | Cognito user pool ID                           |
+| `AWS_COGNITO_CLIENT_ID`     | Yes      | -       | Cognito app client ID                          |
+| `AWS_COGNITO_CLIENT_SECRET` | Yes      | -       | Cognito app client secret                      |
+| `SCHEDULE_ENGINE_HOST`      | Yes      | -       | External optimization engine URL               |
+| `ENGINE_ALLOWED_IPS`        | Yes      | -       | Comma-separated IP ranges for engine callbacks |
 
 ### Application Profiles
 
 Genesis supports multiple Spring profiles:
 
-- **local**: Local development (verbose logging, SQL logging enabled)
-- **dev**: Development environment
-- **sit**: System Integration Testing
-- **prod**: Production (minimal logging, optimized performance)
+* **local**: Local development (verbose logging, SQL logging enabled)
+* **dev**: Development environment
+* **sit**: System Integration Testing
+* **prod**: Production (minimal logging, optimized performance)
 
 Activate a profile:
+
 ```bash
 export SPRING_PROFILES_ACTIVE=prod
 ./mvnw spring-boot:run
 ```
 
 Or in `application.yaml`:
+
 ```yaml
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
 ```
 
----
+***
 
 ## Database Management
 
@@ -285,19 +288,19 @@ Genesis uses Flyway for database schema versioning.
 
 **Migration Files**: `src/main/resources/db/migrations/`
 
-| File | Description |
-|------|-------------|
-| `V1__organizational_structure.sql` | Company, Branch, Department tables |
-| `V2__employee_management.sql` | Employee, EmployeeRole tables |
-| `V3__shift_management.sql` | Shift, ShiftTimeBlock tables |
-| `V4__schedule_management.sql` | Schedule, ScheduleData tables |
-| `V5__business_rules.sql` | Rule, RuleAnswer tables |
-| `V6__demand_forecasting.sql` | DemandForecast table |
-| `V7__indexes.sql` | Performance indexes |
-| `V8__triggers_functions.sql` | Database triggers and functions |
-| `V9__sample_data.sql` | Sample data for testing |
-| `V10__employee_request_management.sql` | Leave request tables |
-| `V11__cognito_creation_jobs.sql` | Cognito sync tracking |
+| File                                   | Description                        |
+| -------------------------------------- | ---------------------------------- |
+| `V1__organizational_structure.sql`     | Company, Branch, Department tables |
+| `V2__employee_management.sql`          | Employee, EmployeeRole tables      |
+| `V3__shift_management.sql`             | Shift, ShiftTimeBlock tables       |
+| `V4__schedule_management.sql`          | Schedule, ScheduleData tables      |
+| `V5__business_rules.sql`               | Rule, RuleAnswer tables            |
+| `V6__demand_forecasting.sql`           | DemandForecast table               |
+| `V7__indexes.sql`                      | Performance indexes                |
+| `V8__triggers_functions.sql`           | Database triggers and functions    |
+| `V9__sample_data.sql`                  | Sample data for testing            |
+| `V10__employee_request_management.sql` | Leave request tables               |
+| `V11__cognito_creation_jobs.sql`       | Cognito sync tracking              |
 
 ### Running Migrations
 
@@ -332,11 +335,12 @@ spring:
 ```
 
 **Recommendations**:
-- **Development**: `maximum-pool-size: 10`
-- **Production**: `maximum-pool-size: 20-50` (based on load)
-- **Long-running operations**: Disable leak detection (`0`) to avoid false positives
 
----
+* **Development**: `maximum-pool-size: 10`
+* **Production**: `maximum-pool-size: 20-50` (based on load)
+* **Long-running operations**: Disable leak detection (`0`) to avoid false positives
+
+***
 
 ## Monitoring & Health Checks
 
@@ -344,11 +348,11 @@ spring:
 
 Genesis exposes several actuator endpoints:
 
-| Endpoint | Purpose | Authentication |
-|----------|---------|----------------|
-| `/actuator/health` | Health status | Public |
-| `/actuator/info` | Build information | Public |
-| `/actuator/prometheus` | Prometheus metrics | Protected |
+| Endpoint               | Purpose            | Authentication |
+| ---------------------- | ------------------ | -------------- |
+| `/actuator/health`     | Health status      | Public         |
+| `/actuator/info`       | Build information  | Public         |
+| `/actuator/prometheus` | Prometheus metrics | Protected      |
 
 #### Health Check
 
@@ -357,6 +361,7 @@ curl http://localhost:8080/actuator/health
 ```
 
 Response:
+
 ```json
 {
   "status": "UP",
@@ -398,11 +403,13 @@ logging:
 #### Log Format
 
 **Console** (development):
+
 ```
 %d{yyyy-MM-dd HH:mm:ss} [%X{requestId}] [%X{userId}] - %msg%n
 ```
 
 **File** (production):
+
 ```
 %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} [%X{requestId}] [%X{userId}] - %msg%n
 ```
@@ -410,8 +417,9 @@ logging:
 #### MDC Fields
 
 All logs include:
-- `requestId`: Unique request identifier
-- `userId`: Cognito user ID (if authenticated)
+
+* `requestId`: Unique request identifier
+* `userId`: Cognito user ID (if authenticated)
 
 #### Viewing Logs
 
@@ -431,12 +439,14 @@ grep "A1B2C3D4" logs/application.log
 Genesis integrates with Micrometer for metrics collection.
 
 **Key Metrics**:
-- `http.server.requests`: HTTP request metrics (count, duration, percentiles)
-- `jvm.memory.used`: JVM memory usage
-- `hikaricp.connections.active`: Active database connections
-- `hikaricp.connections.idle`: Idle database connections
+
+* `http.server.requests`: HTTP request metrics (count, duration, percentiles)
+* `jvm.memory.used`: JVM memory usage
+* `hikaricp.connections.active`: Active database connections
+* `hikaricp.connections.idle`: Idle database connections
 
 **Prometheus Scrape Config**:
+
 ```yaml
 scrape_configs:
   - job_name: 'genesis-api'
@@ -445,7 +455,7 @@ scrape_configs:
       - targets: ['localhost:8080']
 ```
 
----
+***
 
 ## Troubleshooting
 
@@ -456,6 +466,7 @@ scrape_configs:
 **Symptom**: Application fails to start with `Connection refused` or `Unknown database`
 
 **Solutions**:
+
 ```bash
 # Check PostgreSQL is running
 pg_isready -h localhost -p 5432
@@ -473,6 +484,7 @@ echo $POSTGRES_DB_NAME
 **Symptom**: `FlywayException: Validate failed: Migration checksum mismatch`
 
 **Solutions**:
+
 ```bash
 # Repair migration history
 ./mvnw flyway:repair
@@ -487,6 +499,7 @@ echo $POSTGRES_DB_NAME
 **Symptom**: `401 Unauthorized` or `Invalid JWT token`
 
 **Solutions**:
+
 ```bash
 # Verify Cognito configuration
 echo $AWS_COGNITO_USER_POOL_ID
@@ -503,6 +516,7 @@ echo $AWS_COGNITO_CLIENT_ID
 **Symptom**: `AsyncRequestTimeoutException` or `504 Gateway Timeout`
 
 **Solutions**:
+
 ```yaml
 # Increase timeouts in application.yaml
 server:
@@ -524,6 +538,7 @@ feign:
 **Symptom**: `OutOfMemoryError` or slow performance
 
 **Solutions**:
+
 ```bash
 # Increase JVM heap size
 export JAVA_OPTS="-Xms512m -Xmx2048m"
@@ -567,7 +582,7 @@ WHERE schemaname = 'public'
 ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 ```
 
----
+***
 
 ## Performance Tuning
 
@@ -604,6 +619,7 @@ ANALYZE schedules;
 **Formula**: `connections = ((core_count * 2) + effective_spindle_count)`
 
 For a 4-core server with SSD:
+
 ```yaml
 spring:
   datasource:
@@ -611,7 +627,7 @@ spring:
       maximum-pool-size: 10  # (4 * 2) + 1 (SSD)
 ```
 
----
+***
 
 ## Security Best Practices
 
@@ -622,14 +638,10 @@ spring:
 5. **IP whitelisting**: Restrict engine callback endpoints to known IPs
 6. **Audit logging**: Monitor access logs for suspicious activity
 
----
+***
 
 ## Next Steps
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System design and patterns
-- [TECHNICAL.md](TECHNICAL.md) - Data models and API standards
-- [MODULES.md](MODULES.md) - Module-specific documentation
-
-
-
-
+* [ARCHITECTURE.md](../compiled/technical_documentation/ARCHITECTURE.md) - System design and patterns
+* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models and API standards
+* [MODULES.md](../compiled/technical_documentation/MODULES.md) - Module-specific documentation
