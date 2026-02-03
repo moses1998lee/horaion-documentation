@@ -81,30 +81,32 @@ Automate complex scheduling operations while maintaining compliance with labor r
 ### User Role Hierarchy
 
 ```mermaid
-mindmap
-  root((Genesis Users))
-    Primary Users
-      System Admin
-        ::icon(fa fa-cogs)
-        Org Management
-        User Management
-      Dept Manager
-        ::icon(fa fa-user-tie)
-        Schedule Creation
-        Approvals
-      Employee
-        ::icon(fa fa-user)
-        View Schedule
-        Request Leave
-    Secondary Users
-      HR Personnel
-        ::icon(fa fa-users)
-        Onboarding
-        Bulk Imports
-      Ops Team
-        ::icon(fa fa-server)
-        Monitoring
-        Deployment
+graph TD
+    root((Genesis Users))
+    
+    subgraph Primary_Users [Primary Users]
+        SysAdmin[System Admin<br/>Org Management<br/>User Management]
+        DeptMgr[Dept Manager<br/>Schedule Creation<br/>Approvals]
+        Emp[Employee<br/>View Schedule<br/>Request Leave]
+    end
+    
+    subgraph Secondary_Users [Secondary Users]
+        HR[HR Personnel<br/>Onboarding<br/>Bulk Imports]
+        Ops[Ops Team<br/>Monitoring<br/>Deployment]
+    end
+    
+    root --> SysAdmin
+    root --> DeptMgr
+    root --> Emp
+    root --> HR
+    root --> Ops
+    
+    style root fill:#f9f,stroke:#333
+    style SysAdmin fill:#e1f5fe
+    style DeptMgr fill:#e1f5fe
+    style Emp fill:#e1f5fe
+    style HR fill:#fff3e0
+    style Ops fill:#fff3e0
 ```
 
 #### 1. System Administrators
