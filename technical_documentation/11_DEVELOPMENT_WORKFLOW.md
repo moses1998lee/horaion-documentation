@@ -52,19 +52,16 @@ docker run -p 8080:8080 genesis-api
 ### Version Control Strategy (Feature Branch)
 
 ```mermaid
-graph LR
-    Main((main)) --> Commit1((Commit))
-    Commit1 --> Commit2((Commit))
-    Commit2 --> Branch[feature/GEN-123]
-    Branch --> DevWork[Dev Work]
-    DevWork --> MoreWork[More Work]
-    MoreWork --> PR[PR Merge]
-    PR --> MainMerge((Merge to main))
-    MainMerge --> Deploy((Deploy))
-    
-    style Main fill:#f9f,stroke:#333
-    style Branch fill:#e1f5fe,stroke:#0277bd
-    style MainMerge fill:#f9f,stroke:#333
+gitGraph
+   commit
+   commit
+   branch feature/GEN-123
+   checkout feature/GEN-123
+   commit id: "Dev Work"
+   commit id: "More Work"
+   checkout main
+   merge feature/GEN-123 id: "PR Merge"
+   commit id: "Deploy"
 ```
 
 - **Main Branch**: `main` (Production-ready code)
