@@ -1,5 +1,6 @@
-# Table of Contents
+# Table of contents
 
+* [00\_TABLE\_OF\_CONTENTS](00_TABLE_OF_CONTENTS.md)
 * [Executive Summary](01_EXECUTIVE_SUMMARY.md)
 * [System Architecture](02_SYSTEM_ARCHITECTURE.md)
 * [Technology Stack](03_TECHNOLOGY_STACK.md)
