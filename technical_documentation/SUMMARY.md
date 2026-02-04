@@ -1,6 +1,6 @@
 # Table of contents
 
-* [00\_TABLE\_OF\_CONTENTS](00_TABLE_OF_CONTENTS.md)
+* [Table of Contents](00_TABLE_OF_CONTENTS.md)
 * [Executive Summary](01_EXECUTIVE_SUMMARY.md)
 * [System Architecture](02_SYSTEM_ARCHITECTURE.md)
 * [Modules](modules/README.md)
