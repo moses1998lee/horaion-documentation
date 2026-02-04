@@ -1,0 +1,65 @@
+# Leave & Availability Domain Logic
+
+## Service: `EmployeeLeaveAvailabilityService`
+
+This service acts as the gatekeeper for employee time.
+
+### The Unified "Constraint" Model
+
+We treat both **Absence** (Leave) and **Presence** (Availability) as "Constraints" on the schedule.
+
+1.  **Hard Constraint (Leave)**: "The employee is definitely NOT here."
+2.  **Soft Constraint (Availability Preference)**: "The employee PREFERS to be here (or not)."
+
+This unification allows the `Auto-Scheduler` to fetch a single list of `TimeConstraints` rather than querying five different tables.
+
+### Approval Logic & Precedence
+
+Not all requests are created equal. The system uses a `requesterPrecedence` integer to decide who wins.
+
+*   **Logic**:
+    *   If `User A` submits a request, it has `Precedence: 1`.
+    *   If `Admin B` submits a request "On Behalf Of" User A, it has `Precedence: 10`.
+*   **Use Case**:
+    *   An employee requests Annual Leave (Pending).
+    *   A Manager creates a "Mandatory Training" block for the same day (Auto-Approved).
+    *   The "Mandatory Training" (High Precedence) effectively overrides or conflicts with the leave request depending on business rules.
+
+### Event-Driven Architecture
+
+This module is a "Producer" in event-driven design. It does not send emails directly; it **publishes facts**.
+
+```mermaid
+sequenceDiagram
+    participant Service as AvailabilityService
+    participant Publisher as EventPublisher
+    participant Email as EmailService
+    participant Sched as Scheduler
+    
+    Service->>Service: Approve Request
+    Service->>Publisher: Publish(LeaveApprovedEvent)
+    
+    par Async Actions
+        Publisher->>Email: Send Confirmation Email
+        Publisher->>Sched: Invalidate Cached Schedule
+    end
+```
+
+### Entities
+
+#### `EmployeeLeaveAvailability`
+
+*   **Keys**:
+    *   `id` (UUID, PK)
+    *   `employee_id` (FK): Subject of the request.
+    *   `approved_by` (FK): Audit trail of the manager.
+*   **Fields**:
+    *   `request_type`: Enum (`ANNUAL_LEAVE`, `SICK_LEAVE`, `AVAILABILITY`).
+    *   `status`: Enum (`PENDING`, `APPROVED`, `REJECTED`, `CANCELLED`).
+    *   `start_date` / `end_date`: **Inclusive** range.
+    *   `notes`: User-provided context ("Going to dentist").
+
+{% hint style="warning" %}
+**Important / Warning:**
+**Date Validation**: The system explicitly forbids `end_date < start_date`. However, `start_time` and `end_time` are nullable (implying "All Day").
+{% endhint %}
