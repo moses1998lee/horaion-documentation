@@ -1,70 +1,110 @@
 # API Reference
 
-{% hint style="info" %}
-**Note:**
-**Base Path**: `/api/v1/departments/{departmentId}/shifts`
-**Scope**: All shifts are scoped to a specific **Department**.
+{% hint style="warning" %}
+**Security Notice:**
+All endpoints in this module are protected by **Role Based Access Control (RBAC)**.
+You must have the appropriate permissions (e.g., `create:shift`, `read:shift`) to access these resources. Access is also strictly scoped to the `departmentId` provided in the path.
 {% endhint %}
 
-## Shift Management
+## Controller: `ShiftController`
 
-### 1. Create Shift Template
+**Base Path**: `/api/v1/departments/{departmentId}/shifts`
 
-**Endpoint**: `POST .../shifts`
+This controller manages the lifecycle of Shift Templates.
 
-Defines a new shift pattern and its staffing requirements.
+### 1. Retrieve Shifts (Paginated)
 
-*   **Request Body**:
+**Endpoint**: `GET /`
+
+Retrieves a paginated list of all shifts for a specific department.
+
+*   **Permissions**: `read:shift`
+*   **Parameters**:
+    *   `page` (query, int): Page number (default: 0)
+    *   `size` (query, int): Items per page (default: 10)
+*   **Response**: `200 OK` with `Page<ShiftResponse>`
+
+### 2. Create Shift
+
+**Endpoint**: `POST /`
+
+Creates a new Shift Template definition.
+
+*   **Permissions**: `create:shift`
+*   **Request Body**: `CreateShiftRequest`
+
     ```json
     {
-      "label": "Morning Rush",
-      "type": "OPENING",
-      "startTime": "07:00",
-      "endTime": "15:00",
-      "daysAppliedTo": [1, 2, 3, 4, 5], // Mon-Fri
+      "label": "Morning Standard",
+      "type": "MORNING",
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "daysAppliedTo": [1, 2, 3, 4, 5],
       "colorCode": "#FF5733",
       "shiftRoles": [
-        "uuid-of-manager-role", // Implicitly required count = 1
-        "uuid-of-cashier-role",
-        "uuid-of-cashier-role"  // Listed twice = required count 2
+        "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11", 
+        "b1ffcd22-8d1a-5fe9-cc7e-7cc8ce491b22"
       ]
     }
     ```
 
-### 2. Get Active Shifts
+    {% hint style="info" %}
+    **Note on daysAppliedTo**:
+    1 = Monday, 7 = Sunday. The array `[1, 2, 3, 4, 5]` represents a standard Monday-Friday work week.
+    {% endhint %}
 
-**Endpoint**: `GET .../shifts/active`
+*   **Response**: `201 Created`
 
-Returns the "Menu" of currently available shifts for the solver to use.
+### 3. Get Shift by ID
 
-### 3. Update Shift
+**Endpoint**: `GET /{id}`
 
-**Endpoint**: `PUT .../shifts/{id}`
+Retrieves full details for a single shift template.
 
-Updates the definition.
+*   **Permissions**: `read:shift`
+*   **Response**: `200 OK`
 
-{% hint style="warning" %}
-**Important / Warning:**
-**Impact**: Changing a Shift Definition (e.g., changing 08:00 to 09:00) **does NOT** automatically update past or already-published schedules. It only affects future schedule generation.
+    ```json
+    {
+      "id": "c2ggde00-0e1b-6ff0-dd8f-8dd9df502c33",
+      "label": "Morning Standard",
+      "shiftType": "MORNING",
+      "startTime": "09:00:00",
+      "endTime": "17:00:00",
+      "shiftRoles": ["..."],
+      "isActive": true
+    }
+    ```
+
+### 4. Update Shift
+
+**Endpoint**: `PUT /{id}`
+
+Updates an existing shift.
+
+*   **Permissions**: `update:shift`
+*   **Request Body**: `UpdateShiftRequest` (Same structure as Create)
+*   **Response**: `200 OK`
+
+### 5. Delete Shift
+
+**Endpoint**: `DELETE /{id}`
+
+Performs a **HARD DELETE** on the shift.
+
+{% hint style="danger" %}
+**Critical Warning:**
+This operation is **irreversible**. It permanently removes the Shift template and its associated Role constraints from the database.
+Ensure the shift is not actively being used in upcoming schedules before deletion.
 {% endhint %}
 
-## Exception Handling
+*   **Permissions**: `delete:shift`
+*   **Response**: `204 No Content`
 
-| Exception | HTTP Status | Description |
+### 6. Utility Endpoints
+
+| Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `DuplicateShiftLabelException` | `409 Conflict` | Trying to create "Morning" shift when one already exists for this department. |
-| `ShiftNotFoundException` | `404 Not Found` | Invalid Shift ID. |
-
-### Example Error Responses
-
-#### 409 Conflict (Duplicate Label)
-
-```json
-{
-  "success": false,
-  "error": {
-    "code": "DUPLICATE_SHIFT_LABEL",
-    "message": "Shift with label 'Morning Rush' already exists for this department."
-  }
-}
-```
+| `/active` | `GET` | Returns a simple list (not paginated) of all **Active** shifts. Useful for dropdowns. |
+| `/roles` | `GET` | Returns a distinct list of all Employee Roles currently used in this department's shifts. |
+| `/list` | `GET` | Returns a simple list of all shifts (including inactive). |

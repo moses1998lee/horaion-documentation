@@ -1,61 +1,72 @@
-# Shift Domain Logic
+# Domain Model
 
-## Service: `ShiftService`
+## Entities
 
-This service manages the "Inventory of Time".
+### 1. Shift
+**Table**: `shifts`
 
-### 1. The Multi-Role Pattern
+The core aggregate root representing a shift template.
 
-A unique feature of this system is that a single `Shift` entity aggregates multiple `EmployeeRoles`.
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | UUID | Yes | Primary Key |
+| `department_id` | UUID | Yes | Foreign Key to Department |
+| `label` | VARCHAR(100) | Yes | Human-readable name (e.g., "Morning A") |
+| `shift_type` | Enum | Yes | Classification (see below) |
+| `start_time` | TIME | Yes | Start of the shift (e.g., `09:00:00`) |
+| `end_time` | TIME | Yes | End of the shift (e.g., `17:00:00`) |
+| `days_applied_to`| INT[] | Yes | Array of integers (1=Mon) indicating valid days |
+| `color_code` | VARCHAR(10) | Yes | Hex code for UI display (e.g., `#FF0000`) |
+| `is_active` | BOOLEAN | Yes | Default: `true`. |
+| `soft_delete` | BOOLEAN | Yes | Default: `false`. Handling deletion logic. |
 
-*   **Traditional Model**: 1 Shift = 1 Person.
-*   **Horaion Model**: 1 Shift = A Team.
-    *   Example: "Truck Unloading Shift" (04:00 - 08:00).
-    *   Requirement: 4x Movers, 1x Supervisor.
+**Constraints**:
+*   `uq_shift_label_per_department`: A shift label must be unique within a Department.
 
-This aggregation simplifies the schedule generation. Instead of the solver trying to place 5 individual shifts, it places 1 "Block" and then fills the 5 slots within it.
+### 2. ShiftRole
+**Table**: `shift_roles`
 
-### 2. Validation Logic
+A association entity defining staffing requirements.
 
-*   **Label Uniqueness**: Enforced per-department. You can have "Morning" in Kitchen and "Morning" in Bar, but not two "Morning" shifts in Kitchen.
-*   **Time Validity**: `startTime` must be defined. `endTime` can be *after* `startTime` (same day) or *before* `startTime` (overnight shift).
-    *   *Note*: The system handles overnight shifts (cross-midnight) efficiently.
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `id` | UUID | Yes | Primary Key |
+| `shift_id` | UUID | Yes | Parent Shift |
+| `employee_role_id`| UUID | Yes | Reference to global Employee Role |
+| `required_count` | INTEGER | Yes | How many people of this role are needed. (**Default: 1**) |
 
-#### Cross-Midnight Handling
+**Constraints**:
+*   `uq_shift_role`: A specific Role can only be added once per Shift.
+*   **Implementation Note**: While the database supports variable counts (e.g., 2x Baristas), the current `ShiftService` implementation hardcodes this to **1** upon creation.
 
-```mermaid
-sequenceDiagram
-    participant FE as Frontend
-    participant API as ShiftService
-    
-    FE->>API: Create Shift (22:00 - 06:00)
-    API->>API: Verify Duration (8 hours)
-    API->>API: Mark as "Overnight"
-    API-->>FE: Success
-```
+## Enums
 
-### Frontend Integration Guide
+### ShiftType
+Standardized categories for reporting and high-level logic.
 
-#### Displaying Shifts (Gantt Palette)
-
-When building the Schedule Editor, use the `GET .../shifts/active` endpoint to populate the "Draggable Palette" on the left side of the screen.
-
-```typescript
-// Component: ShiftPaletteItem
-interface ShiftProps {
-  label: string;
-  color: string;
-  duration: string; // "8h"
+```java
+public enum ShiftType {
+    MORNING,
+    AFTERNOON,
+    EVENING,
+    NIGHT,
+    SPLIT,    // A shift with a significant break in the middle
+    FLEXIBLE, // No fixed start/end time
+    ON_CALL   // Employee must be available but not necessarily on site
 }
-
-// Render
-<div style={{ backgroundColor: shift.colorCode }}>
-  <span className="font-bold">{shift.label}</span>
-  <span className="text-xs">{shift.startTime} - {shift.endTime}</span>
-</div>
 ```
 
-{% hint style="success" %}
-**Tip / Success:**
-**Color Coding**: Always use the `colorCode` from the API. This ensures that the "Morning Shift" looks the same in the Palette, the Gantt Chart, and the Employee Mobile App.
+## Validation Rules
+
+Requests are validated using `jakarta.validation` annotations.
+
+{% hint style="danger" %}
+**Critical:**
+**Color Code Validation**: The system strictly enforces Hex format (`^#[0-9A-Fa-f]{6}$`). Invalid colors will cause a `400 Bad Request`.
 {% endhint %}
+
+| Field | Rule | Message |
+| :--- | :--- | :--- |
+| `label` | Not Blank, Max 100 | "Label must not exceed 100 characters." |
+| `daysAppliedTo` | Not Empty, Size 1-7 | "Days applied to must have between 1 and 7 elements." |
+| `colorCode` | Regex | "Color code must be a valid hex color." |

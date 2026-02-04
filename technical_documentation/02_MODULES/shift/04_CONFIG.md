@@ -1,29 +1,38 @@
-# Shift Module Configuration
+# Configuration & Security
 
-## Database Configuration
+## Application Configuration
 
-### Tables
+The Shift Module does not require specific entries in `application.yml` as it leverages the shared infrastructure (PostgreSQL, Security, Validator).
 
-1.  **`shifts`**: The main definition.
-    *   `days_applied_to`: **Integer Array (`integer[]`)**.
-        *   Stores the days of week (1=Mon, 7=Sun) this shift is valid for.
-        *   *Advantage*: Array columns in Postgres allow extremely fast filtering (e.g., "Find all shifts valid on Mondays" -> `WHERE 1 = ANY(days_applied_to)`).
+However, it relies on the Global Exception Handler for standardized error responses.
 
-2.  **`shift_roles`**: The staffing requirements.
-    *   Maps `shift_id` <-> `employee_role_id`.
+## Permissions (RBAC)
 
-### Indexes
+Access is controlled via the `Permit.io` integration. The following actions must be assigned to user roles for them to interact with this module.
 
-| Index Name | Table | Column | Purpose |
+| Resource | Action | Description | Typical Role |
 | :--- | :--- | :--- | :--- |
-| `idx_shifts_department_id` | `shifts` | `department_id` | Partitioning shifts by department. |
-| `uq_shift_label_per_department` | `shifts` | `department_id` + `label` | Enforcing unique names. |
+| `shift` | `read` | View shift templates | Manager, Employee, Admin |
+| `shift` | `create` | Define new shifts | Manager, Admin |
+| `shift` | `update` | Modify existing shifts | Manager, Admin |
+| `shift` | `delete` | Soft-delete a shift | Manager, Admin |
 
-## Application Properties
-
-No specific properties required.
-
-{% hint style="danger" %}
-**Critical:**
-**Hard Deletes**: Be careful with "Hard Deletes" on Shifts. If you hard-delete a shift template, you may break historical reporting for schedules that referenced it. Always use **Soft Delete** (`is_active = false`).
+{% hint style="info" %}
+**Note:**
+Permissions are implicitly scoped to the **Department**. A Manager with `read:shift` can only read shifts within their own Department(s).
 {% endhint %}
+
+## Database Indexes
+
+To ensure performance during schedule generation (which queries shifts heavily), the following indexes are critical:
+
+```sql
+-- Filter by Department (Most common query)
+CREATE INDEX idx_shifts_department_id ON shifts(department_id);
+
+-- Filter by Type (Reporting)
+CREATE INDEX idx_shifts_shift_type ON shifts(shift_type);
+
+-- Soft Delete awareness (Optional but recommended for large datasets)
+-- Note: The current `@Where(clause = "soft_delete = false")` handles this via Hibernate.
+```

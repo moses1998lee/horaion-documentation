@@ -1,42 +1,77 @@
 # Shift Module
 
-| Attribute     | Details                                       |
-| :------------ | :-------------------------------------------- |
-| **Namespace** | `com.horaion.app.modules.shift`               |
-| **Status**    | 🟢 Stable                                     |
+| Attribute | Details |
+| :--- | :--- |
+| **Namespace** | `com.horaion.app.modules.shift` |
+| **Status** | 🟢 Stable |
 | **Criticality** | **High** (Core input for Schedule Generation) |
-| **Dependencies** | Department, Employee (Role)                   |
+| **Dependencies** | Department, Employee (Role) |
 
 ## Executive Summary
 
-The **Shift Module** defines the **Templates of Work**.
+The **Shift Module** is responsible for defining the **Templates of Work** within the organization. 
 
-Crucially, a "Shift" in this module is a **Definition**, not an Assignment. It defines a standard block of time (e.g., "Morning Shift: 08:00 - 16:00") and the staffing requirements for that block (e.g., "Requires 2 Cashiers").
+Crucially, in the Genesis platform, a "Shift" is a **Metadata Definition**, not an assignment. It represents a reusable block of time (e.g., "Standard Morning: 09:00 - 17:00") and the staffing requirements needed for that block.
 
-The [Schedule Module](../schedule/01_OVERVIEW.md) later uses these definitions to generate the actual roster.
+{% hint style="info" %}
+**Analogy Note:**
+Think of the **Shift Module** as the **"Menu"** in a restaurant. It lists what is *available* to be scheduled (Morning Shift, Night Shift).
+The **Schedule Module** is the **"Order"** (e.g., "John is working the Morning Shift on Monday").
+{% endhint %}
 
 ### Core Capabilities
+1.  **Shift Templating**: Define standard operating hours with visual cues (Color Codes).
+2.  **Role Requirements**: Specify exactly *which* roles are needed.
+    *   *Current Limitation*: The system currently defaults to **1 person per role** specified.
+3.  **Day Applicability**: Tag shifts for specific days of the week (e.g., "Weekend Brunch Shift" only applies on Sat/Sun).
+4.  **Department Scoping**: Shifts are strictly isolated by Department.
 
-1.  **Shift Templating**: Define standard operating hours.
-2.  **Role Requirements**: Specify exactly *who* is needed for this shift (e.g., "1 Manager, 3 Baristas").
-3.  **Day Applicability**: Tag shifts for specific days (e.g., "Weekend Brunch Shift").
+## Module Architecture
 
-## Hierarchy & Data Flow
+The Shift module sits between the organizational structure (Department) and the operational execution (Schedule).
 
 ```mermaid
 graph TD
-    Manager[Store Manager] --> |1. Define Shift| Shift[Shift Template]
+    Manager[Department Manager] --> |1. Defines| Shift[Shift Template]
     
-    Shift --> |Attributes| Time[08:00 - 16:00]
-    Shift --> |Attributes| Days[Mon, Tue, Wed]
+    subgraph "Shift Definition"
+        Shift --> |Time Window| Time[09:00 - 17:00]
+        Shift --> |Visual| Color[#FF5733]
+        Shift --> |Constraints| Days[Mon, Tue, Wed]
+        
+        Shift --> |Requires| RoleReqs{Role Requirements}
+        RoleReqs --> |1x| Admin[Admin Role]
+        RoleReqs --> |3x| User[User Role]
+    end
     
-    Shift --> |Requirements| ShiftRole1[2x Cashiers]
-    Shift --> |Requirements| ShiftRole2[1x Manager]
-    
-    Shift --> |Input For| Solver[Schedule Solver]
+    Shift -.-> |Input Data| Solver[Optimization Engine]
+    Solver --> |Generates| Roster[Final Schedule]
 ```
 
-{% hint style="info" %}
-**Note:**
-**Analogy**: Think of the **Shift Module** as the "Menu" in a restaurant. It lists what is *available* (Morning Shift, Night Shift). The **Schedule Module** is the actual "Order" (John is working the Morning Shift on Monday).
+## Key Interactions
+
+### 1. Department Module (Upstream)
+*   **Relationship**: **Strict Parent-Child**.
+*   **Details**: Every Shift belongs to exactly one `Department`. Operations are always scoped via `/api/v1/departments/{departmentId}/shifts`.
+*   **Cascade**: If a Department is deleted, its Shifts are likely cascaded (though usually soft-deleted in practice).
+
+### 2. Employee Module (Lateral)
+*   **Relationship**: **Reference**.
+*   **Details**: Shifts define requirements based on `EmployeeRole` (via `ShiftRole` entity). It does *not* reference specific Employees, only their Roles.
+
+### 3. Schedule Module (Downstream)
+*   **Relationship**: **Dependency**.
+*   **Details**: The Schedule module uses the list of Active Shifts to know what slots need to be filled by the optimization engine.
+
+## Domain Model Summary
+
+| Entity | Description |
+| :--- | :--- |
+| `Shift` | The root aggregate. Contains time, label, and metadata. |
+| `ShiftRole` | A child entity defining "How many of Role X are needed". |
+| `ShiftType` | Enum categorization (MORNING, NIGHT, etc.) used for reporting. |
+
+{% hint style="warning" %}
+**Important Implementation Detail:**
+Shifts support **Soft Deletion**. When a user "deletes" a shift, `softDelete` is set to `true` and `isActive` to `false`. This preserves historical data for past schedules that may validly reference this now-deleted shift.
 {% endhint %}
