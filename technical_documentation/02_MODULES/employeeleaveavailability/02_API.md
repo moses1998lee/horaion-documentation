@@ -82,3 +82,18 @@ Manager action to deny a request.
 | `DuplicateLeaveRequestException` | `409 Conflict` | Dates overlap with an existing request. |
 | `InvalidDateRangeException` | `400 Bad Request` | End Date is before Start Date. |
 | `InvalidRequestStatusException` | `400 Bad Request` | Trying to modify a finalized request. |
+
+### Example Error Response (Conflict)
+
+When an employee tries to double-book themselves (e.g., requesting Sick Leave when they already have Annual Leave approved):
+
+```json
+{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "DUPLICATE_LEAVE_REQUEST",
+    "message": "A leave request already exists for the overlapping period: 2024-12-25 to 2024-12-26."
+  }
+}
+```

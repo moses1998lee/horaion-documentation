@@ -25,6 +25,19 @@ Not all requests are created equal. The system uses a `requesterPrecedence` inte
     *   A Manager creates a "Mandatory Training" block for the same day (Auto-Approved).
     *   The "Mandatory Training" (High Precedence) effectively overrides or conflicts with the leave request depending on business rules.
 
+### Auto-Approval Logic
+
+The system automatically approves requests based on the `SubmissionType`:
+
+| Submission Type | Status | Use Case |
+| :--- | :--- | :--- |
+| `SELF_SERVICE` | `PENDING` | Employee applying via Mobile App. Needs Manager review. |
+| `ON_BEHALF` | `APPROVED` | HR or Manager logging leave *for* the employee. Assumed pre-approved. |
+
+{% hint style="info" %}
+**Note:** `ON_BEHALF` requires elevated permissions (System Owner or Department Lead).
+{% endhint %}
+
 ### Event-Driven Architecture
 
 This module is a "Producer" in event-driven design. It does not send emails directly; it **publishes facts**.
@@ -63,3 +76,25 @@ sequenceDiagram
 **Important / Warning:**
 **Date Validation**: The system explicitly forbids `end_date < start_date`. However, `start_time` and `end_time` are nullable (implying "All Day").
 {% endhint %}
+
+### Request Lifecycle
+
+The lifecycle of a generic request involves the Employee (Applicant) and the Manager (Approver).
+
+```mermaid
+stateDiagram-v2
+    [*] --> Pending: Employee Submits
+    [*] --> Approved: Admin Submits (Auto)
+    
+    Pending --> Approved: Manager Approves
+    Pending --> Rejected: Manager Rejects
+    Pending --> Cancelled: Employee Cancels
+    
+    Approved --> [*]: Final State
+    Rejected --> [*]: Final State
+    Cancelled --> [*]: Final State
+```
+
+1.  **Pending**: Waiting for action. Blocks the employee from submitting overlapping requests.
+2.  **Approved**: Confirmed. This is the only state that the **Scheduler** cares about.
+3.  **Rejected**: Denied. The constraints are ignored by the Scheduler.
