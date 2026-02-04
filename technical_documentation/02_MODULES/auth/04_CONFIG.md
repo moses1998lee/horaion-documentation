@@ -10,8 +10,10 @@ The module relies on the global `genesis` (soon to be `horaion`) configuration b
 | `aws.cognito.user-pool-id` | internal User Pool ID | Yes | - |
 | `aws.cognito.region` | AWS Region (e.g., `ap-southeast-1`) | Yes | `ap-southeast-1` |
 
-> [!NOTE]
-> * `client-secret` is optional in Cognito, but if enabled in AWS, it must be provided here. The `AuthService` automatically detects if it's set and calculates the `SECRET_HASH` accordingly.
+{% hint style="info" %}
+**Note:**
+* `client-secret` is optional in Cognito, but if enabled in AWS, it must be provided here. The `AuthService` automatically detects if it's set and calculates the `SECRET_HASH` accordingly.
+{% endhint %}
 
 ## Beans
 ### `CognitoIdentityProviderClient`

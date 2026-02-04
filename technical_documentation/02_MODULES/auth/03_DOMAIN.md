@@ -18,8 +18,10 @@ The core business logic resides here, orchestrating interactions between AWS Cog
 3.  **Local Persistence**:
     *   An `Employee` record is created keyed by the `sub`.
 4.  **Rolllback Mechanism (Crucial)**:
-    *   > [!WARNING]
-    *   > **Failure Scenario**: If the local database fails to save the Employee, the system enters an inconsistent state.
+    *   {% hint style="warning" %}
+    *   **Important / Warning:**
+    *   **Failure Scenario**: If the local database fails to save the Employee, the system enters an inconsistent state.
+    *   {% endhint %}
     *   **Resolution**: The service catches the exception and immediately deletes the user from AWS ("Compensating Transaction") to restore consistency.
 5.  **Notification**:
     *   Upon final success, a welcome email is queued.
@@ -27,8 +29,10 @@ The core business logic resides here, orchestrating interactions between AWS Cog
 ### 2. Secret Hash Calculation
 **Requirement**: AWS Cognito Security Compliance.
 
-> [!TIP]
-> AWS Cognito requires a `SECRET_HASH` to verify the client's authenticity. This prevents unauthorized apps from spamming the User Pool.
+{% hint style="success" %}
+**Tip / Success:**
+AWS Cognito requires a `SECRET_HASH` to verify the client's authenticity. This prevents unauthorized apps from spamming the User Pool.
+{% endhint %}
 
 *   **Algorithm**: `HMAC-SHA256`
 *   **Formula**: `Base64(HmacSHA256("Client Secret", "Username" + "Client ID"))`
@@ -60,8 +64,10 @@ A functional wrapper helper (`utils/ExceptionWrappingExecutor.java`) designed to
 **Why it exists**:
 Java's Functional Interfaces (like `Supplier`) do not support checked exceptions. This utility wraps code blocks (like AWS SDK calls) to:
 
-> [!NOTE]
-> **Wrapper Logic**: checked `Exception`s are wrapped into a runtime `CryptographicException` (usually for HMAC errors) or `AuthOperationException`. RuntimeExceptions (e.g., `SdkClientException`) pass through unmodified.
+{% hint style="info" %}
+**Note:**
+**Wrapper Logic**: checked `Exception`s are wrapped into a runtime `CryptographicException` (usually for HMAC errors) or `AuthOperationException`. RuntimeExceptions (e.g., `SdkClientException`) pass through unmodified.
+{% endhint %}
 
 **Usage Pattern**:
 ```java

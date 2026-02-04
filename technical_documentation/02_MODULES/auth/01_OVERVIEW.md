@@ -10,8 +10,10 @@
 ## Executive Summary
 The **Auth Module** orchestrates user identity, authentication, and registration within the Horaion platform. It acts as the secure gateway ("The Bouncer") between the client application and our identity provider, **AWS Cognito**.
 
-> [!IMPORTANT]
-> **For New Developers**: We leverage **AWS Cognito** for identity management to ensure industry-standard security for password storage and token generation. This module's primary responsibility is to bridge the gap between AWS's identity records and Horaion's local business data.
+{% hint style="warning" %}
+**Important / Warning:**
+**For New Developers**: We leverage **AWS Cognito** for identity management to ensure industry-standard security for password storage and token generation. This module's primary responsibility is to bridge the gap between AWS's identity records and Horaion's local business data.
+{% endhint %}
 
 ### Core Capabilities
 1.  **Identity Federation**: Proxies registration requests to AWS.

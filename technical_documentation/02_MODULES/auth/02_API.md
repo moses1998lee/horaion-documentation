@@ -1,6 +1,7 @@
 # API Reference
 
 {% hint style="warning" %}
+**Important / Warning:**
 **Security Notice**: Most endpoints in this controller are **Public** to allow unauthenticated users to Register and Login. However, rate limiting and internal checks are applied.
 {% endhint %}
 
@@ -8,7 +9,7 @@
 
 **Base Path**: `/api/v1/auth`
 
-### 1. User Registration
+### 2. User Registration
 
 **Endoint**: `POST /register`
 
@@ -88,7 +89,10 @@ Authenticates a user against AWS Cognito and retrieves session tokens.
   * `401 Unauthorized`: Invalid credentials.
   * `403 Forbidden`: Account email is not confirmed.
 
-> \[!CAUTION] **Token Security**: Tokens should be stored securely on the client side (e.g., `HttpOnly` cookies) to prevent XSS attacks.
+{% hint style="danger" %}
+**Critical:**
+**Token Security**: Tokens should be stored securely on the client side (e.g., `HttpOnly` cookies) to prevent XSS attacks.
+{% endhint %}
 
 #### 4. Refresh Token
 
