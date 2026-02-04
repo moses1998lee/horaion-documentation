@@ -3,7 +3,7 @@
 {% hint style="info" %}
 **Note:**
 **Base Path**: `/api/v1/companies/{companyId}/departments/{departmentId}/demand-forecasts`
-All endpoints require both `companyId` and `departmentId`.
+**Context**: All endpoints are scoped to a specific `Department`. You cannot fetch a forecast "globally" without knowing which department it belongs to.
 {% endhint %}
 
 ## Controller: `DemandForecastController`
@@ -14,8 +14,12 @@ All endpoints require both `companyId` and `departmentId`.
 
 Retrieves a history of forecasts for a department.
 
-*   **Parameters**: `page`, `size`.
-*   **Success Response** (`200 OK`): `Page<DemandForecastResponse>`.
+*   **Query Parameters**:
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | `int` | `0` | Page number. |
+| `size` | `int` | `10` | Items per page. |
 
 ### 2. Get Forecast by Date
 
@@ -23,17 +27,19 @@ Retrieves a history of forecasts for a department.
 
 Finds the specific plan for a single calendar day.
 
-*   **Parameters**:
+*   **Path Parameters**:
     *   `date`: YYYY-MM-DD (e.g., `2024-12-25`).
 *   **Success Response** (`200 OK`): Returns the complex timeblock structure for that day.
+*   **Error Responses**:
+    *   `404 Not Found`: If no plan exists for this specific date.
 
 ### 3. Get Forecast by Date Range
 
 **Endpoint**: `GET .../demand-forecasts/range`
 
-Useful for fetching a full week's worth of demand to display on a calendar view.
+**Use Case**: Fetching a full week's worth of demand to display on the Weekly Calendar View.
 
-*   **Parameters**:
+*   **Query Parameters**:
     *   `startDate`: YYYY-MM-DD.
     *   `endDate`: YYYY-MM-DD.
 
@@ -41,7 +47,12 @@ Useful for fetching a full week's worth of demand to display on a calendar view.
 
 **Endpoint**: `POST .../demand-forecasts`
 
-Creates a new forecast. If a forecast already exists for this date, the logic inside `DemandForecastService` will intelligently **Update** it instead of crashing.
+Creates a new forecast.
+
+{% hint style="success" %}
+**Tip / Success:**
+**Idempotency**: If a forecast already exists for this date, the service logic will intelligently **Update** it instead of crashing with a "Duplicate" error. This makes the frontend logic much simpler (just "Save", don't worry about "Create vs Edit").
+{% endhint %}
 
 *   **Request Body**: `CreateDemandForecastRequest`
     ```json
@@ -55,21 +66,25 @@ Creates a new forecast. If a forecast already exists for this date, the logic in
             { "roleId": "uuid-for-cashier", "demandValue": 5 },
             { "roleId": "uuid-for-manager", "demandValue": 1 }
           ]
+        },
+        {
+          "index": 18,
+          "demands": [
+             { "roleId": "uuid-for-cashier", "demandValue": 5 }
+          ]
         }
       ]
     }
     ```
-    {% hint style="success" %}
-    **Tip / Success:**
-    **Index 17?** That means **08:30 AM**.
-    Formula: `(8 * 2) + 1 = 17`.
-    {% endhint %}
+    *   **Logic**:
+        *   `index: 17` = **08:30**. 5 Cashiers, 1 Manager.
+        *   `index: 18` = **09:00**. 5 Cashiers. (Manager went home?).
 
 ### 5. Update Forecast
 
 **Endpoint**: `PUT .../demand-forecasts/{id}`
 
-Updates metadata or demand values.
+Updates metadata or demand values for an existing ID.
 
 ### 6. Soft Delete
 
@@ -79,14 +94,16 @@ Marks the forecast as deleted but keeps it for historical data training.
 
 {% hint style="danger" %}
 **Critical:**
-**Hard Delete**: There is also a `DELETE /{id}` endpoint, but it completely wipes the record. Use Soft Delete whenever possible to preserve data for AI training usage.
+**Hard Delete vs Soft Delete**:
+*   `DELETE /{id}/soft`: **Preferred**. Sets `is_deleted=true`. Preserves history for AI.
+*   `DELETE /{id}`: **Destructive**. Wipes the record from the database. Use only if a user made a mistake and wants to "Undo" a creation immediately.
 {% endhint %}
 
 ## Exception Handling
 
-Mapped in `DemandForecastExceptionHandler` (generic handler).
+Mapped in `DemandForecastExceptionHandler`.
 
 | Exception | HTTP Status | Description |
 | :--- | :--- | :--- |
 | `DemandForecastNotFoundException` | `404 Not Found` | ID or Date not found. |
-| `DepartmentNotFoundException` | `404 Not Found` | Invalid Department ID. |
+| `DepartmentNotFoundException` | `404 Not Found` | Invalid Department ID provided. |
