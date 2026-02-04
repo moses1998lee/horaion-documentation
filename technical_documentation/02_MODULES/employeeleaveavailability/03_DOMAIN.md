@@ -98,3 +98,39 @@ stateDiagram-v2
 1.  **Pending**: Waiting for action. Blocks the employee from submitting overlapping requests.
 2.  **Approved**: Confirmed. This is the only state that the **Scheduler** cares about.
 3.  **Rejected**: Denied. The constraints are ignored by the Scheduler.
+
+### Frontend Integration Guide
+
+To ensure consistent UI across Mobile, Web, and Email, use these standard mappings.
+
+#### TypeScript Enums & Helpers
+
+```typescript
+export enum RequestStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  CANCELLED = 'CANCELLED'
+}
+
+export const StatusConfig: Record<RequestStatus, { label: string; color: string }> = {
+  [RequestStatus.PENDING]:   { label: 'Pending Review', color: 'orange' },
+  [RequestStatus.APPROVED]:  { label: 'Approved',       color: 'green' },
+  [RequestStatus.REJECTED]:  { label: 'Declined',       color: 'red' },
+  [RequestStatus.CANCELLED]: { label: 'Cancelled',      color: 'grey' }
+};
+
+/**
+ * Returns a user-friendly label for the Leave Type.
+ * e.g., "ANNUAL_LEAVE" -> "Annual Leave 🌴"
+ */
+export function getLeaveTypeLabel(type: string): string {
+  const labels: Record<string, string> = {
+    ANNUAL_LEAVE: 'Annual Leave 🌴',
+    SICK_LEAVE: 'Sick Leave 🤒',
+    UNPAID_LEAVE: 'Unpaid Leave 💸',
+    AVAILABILITY: 'Availability Preference 🕒'
+  };
+  return labels[type] || type;
+}
+```
