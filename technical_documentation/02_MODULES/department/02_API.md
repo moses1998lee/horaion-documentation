@@ -3,7 +3,7 @@
 {% hint style="info" %}
 **Note:**
 **Base Path**: `/api/v1/companies/{companyId}/branches/{branchId}/departments`
-All endpoints require a valid `companyId` AND `branchId` in the path.
+All endpoints require a valid `companyId` AND `branchId` in the path. This strict scoping ensures data isolation.
 {% endhint %}
 
 ## Controller: `DepartmentController`
@@ -15,27 +15,33 @@ All endpoints require a valid `companyId` AND `branchId` in the path.
 Retrieves a paginated list of departments for a specific branch.
 
 *   **Query Parameters**:
-    *   `page`: Page number (default: 0).
-    *   `size`: Items per page (default: 10).
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | `int` | `0` | Page number. |
+| `size` | `int` | `10` | Items per page. |
 
 ### 2. Get Department by ID
 
 **Endpoint**: `GET .../departments/{id}`
 
 Fetches detailed information about a department, including its recursive parent (if any).
+*   **Response includes**: `parentId`, `parentName`, `headOfDeptId`, `headOfDeptName`.
 
 ### 3. Get Active Departments
 
 **Endpoint**: `GET .../departments/active`
 
 Retrieves all departments where `isActive = true`.
-**Use Case**: Populating "Select Department" lists in the Scheduler UI.
+*   **Use Case**: Populating "Select Department" lists in the Scheduler UI.
+*   **Note**: This endpoint is usually unpaginated as the list of departments is rarely massive per branch.
 
 ### 4. Get Roles in Department
 
 **Endpoint**: `GET .../departments/{id}/roles`
 
 Returns a list of all Employee Roles (e.g., "Cashier", "Manager") that are associated with this department.
+*   **Use Case**: When scheduling a shift for the "Bakery" department, you only want to see "Bakers", not "Accountants".
 
 ### 5. Create Department
 

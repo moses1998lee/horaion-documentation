@@ -50,3 +50,60 @@ This allows large clients (like Hypermarkets) to model "Perishables" as a parent
 **Note:**
 **Indexes**: We index `branch_id` (for listing), `department_code` (for search), and `parent_id` (for tree traversal) to ensure performance remains high even with deep hierarchies.
 {% endhint %}
+
+### Frontend Integration Guide
+
+Since departments can be nested indefinitely, rendering them in a flat dropdown or a tree requires recursion.
+
+#### TypeScript Helpers
+
+```typescript
+interface Department {
+  id: string;
+  name: string;
+  parentId?: string;
+  children?: Department[]; // Populated by the helper below
+}
+
+/**
+ * Transforms a flat list of departments into a Tree Structure.
+ * Useful for "Tree Select" components.
+ */
+function buildDepartmentTree(departments: Department[]): Department[] {
+  const map: Record<string, Department> = {};
+  const tree: Department[] = [];
+
+  // Initialize map
+  departments.forEach(d => {
+    map[d.id] = { ...d, children: [] };
+  });
+
+  // Build tree
+  departments.forEach(d => {
+    if (d.parentId && map[d.parentId]) {
+      map[d.parentId].children!.push(map[d.id]);
+    } else {
+      tree.push(map[d.id]);
+    }
+  });
+
+  return tree;
+}
+
+/**
+ * Generates breadcrumbs for a specific department.
+ * Example: "Engineering > Mobile > iOS"
+ */
+function getBreadcrumbs(targetId: string, allDepartments: Department[]): string[] {
+  const map = new Map(allDepartments.map(d => [d.id, d]));
+  const breadcrumbs: string[] = [];
+  
+  let current = map.get(targetId);
+  while (current) {
+    breadcrumbs.unshift(current.name);
+    current = current.parentId ? map.get(current.parentId) : undefined;
+  }
+  
+  return breadcrumbs;
+}
+```

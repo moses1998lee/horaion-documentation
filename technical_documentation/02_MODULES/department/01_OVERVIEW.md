@@ -36,6 +36,10 @@ graph TD
     SubDept2 --> |Assigned| Emp2[Employee: Bob]
 ```
 
+### Visual Example: Breadcrumbs
+In the frontend UI, this hierarchy translates to easy navigation:
+> **Cape Town** > **Engineering** > **Backend Team**
+
 ## Core Capabilities
 
 1.  **Organizational Modeling**:
