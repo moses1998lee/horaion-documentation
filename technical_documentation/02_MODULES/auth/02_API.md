@@ -1,6 +1,7 @@
 # Auth Module API Layer
 
 > [!IMPORTANT]
+>
 > **Security Notice**: Most endpoints in this controller are **Public** to allow unauthenticated users to Register and Login. However, rate limiting and internal checks are applied.
 
 ## Controller: `AuthController`
