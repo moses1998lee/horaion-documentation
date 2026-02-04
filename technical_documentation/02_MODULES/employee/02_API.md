@@ -23,10 +23,37 @@ Retrieves a paginated list of employees for specific branch.
 
 **Endpoint**: `GET .../employees/{id}`
 
-Fetches the full profile, including:
-*   Standard fields (Name, Email).
-*   Active Department Assignments.
-*   Job Title details.
+Fetches the full profile, including standard fields, active department assignments, and job title details.
+
+*   **Success Response** (`200 OK`):
+    ```json
+    {
+      "id": "e58ed763-928c-4155-bee9-fdbaaadc15f3",
+      "firstName": "John",
+      "lastName": "Doe",
+      "code": "EMP-A1B2",
+      "email": "john.doe@company.com",
+      "jobTitle": {
+        "id": "job-uuid-1",
+        "name": "Senior Cashier"
+      },
+      "departments": [
+        {
+          "departmentId": "dept-sales-uuid",
+          "departmentName": "Sales",
+          "isPrimary": true,
+          "assignmentType": "PERMANENT"
+        },
+        {
+          "departmentId": "dept-inventory-uuid",
+          "departmentName": "Inventory",
+          "isPrimary": false,
+          "assignmentType": "TEMPORARY"
+        }
+      ],
+      "isActive": true
+    }
+    ```
 
 ### 3. Assign to Department
 

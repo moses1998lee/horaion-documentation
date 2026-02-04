@@ -59,3 +59,28 @@ The `assignJobTitle` method is not just a database update; it is a security prov
 **Important / Warning:**
 **Privacy**: This table contains **PII** (Personally Identifiable Information) like Email, Phone, and DOB. Access to this entity is strictly audited and restricted via `PermitCheck`.
 {% endhint %}
+
+### Employee Lifecycle
+
+An employee's status changes over time, affecting their access and payroll.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Probation: Hire (Create)
+    Probation --> Active: Probation End Date Passed
+    
+    Probation --> Terminated: Deactivate (isActive=false)
+    Active --> Terminated: Resignation/Firing
+    
+    Terminated --> Active: Re-hired
+    
+    Terminated --> SoftDeleted: Delete API
+    Active --> SoftDeleted: Delete API
+    
+    SoftDeleted --> [*]: Data Retained for 5 Years (Legal)
+```
+
+1.  **Probation**: Newly hired. `probationEndDate` is in the future.
+2.  **Active**: Fully confirmed staff member.
+3.  **Terminated**: `isActive = false`. Login access is revoked code-side immediately.
+4.  **SoftDeleted**: Removed from standard lists but kept for tax/audit purposes.
