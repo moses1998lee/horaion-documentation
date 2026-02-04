@@ -3,6 +3,11 @@
 * [00\_TABLE\_OF\_CONTENTS](00_TABLE_OF_CONTENTS.md)
 * [Executive Summary](01_EXECUTIVE_SUMMARY.md)
 * [System Architecture](02_SYSTEM_ARCHITECTURE.md)
+* Modules
+    * [Auth Module](02_MODULES/auth/01_OVERVIEW.md)
+        * [API Reference](02_MODULES/auth/02_API.md)
+        * [Domain Logic](02_MODULES/auth/03_DOMAIN.md)
+        * [Configuration](02_MODULES/auth/04_CONFIG.md)
 * [Technology Stack](03_TECHNOLOGY_STACK.md)
 * [Backend Specifications](04_BACKEND_SPECIFICATIONS.md)
 * [Frontend Specifications](05_FRONTEND_SPECIFICATIONS.md)
