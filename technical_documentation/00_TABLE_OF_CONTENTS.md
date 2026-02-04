@@ -1,6 +1,6 @@
-# Genesis API - Technical Documentation
+# Horaion API - Technical Documentation
 
-> **Complete technical specification for the Genesis Workforce Management Platform**
+> **Complete technical specification for the Horaion Workforce Management Platform**
 
 ---
 
@@ -166,4 +166,4 @@ No critical missing information. See [REQUIRED_ACTIONS.md](REQUIRED_ACTIONS.md) 
 ---
 
 **Last Updated**: 2026-02-03  
-**Maintained By**: Genesis Development Team
+**Maintained By**: Horaion Development Team

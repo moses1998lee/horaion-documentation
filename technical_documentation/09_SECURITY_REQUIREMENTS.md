@@ -3,7 +3,7 @@
 
 
 
-> **Genesis Workforce Management Platform - Security Requirements**
+> **Horaion Workforce Management Platform - Security Requirements**
 
 ---
 

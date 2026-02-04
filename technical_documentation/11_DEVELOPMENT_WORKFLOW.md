@@ -1,6 +1,6 @@
 # 11 - Development Workflow
 
-> **Genesis Workforce Management Platform - Development Workflow**
+> **Horaion Workforce Management Platform - Development Workflow**
 
 
 
@@ -34,7 +34,7 @@ ENGINE_API_URL=https://engine.example.com
 ```bash
 # Clone repository
 git clone <repository-url>
-cd genesis-api
+cd horaion-api
 
 # Build
 ./mvnw clean install
@@ -43,8 +43,8 @@ cd genesis-api
 ./mvnw spring-boot:run
 
 # Or with Docker
-docker build -t genesis-api .
-docker run -p 8080:8080 genesis-api
+docker build -t horaion-api .
+docker run -p 8080:8080 horaion-api
 ```
 
 ### Development Workflow
@@ -105,15 +105,15 @@ flowchart LR
 **Steps**:
 1.  **Build**: Developers build the Docker image locally.
     ```bash
-    docker build -t genesis-api:latest .
+    docker build -t horaion-api:latest .
     ```
 2.  **Push**: Push to Container Registry (Digital Ocean / AWS ECR).
     ```bash
-    docker push genesis-api:latest
+    docker push horaion-api:latest
     ```
 3.  **Deploy**: Pull and restart on the target server (Droplet/Lightsail).
     ```bash
-    ssh user@server "docker pull genesis-api:latest && docker-compose up -d"
+    ssh user@server "docker pull horaion-api:latest && docker-compose up -d"
     ```
 
 **Future CI/CD (SaaS Phase)**:
@@ -147,7 +147,7 @@ jobs:
       - name: Run Tests
         run: ./mvnw test
       - name: Build Docker Image
-        run: docker build -t genesis-api .
+        run: docker build -t horaion-api .
 ```
 
 ---

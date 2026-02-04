@@ -3,13 +3,13 @@
 
 
 
-> **Genesis Workforce Management Platform - Executive Summary**
+> **Horaion Workforce Management Platform - Executive Summary**
 
 ---
 
 ## 1.1 System Overview
 
-**Genesis** is a comprehensive workforce management platform designed to optimize employee scheduling, manage organizational hierarchies, and streamline workforce operations for multi-location businesses.
+**Horaion** is a comprehensive workforce management platform designed to optimize employee scheduling, manage organizational hierarchies, and streamline workforce operations for multi-location businesses.
 
 ### Core Purpose
 Automate complex scheduling operations while maintaining compliance with labor regulations, employee preferences, and business constraints through integration with an external optimization engine.
@@ -82,7 +82,7 @@ Automate complex scheduling operations while maintaining compliance with labor r
 
 ```mermaid
 mindmap
-  root((Genesis Users))
+  root((Horaion Users))
     Primary Users
       System Admin
         ::icon(fa fa-cogs)
@@ -107,7 +107,7 @@ mindmap
         Deployment
 ```
 
-> **Diagram Explanation**: This mindmap illustrates the complete hierarchy of users who interact with the Genesis platform, categorized by their primary function.
+> **Diagram Explanation**: This mindmap illustrates the complete hierarchy of users who interact with the Horaion platform, categorized by their primary function.
 
 **Detailed Breakdown**:
 1.  **Primary Users (Daily Operations)**:

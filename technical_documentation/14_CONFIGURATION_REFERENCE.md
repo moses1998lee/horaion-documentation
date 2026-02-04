@@ -1,6 +1,6 @@
-# Genesis API - Configuration Deep Dive
+# Horaion API - Configuration Deep Dive
 
-> **Genesis Workforce Management Platform - Configuration Reference**
+> **Horaion Workforce Management Platform - Configuration Reference**
 
 Complete reference for all configuration classes and their purposes.
 
@@ -8,7 +8,7 @@ Complete reference for all configuration classes and their purposes.
 
 ## Configuration Classes Overview
 
-Genesis has **6 configuration classes** that set up critical infrastructure:
+Horaion has **6 configuration classes** that set up critical infrastructure:
 
 | Configuration | Purpose | Key Features |
 |---------------|---------|--------------|
@@ -23,7 +23,7 @@ Genesis has **6 configuration classes** that set up critical infrastructure:
 
 ## 1. AsyncConfiguration
 
-**File**: `com.resetrix.genesis.configurations.AsyncConfiguration`
+**File**: `com.resetrix.horaion.configurations.AsyncConfiguration`
 
 ### Purpose
 Enables asynchronous method execution with dedicated thread pools.
@@ -105,7 +105,7 @@ public void processAsyncCognitoCreation(String jobId) {
 
 ## 2. FeignConfiguration
 
-**File**: `com.resetrix.genesis.configurations.FeignConfiguration`
+**File**: `com.resetrix.horaion.configurations.FeignConfiguration`
 
 ### Purpose
 Configures Feign HTTP clients for external service communication.
@@ -174,7 +174,7 @@ public ErrorDecoder feignErrorDecoder() {
 
 ## 3. DatabaseConfiguration
 
-**File**: `com.resetrix.genesis.configurations.DatabaseConfiguration`
+**File**: `com.resetrix.horaion.configurations.DatabaseConfiguration`
 
 ### Purpose
 Configures HikariCP connection pool with database-specific optimizations.
@@ -213,7 +213,7 @@ readOnly: false
 private void applyPostgreSQLOptimizations(HikariConfig config) {
     // Connection settings
     config.addDataSourceProperty("tcpKeepAlive", "true");
-    config.addDataSourceProperty("ApplicationName", "Genesis-Application");
+    config.addDataSourceProperty("ApplicationName", "Horaion-Application");
     config.addDataSourceProperty("assumeMinServerVersion", "12.0");
     
     // Performance
@@ -295,18 +295,18 @@ private String getResolvedPassword() {
 
 ### Pool Naming
 
-**Format**: `Genesis-HikariCP-{profile}`
+**Format**: `Horaion-HikariCP-{profile}`
 
 **Examples**:
-- `Genesis-HikariCP-dev`
-- `Genesis-HikariCP-prod`
-- `Genesis-HikariCP` (no profile)
+- `Horaion-HikariCP-dev`
+- `Horaion-HikariCP-prod`
+- `Horaion-HikariCP` (no profile)
 
 ---
 
 ## 4. WebServerConfiguration
 
-**File**: `com.resetrix.genesis.configurations.WebServerConfiguration`
+**File**: `com.resetrix.horaion.configurations.WebServerConfiguration`
 
 ### Purpose
 Configures Tomcat embedded server with extended timeouts for long-running operations.
@@ -363,7 +363,7 @@ factory.addConnectorCustomizers(connector -> {
 
 ## 5. CognitoConfiguration
 
-**File**: `com.resetrix.genesis.configurations.CognitoConfiguration`
+**File**: `com.resetrix.horaion.configurations.CognitoConfiguration`
 
 ### Purpose
 Configures AWS Cognito client for user authentication and management.
@@ -400,7 +400,7 @@ app:
 
 ## 6. SecurityConfiguration
 
-**File**: `com.resetrix.genesis.configurations.SecurityConfiguration`
+**File**: `com.resetrix.horaion.configurations.SecurityConfiguration`
 
 ### Purpose
 Configures Spring Security with JWT authentication and endpoint protection.
@@ -436,8 +436,8 @@ Configures Spring Security with JWT authentication and endpoint protection.
 app:
   database:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/genesis
-    username: genesis_user
+    url: jdbc:postgresql://localhost:5432/horaion
+    username: horaion_user
     password: ${DB_PASSWORD}
     hikari:
       maximum-pool-size: 10

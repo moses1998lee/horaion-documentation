@@ -1,12 +1,12 @@
 # 01 - Shared Kernel Overview
 
-> **Common Components & Infrastructure for the Genesis Platform**
+> **Common Components & Infrastructure for the Horaion Platform**
 
 ---
 
 ## Introduction
 
-The **Shared Kernel** (`com.horaion.app.shared`) is the backbone of the Genesis application. It provides a robust set of reusable components, infrastructure adapters, and standardized patterns that all feature modules must use.
+The **Shared Kernel** (`com.horaion.app.shared`) is the backbone of the Horaion application. It provides a robust set of reusable components, infrastructure adapters, and standardized patterns that all feature modules must use.
 
 **Why a Shared Kernel?**
 Instead of duplicating logic in every module (like "how to send an email" or "how to format a JSON error"), we centralize these concerns here. This ensures:

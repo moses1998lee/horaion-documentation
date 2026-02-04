@@ -1,8 +1,8 @@
-# Genesis API - Expanded Technical Documentation
+# Horaion API - Expanded Technical Documentation
 
-> **Genesis Workforce Management Platform - Technical Deep Dive**
+> **Horaion Workforce Management Platform - Technical Deep Dive**
 
-This document provides detailed technical information about Genesis implementation patterns.
+This document provides detailed technical information about Horaion implementation patterns.
 
 ---
 
@@ -22,7 +22,7 @@ This document provides detailed technical information about Genesis implementati
 
 ### Thread Pool Configuration
 
-Genesis implements **two dedicated thread pools** for different types of asynchronous operations.
+Horaion implements **two dedicated thread pools** for different types of asynchronous operations.
 
 #### 1. Schedule Task Executor
 
@@ -99,7 +99,7 @@ public void processAsyncCognitoCreation(String jobId) {
 
 ### Feign Client Configuration
 
-Genesis uses **Feign** for HTTP client communication with the external optimization engine.
+Horaion uses **Feign** for HTTP client communication with the external optimization engine.
 
 #### Timeout Configuration
 
@@ -164,7 +164,7 @@ public ErrorDecoder feignErrorDecoder() {
 
 ### HikariCP Configuration
 
-Genesis uses **HikariCP** for high-performance connection pooling with database-specific optimizations.
+Horaion uses **HikariCP** for high-performance connection pooling with database-specific optimizations.
 
 #### Default Pool Settings
 
@@ -184,7 +184,7 @@ autoCommit: false            (managed by @Transactional)
 readOnly: false
 ```
 
-**Pool Name**: `Genesis-HikariCP-{profile}` (e.g., `Genesis-HikariCP-prod`)
+**Pool Name**: `Horaion-HikariCP-{profile}` (e.g., `Horaion-HikariCP-prod`)
 
 #### PostgreSQL-Specific Optimizations
 
@@ -192,7 +192,7 @@ readOnly: false
 ```java
 private void applyPostgreSQLOptimizations(HikariConfig config) {
     config.addDataSourceProperty("tcpKeepAlive", "true");
-    config.addDataSourceProperty("ApplicationName", "Genesis-Application-{profile}");
+    config.addDataSourceProperty("ApplicationName", "Horaion-Application-{profile}");
     config.addDataSourceProperty("assumeMinServerVersion", "12.0");
     config.addDataSourceProperty("reWriteBatchedInserts", "true");
     
@@ -258,7 +258,7 @@ private String getResolvedPassword() {
 
 ### Timeout Configuration
 
-Genesis configures **unlimited timeouts** at multiple levels to support long-running operations.
+Horaion configures **unlimited timeouts** at multiple levels to support long-running operations.
 
 #### Spring MVC Async Support
 
@@ -303,7 +303,7 @@ factory.addConnectorCustomizers(connector -> {
 
 ### Mapper Architecture
 
-Genesis uses **dedicated mapper classes** for DTO ↔ Entity conversion (11 mappers total).
+Horaion uses **dedicated mapper classes** for DTO ↔ Entity conversion (11 mappers total).
 
 #### Mapper Responsibilities
 
@@ -404,7 +404,7 @@ public void updateEmployeeEntity(Employee employee, EmployeeRequestDTO request) 
 
 ### @Transactional Usage
 
-Genesis uses Spring's `@Transactional` annotation for declarative transaction management.
+Horaion uses Spring's `@Transactional` annotation for declarative transaction management.
 
 #### Service-Level Transactions
 
@@ -462,7 +462,7 @@ public void processAsyncCognitoCreation(String jobId) {
 
 ### Async Job Processing
 
-Genesis implements a **job-based async pattern** for bulk Cognito account creation.
+Horaion implements a **job-based async pattern** for bulk Cognito account creation.
 
 #### Workflow Overview
 

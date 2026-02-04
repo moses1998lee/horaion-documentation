@@ -1,6 +1,6 @@
 # 10 - Performance Requirements
 
-> **Genesis Workforce Management Platform - Performance Requirements**
+> **Horaion Workforce Management Platform - Performance Requirements**
 
 
 

@@ -11,7 +11,7 @@
 
 The **Shift Module** is responsible for defining the **Templates of Work** within the organization. 
 
-Crucially, in the Genesis platform, a "Shift" is a **Metadata Definition**, not an assignment. It represents a reusable block of time (e.g., "Standard Morning: 09:00 - 17:00") and the staffing requirements needed for that block.
+Crucially, in the Horaion platform, a "Shift" is a **Metadata Definition**, not an assignment. It represents a reusable block of time (e.g., "Standard Morning: 09:00 - 17:00") and the staffing requirements needed for that block.
 
 {% hint style="info" %}
 **Analogy Note:**

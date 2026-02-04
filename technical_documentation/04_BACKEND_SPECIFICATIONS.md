@@ -1,6 +1,6 @@
 # Backend Specifications
 
-> **Genesis Workforce Management Platform - Backend Specifications**
+> **Horaion Workforce Management Platform - Backend Specifications**
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@
 
 ## Overview
 
-Genesis follows **Vertical Slice Architecture**, where each module is a self-contained feature with its own:
+Horaion follows **Vertical Slice Architecture**, where each module is a self-contained feature with its own:
 
 * **Controllers**: REST API endpoints
 * **Services**: Business logic

@@ -1,6 +1,6 @@
 # 12 - Application Flowcharts
 
-> **Genesis Workforce Management Platform - Application Flowcharts**
+> **Horaion Workforce Management Platform - Application Flowcharts**
 
 ---
 

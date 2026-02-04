@@ -1,6 +1,6 @@
 # Database Specifications
 
-> **Genesis Workforce Management Platform - Database Specifications**
+> **Horaion Workforce Management Platform - Database Specifications**
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@
 
 ### Entity Relationship Diagram
 
-The Genesis data model is organized around a hierarchical multi-tenant structure:
+The Horaion data model is organized around a hierarchical multi-tenant structure:
 
 ```mermaid
 erDiagram
@@ -488,7 +488,7 @@ The `LogAspect` automatically logs all service and controller method executions.
 **Pointcuts**:
 
 ```java
-@Pointcut("execution(public * com.resetrix.genesis..services..*(..))")
+@Pointcut("execution(public * com.resetrix.horaion..services..*(..))")
 public void serviceMethods() {}
 
 @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")

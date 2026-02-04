@@ -6,7 +6,7 @@
 
 ## Overview
 
-The `AsyncConfiguration` class enables asynchronous method execution using the `@Async` annotation. In Genesis, we leverage **Java 21 Virtual Threads** (Project Loom) instead of traditional platform threads.
+The `AsyncConfiguration` class enables asynchronous method execution using the `@Async` annotation. In Horaion, we leverage **Java 21 Virtual Threads** (Project Loom) instead of traditional platform threads.
 
 **Class**: `com.horaion.app.shared.core.configurations.AsyncConfiguration`
 

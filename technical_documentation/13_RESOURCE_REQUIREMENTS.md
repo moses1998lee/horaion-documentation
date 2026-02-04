@@ -1,6 +1,6 @@
 # 13 - Resource Requirements
 
-> **Genesis Workforce Management Platform - Resource Requirements**
+> **Horaion Workforce Management Platform - Resource Requirements**
  
  ## 6.1 Hardware Requirements
  

@@ -1,6 +1,6 @@
 # 03 - Technology Stack
 
-> **Genesis Workforce Management Platform - Technology Stack**
+> **Horaion Workforce Management Platform - Technology Stack**
  
 ---
  

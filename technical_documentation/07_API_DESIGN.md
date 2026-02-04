@@ -1,8 +1,8 @@
 # Code Examples & Common Workflows
 
-> **Genesis Workforce Management Platform - API Design**
+> **Horaion Workforce Management Platform - API Design**
 
-Practical examples to help you understand how to work with the Genesis API.
+Practical examples to help you understand how to work with the Horaion API.
 
 ---
 

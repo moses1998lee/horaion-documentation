@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Genesis optimization engine (built in Python) is strict about data types. The `RuleValueConverter` ensures that Java objects are formatted exactly as the engine expects.
+The Horaion optimization engine (built in Python) is strict about data types. The `RuleValueConverter` ensures that Java objects are formatted exactly as the engine expects.
 
 **Class**: `com.horaion.app.shared.core.utils.RuleValueConverter`
 

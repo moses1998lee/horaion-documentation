@@ -1,6 +1,6 @@
 # Infrastructure & Deployment
 
-> **Genesis Workforce Management Platform - Infrastructure & Deployment**
+> **Horaion Workforce Management Platform - Infrastructure & Deployment**
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@
 
 ### Environment Overview
 
-Genesis employs a dual-cloud strategy to separate testing/staging from production workloads:
+Horaion employs a dual-cloud strategy to separate testing/staging from production workloads:
 
 | Environment    | Platform          | Purpose              | Access            |
 | -------------- | ----------------- | -------------------- | ----------------- |
@@ -96,7 +96,7 @@ The deployment pipeline enforces environment consistency via immutable artifacts
 
 ```bash
 git clone <repository-url>
-cd genesis/api_app/genesis-api
+cd horaion/api_app/horaion-api
 ```
 
 #### 2. Configure Environment Variables
@@ -110,8 +110,8 @@ APPLICATION_PORT=8080
 # Database
 POSTGRES_DB_HOST=localhost
 POSTGRES_DB_PORT=5432
-POSTGRES_DB_NAME=genesis
-POSTGRES_DB_USER=genesis_user
+POSTGRES_DB_NAME=horaion
+POSTGRES_DB_USER=horaion_user
 POSTGRES_DB_PASS=your_password
 
 # Database Connection Pool
@@ -176,7 +176,7 @@ curl http://localhost:8080/actuator/health
 
 ```bash
 # Multi-stage build
-docker build -t genesis-api:latest .
+docker build -t horaion-api:latest .
 ```
 
 #### 2. Run with Docker Compose
@@ -190,28 +190,28 @@ services:
   postgres:
     image: postgres:15-alpine
     environment:
-      POSTGRES_DB: genesis
-      POSTGRES_USER: genesis_user
+      POSTGRES_DB: horaion
+      POSTGRES_USER: horaion_user
       POSTGRES_PASSWORD: your_password
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U genesis_user -d genesis"]
+      test: ["CMD-SHELL", "pg_isready -U horaion_user -d horaion"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  genesis-api:
-    image: genesis-api:latest
+  horaion-api:
+    image: horaion-api:latest
     ports:
       - "8080:8080"
     environment:
       POSTGRES_DB_HOST: postgres
       POSTGRES_DB_PORT: 5432
-      POSTGRES_DB_NAME: genesis
-      POSTGRES_DB_USER: genesis_user
+      POSTGRES_DB_NAME: horaion
+      POSTGRES_DB_USER: horaion_user
       POSTGRES_DB_PASS: your_password
       AWS_REGION: ap-southeast-1
       AWS_COGNITO_USER_POOL_ID: ${AWS_COGNITO_USER_POOL_ID}
@@ -263,7 +263,7 @@ docker-compose up -d
 
 ### Application Profiles
 
-Genesis supports multiple Spring profiles:
+Horaion supports multiple Spring profiles:
 
 * **local**: Local development (verbose logging, SQL logging enabled)
 * **dev**: Development environment
@@ -291,7 +291,7 @@ spring:
 
 ### Flyway Migrations
 
-Genesis uses Flyway for database schema versioning.
+Horaion uses Flyway for database schema versioning.
 
 **Migration Files**: `src/main/resources/db/migrations/`
 
@@ -353,7 +353,7 @@ spring:
 
 ### Spring Boot Actuator
 
-Genesis exposes several actuator endpoints:
+Horaion exposes several actuator endpoints:
 
 | Endpoint               | Purpose            | Authentication |
 | ---------------------- | ------------------ | -------------- |
@@ -432,7 +432,7 @@ All logs include:
 
 ```bash
 # Docker logs
-docker logs genesis-api -f
+docker logs horaion-api -f
 
 # Tail application logs
 tail -f logs/application.log
@@ -443,7 +443,7 @@ grep "A1B2C3D4" logs/application.log
 
 ### Metrics
 
-Genesis integrates with Micrometer for metrics collection.
+Horaion integrates with Micrometer for metrics collection.
 
 **Key Metrics**:
 
@@ -456,7 +456,7 @@ Genesis integrates with Micrometer for metrics collection.
 
 ```yaml
 scrape_configs:
-  - job_name: 'genesis-api'
+  - job_name: 'horaion-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['localhost:8080']
@@ -479,7 +479,7 @@ scrape_configs:
 pg_isready -h localhost -p 5432
 
 # Verify credentials
-psql -h localhost -U genesis_user -d genesis
+psql -h localhost -U horaion_user -d horaion
 
 # Check environment variables
 echo $POSTGRES_DB_HOST
@@ -562,7 +562,7 @@ jmap -dump:live,format=b,file=heap.bin <PID>
 
 #### Engine Connectivity Test
 
-Genesis includes a diagnostic tool to test engine connectivity:
+Horaion includes a diagnostic tool to test engine connectivity:
 
 ```java
 // Located at: com.horaion.app.shared.diagnostics.EngineConnectivityTest
@@ -603,7 +603,7 @@ JAVA_OPTS="
   -XX:+UseG1GC
   -XX:MaxGCPauseMillis=200
   -XX:+HeapDumpOnOutOfMemoryError
-  -XX:HeapDumpPath=/var/log/genesis/heap_dump.hprof
+  -XX:HeapDumpPath=/var/log/horaion/heap_dump.hprof
 "
 ```
 

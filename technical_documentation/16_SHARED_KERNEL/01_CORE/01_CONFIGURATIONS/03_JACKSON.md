@@ -6,7 +6,7 @@
 
 ## Overview
 
-Genesis uses **Jackson** `ObjectMapper` for all JSON processing. This configuration ensures consistent date and time formatting across all API endpoints.
+Horaion uses **Jackson** `ObjectMapper` for all JSON processing. This configuration ensures consistent date and time formatting across all API endpoints.
 
 **Class**: `com.horaion.app.shared.core.configurations.JacksonConfiguration`
 

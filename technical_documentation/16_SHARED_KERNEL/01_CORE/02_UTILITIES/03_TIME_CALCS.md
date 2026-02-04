@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Genesis scheduling engine views time not as continuous, but as discrete **Time Blocks**. This utility converts between human-readable time (`09:00`) and machine-readable indices (`36`).
+The Horaion scheduling engine views time not as continuous, but as discrete **Time Blocks**. This utility converts between human-readable time (`09:00`) and machine-readable indices (`36`).
 
 **Class**: `com.horaion.app.shared.core.utils.TimeBlockCalculator`
 

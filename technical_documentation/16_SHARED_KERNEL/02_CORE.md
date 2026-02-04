@@ -18,7 +18,7 @@ This generic wrapper is used for single-item responses or simple success message
   "success": true,
   "data": {
     "id": "123",
-    "name": "Project Genesis"
+    "name": "Project Horaion"
   },
   "message": "Operation successful",
   "timestamp": "2023-10-27T10:00:00Z",

@@ -1,6 +1,6 @@
 # 05 - Frontend Specifications
 
-> **Genesis Workforce Management Platform - Frontend Specifications**
+> **Horaion Workforce Management Platform - Frontend Specifications**
 
 ## 1. Runtime Environment
 - **Node Version**: Latest LTS
@@ -44,7 +44,7 @@
 
 ## 8. Directory Structure
 ```
-genesis-app/
+horaion-app/
 ├── src/
 │   ├── components/         # Reusable UI components (Radix/Headless)
 │   ├── hooks/              # Custom React hooks
@@ -67,7 +67,7 @@ Required environment variables in `.env`:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `VITE_API_URL` | Base URL for the Genesis API | `https://api.genesis.com` |
+| `VITE_API_URL` | Base URL for the Horaion API | `https://api.horaion.com` |
 
 ## 10. API Integration
 - **Client**: Axios instance configured in `src/services/api.ts`
