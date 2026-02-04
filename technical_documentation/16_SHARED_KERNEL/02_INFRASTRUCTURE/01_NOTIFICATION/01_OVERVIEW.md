@@ -18,6 +18,15 @@ graph LR
     Worker -->|6. Update Status| DB
 ```
 
+### Flow Walkthrough
+1.  **Emit Event**: The application (e.g., Shift Service) publishes a lightweight event message to an **AWS SQS** queue. This happens asynchronously, so the user doesn't wait for the email to be sent.
+2.  **Create Record**: Simultaneously, the application saves a `NotificationRecord` in the database with a status of `PENDING`. This acts as our "Outbox" for audit purposes.
+3.  **Consume**: A dedicated background **Worker** picks up the message from the queue.
+4.  **Send**: The worker calls the external **AWS Service** (SES for Email, SNS for SMS) to actually deliver the message.
+5.  **Ack**: AWS confirms receipt of the request.
+6.  **Update Status**: The worker updates the `NotificationRecord` in the database to `SENT` or `FAILED`.
+
+
 ---
 
 ## Key Components

@@ -62,11 +62,17 @@ graph TD
     style DB fill:#ffebee,stroke:#c62828
 ```
 
-> **Diagram Explanation**:
-> *   **Core**: The most fundamental classes (Enums, Constants, API Wrappers).
-> *   **Infrastructure**: Heavy-lifting implementation for external tools (AWS, Email).
-> *   **Security**: Cross-cutting security concern implementation.
-> *   **Database**: JPA extensions and standardized data access patterns.
+### Diagram Walkthrough
+
+1.  **Core Layer (The Foundation)**: This is the bottom of the pyramid. `Resp`, `Ex` (Exceptions), and `Util` classes live here. They don't depend on *anything* else. Everyone else uses them.
+2.  **Infrastructure Layer (The Adapters)**: This layer does the "dirty work" of talking to the outside world (`AWS`, `Excel`, `Notify`). It depends on **Core** because it might need to throw a `BaseException` or return a standard response.
+3.  **Security Layer (The Gatekeeper)**: Handles `Filters` and contexts. It protects the other layers.
+4.  **Database Layer (The Storage)**: Contains `BaseRepository` definitions.
+
+**Understanding the Arrows**:
+The arrows (`-->`) represent **dependency flow**.
+*   **Core** points to **Infra**, **Sec**, and **DB**: This means `Core` is used by *everyone*.
+*   **Feature Modules** (not shown): Will sit on top and consume these shared layers.
 
 ---
 

@@ -138,6 +138,11 @@ graph TB
 
 > **Diagram Explanation**: This high-level overview shows the three main tiers of the Horaion ecosystem.
 
+**How to Read This Diagram**:
+*   **Top (Pink)**: The **Client Layer** is where users like you sit. You use the Web or Mobile app.
+*   **Middle (Yellow/White)**: The **Gateway** and **Application Server** are "Horaion" itself. The Gateway directs traffic, and the App Server does the thinking.
+*   **Bottom/Right (Grey/Blue)**: The **Data** and **External Services** are where information lives or where we ask for help (like AWS).
+
 **Component Breakdown**:
 1.  **Client Layer (The User's Device)**:
     *   **Web App**: The React application used by employees and managers.
@@ -150,17 +155,17 @@ graph TB
     *   **Business Layer**: The actual logic (e.g., "Calculate Demand", "Approve Schedule").
     *   **Integration Layer**: Helpers that talk to the outside world (Cognito, Webhooks).
     *   **Data Layer**: Translates Java objects into SQL queries for the database.
-4.  **External Services**: Dependancies we don't host ourselves (AWS for auth, AI Engine for math).
+4.  **External Services**: Dependencies we don't host ourselves (AWS for auth, AI Engine for math).
 
-### Request Lifecycle Flow
-The following sequence describes the path of a standard API request (e.g., Schedule Approval):
+### Request Lifecycle Flow (Follow the Arrows)
+The diagram arrows show how a request travels through the system:
 
-1.  **Client Initiation**: The client (Web or Mobile) transmits a secure HTTP request (`POST /approve`) to the public endpoint.
-2.  **Gateway Routing**: The **Load Balancer** intercepts the traffic, evaluates server health, and routes the request to an available Application Server instance.
-3.  **Security Verification**: Upon entry, the **Web Layer** validates the JWT Authorization header to ensure the user possesses the necessary permissions (Principal/Role).
-4.  **Business Processing**: The **Service Layer** executes the business logic, enforcing domain rules (e.g., "Cannot approve an incomplete schedule").
-5.  **Data Persistence**: Validated state changes are transacted to the **Database** via the Repository layer.
-6.  **Response**: The server returns a standard HTTP 200 OK response to the client, confirming the operation's success.
+1.  **Client Initiation**: The client (Web or Mobile) transmits a secure HTTP request (`POST /approve`) -> **Load Balancer**.
+2.  **Gateway Routing**: **Load Balancer** -> **Controllers** (inside the App Server).
+3.  **Security Verification**: **Controllers** use **Filters** to valid the user.
+4.  **Business Processing**: **Controllers** -> **Business Services** (e.g., Schedule Service) -> **Integration/Data Layers**.
+5.  **External Calls**: If needed, **Integration Layer** -> **External Services** (e.g., AWS).
+6.  **Response**: The path reverses to send the answer back to you.
 
 ### External Dependencies
 

@@ -40,13 +40,14 @@ flowchart TD
     Error --> ResponseError(["Return 400 Bad Request"])
 ```
 
-**Key Steps**:
-1.  **Header Normalization**: Headers are sanitized (lowercase, no symbols) to ensure matching works regardless of formatting.
-2.  **Row Parsing**: `EmployeeFieldProcessor` extracts values and handles type conversion.
-3.  **Dependency Resolution**: The system looks up `Branch`, `Department`, and `Role` by name. If found, their IDs are linked; otherwise, the row may fail or be skipped.
-4.  **Database Save**: Valid employees are persisted to PostgreSQL.
-5.  **Cognito Sync**: An immediate sync attempts to create AWS Cognito users for the new employees.
-6.  **Response**: Returns a summary (e.g., "Imported 50 employees. 48 Cognito accounts created, 2 failed").
+**Key Steps (Visual Walkthrough)**:
+1.  **User Uploads Excel**: The user selects a `.xlsx` file on the frontend.
+2.  **Parse & Normalize**: The system reads the file. `Norm` checks if headers act weird (e.g. "First_Name"). `MapHeaders` fixes them to "firstname".
+3.  **Validate**: `Validate` checks if you missed any required columns. If so, it throws an error immediately.
+4.  **Process Rows**: If headers are good, it loops through every row.
+5.  **Resolve**: `Resolve` looks up related data (e.g., converts "Sales Dept" text -> Dept ID `123`).
+6.  **Save & Sync**: It saves to the DB (`SaveDB`) and then tries to create the user in AWS (`SyncCognito`).
+7.  **Response**: Returns the final counts.
 
 ---
 
@@ -72,10 +73,17 @@ flowchart TD
 
 > **Diagram Explanation**: A decision tree for fetching data.
 
-**Logic Flow**:
-1.  **User Request**: Do they want to see *everyone* (List) or *one person* (Detail)?
-2.  **List View**: The system gets a "Page" of 20 employees. Filters (like "Department=Sales") are applied here.
-3.  **Detail View**: The system checks "Does ID 5 exist?". If yes, return it. If no, show a 404 error.
+**Visual Walkthrough**:
+1.  **View Type?**: The user decides to either "Browse All" or "Click a Profile".
+2.  **List Path (Top)**:
+    *   **ListReq**: Request hits the List API.
+    *   **DB**: The database grabs 20 items (Page 1) and filters them.
+    *   **ListResp**: You get a JSON list back.
+3.  **Detail Path (Bottom)**:
+    *   **DetailReq**: Request hits the Detail API with an ID.
+    *   **Exists?**: System checks if ID exists.
+    *   **No**: Returns 404 (Not Found).
+    *   **Yes**: Returns the single JSON profile.
 
 ---
 
@@ -108,11 +116,13 @@ flowchart TD
 
 > **Diagram Explanation**: The safety checks performed when you edit a profile.
 
-**Validation Steps**:
-1.  **Form Check**: Did you send valid JSON? (No? -> 400 Error).
-2.  **Existence Check**: Does this person actually exist? (No? -> 404 Error).
-3.  **Uniqueness Check**: Did you change their Employee Code to one that someone else already has? (Yes? -> 409 Conflict).
-4.  **Success**: If all clear, save to DB and return the new data.
+**Visual Walkthrough**:
+1.  **Valid DTO?**: First, we check the JSON formatting. If you send "Age: Tree", it fails here (400).
+2.  **Exist in DB?**: We check if the ID you are updating actually exists. If not, 404.
+3.  **Code Changed?**: If you are trying to change the unique "Employee Code", we have to double-check nobody else has it (`Is Code Unique?`).
+    *   **No**: 409 Conflict (Duplicate).
+    *   **Yes**: Safe to proceed.
+4.  **Save**: We update the fields and save to PostgreSQL.
 
 ---
 
@@ -142,11 +152,13 @@ flowchart TD
 
 > **Diagram Explanation**: Creating a new user manually (one-by-one).
 
-**Key Difference from Excel Upload**:
-*   This flow resolves relationships (Dept, Role) *immediately* and fails if they are wrong.
-*   **Step 1**: Check if Employee Code is unique.
-*   **Step 2**: Find the IDs for the named Department and Role.
-*   **Step 3**: Save. (Note: Cognito account creation is a separate step).
+**Visual Walkthrough**:
+1.  **Valid DTO?**: Basic JSON check.
+2.  **Unique?**: We check if the Employee Code (e.g., EMP-001) is already taken.
+3.  **Resolve & Exist**: The big difference here is we check references *strictly*.
+    *   If you say "Department ID: 999", we check if Department 999 exists.
+    *   If **No**: It breaks immediately (404 Not Found).
+4.  **Save**: If all references are valid, we create the record.
 
 ---
 

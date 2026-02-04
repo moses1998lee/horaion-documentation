@@ -31,12 +31,20 @@ It uses an **Outbox Pattern** combined with background workers to ensure notific
 
 ```mermaid
 graph LR
-    App[Application] -->|Save| DB[(Notification Table)]
-    Worker[Notification Worker] -->|Poll| DB
-    Worker -->|Send| AWS[AWS SES]
-    AWS -->|Result| Worker
-    Worker -->|Update Status| DB
+    App[Application] -->|1. Save| DB[(Notification Table)]
+    Worker[Notification Worker] -->|2. Poll| DB
+    Worker -->|3. Send| AWS[AWS SES]
+    AWS -->|4. Result| Worker
+    Worker -->|5. Update Status| DB
 ```
+
+### Visual Walkthrough
+1.  **Save**: The application code (e.g., in a Service) writes to the DB. This is fast and transactional.
+2.  **Poll**: The Background `Worker` wakes up periodically to check the DB for new items.
+3.  **Send**: The Worker creates the actual API request to AWS.
+4.  **Result**: AWS responds (Success/Failure).
+5.  **Update Status**: The Worker records the final outcome back in the DB for history.
+
 
 ---
 
