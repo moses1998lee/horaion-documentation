@@ -21,17 +21,39 @@ Think of the **Company** as the "Tenant" or the "Account Owner". It is the stric
 **Unique Identity**: Every company is uniquely identified by its **Registration Number** (e.g., CIPC Number, Tax ID). This prevents duplicate accounts for the same real-world business.
 {% endhint %}
 
-### Core Capabilities
+## Hierarchy & Relationships
 
-1.  **Tenant Management**: Onboarding new companies and managing their profiles.
-2.  **Onboarding Status**: Tracking whether a company has completed the initial setup (`hasCompletedOnboarding`).
-3.  **Discovery**: Finding companies by name or registration number (for admin/support).
+The Company is the root node of the entire Horaion data structure.
+
+```mermaid
+graph TD
+    Root[Global Horaion Platform] --> CompanyA[Company: Acme Corp]
+    Root --> CompanyB[Company: Beta Ltd]
+    
+    CompanyA --> Branch1[Branch: HQ]
+    CompanyA --> Branch2[Branch: Warehouse]
+    
+    Branch1 --> Emp1[Employee: Alice]
+    Branch2 --> Emp2[Employee: Bob]
+    
+    CompanyB --> Branch3[Branch: Main Office]
+```
+
+## Core Capabilities
+
+1.  **Tenant Management**:
+    *   **Onboarding**: Managing the transition from a "New Sign-up" to a "Fully Configured" active tenant.
+    *   **Lifecycle**: Creation, Suspension, and Deletion of company accounts.
+2.  **Identity Verification**:
+    *   Enforcing legal uniqueness via `registrationNumber`.
+3.  **Discovery**:
+    *   Providing admin-level search tools to find companies by name or ID.
 
 ## Responsibilities
 
-*   **Identity**: Maintaining the "Single Source of Truth" for business entities.
-*   **Compliance**: Enforcing unique registration numbers.
-*   **Lifecycle**: Managing the creation, update, and decommissioning of company accounts.
+*   **Single Source of Truth**: For the legal entity's profile.
+*   **Data Isolation Root**: All other modules (Auth, Branch, Employee) reference `company_id` to enforce security barriers.
+*   **Compliance**: Storing the legal registration number for audit trails.
 
 ## Module Architecture
 
@@ -47,22 +69,3 @@ graph TD
     CompanyService --> SecurityContext[Security Context]
     CompanyRepository --> DB[(Database)]
 ```
-
-## Key Interactions
-
-1.  **Security Module**:
-    *   **Dependency**: Heavy integration with `SecurityContextService`.
-    *   **Reason**: Every single meaningful operation in the system requires a `companyId`. This module provides the validity check for that ID.
-
-2.  **All Other Modules**:
-    *   **Relationship**: Parent.
-    *   **Reason**: `Employee`, `Branch`, `Department` all have a `company_id` Foreign Key.
-
-## Configuration
-
-This module utilizes standard application configuration. See `04_CONFIG.md`.
-
-## Events
-
-*   **Emits**: None currently.
-*   **Listens**: None.

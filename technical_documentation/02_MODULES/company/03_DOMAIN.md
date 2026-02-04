@@ -4,49 +4,66 @@
 
 The guardian of tenant isolation and business identity.
 
+### Onboarding Lifecycle
+
+A Company goes through a distinct lifecycle from creation to active usage.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft: Create Company (POST)
+    Draft --> SettingUp: Define Branch & Dept
+    SettingUp --> Active: Complete Onboarding (POST)
+    
+    Active --> [*]: Delete Company
+```
+
+1.  **Draft**: The company entity exists, but has no branches or employees (other than the creator).
+2.  **SettingUp**: The user is currently in the wizard flow.
+3.  **Active**: The `hasCompletedOnboarding` flag is `true`. The company is fully operational.
+
 ### Core Flows
 
-#### 1. Creation & Duplicate Prevention
-**Goal**: Ensure every company on the platform is a unique legal entity.
+#### 1. Duplicate Prevention (The "Business Key")
+**Goal**: Ensure every company is a unique legal entity.
 
 **Logic**:
-1.  **Check**: `companyRepository.existsByRegistrationNumber(...)`.
-    *   {% hint style="warning" %}
-    *   **Important / Warning:**
-    *   **Strict Uniqueness**: The Registration Number is the primary "business key". Creating a duplicate throws a `DuplicateRegistrationNumberException` immediately.
-    *   {% endhint %}
-2.  **Persist**: If unique, a new `Company` record is created.
-3.  **Metadata**: Timestamps (`createdAt`, `updatedAt`) are auto-managed.
+*   The `registrationNumber` column has a database-level **Unique Constraint**.
+*   The Service `create()` method also creates a "Java-level" check:
+    ```java
+    if (repository.existsByRegistrationNumber(req.number)) {
+        throw new DuplicateRegistrationNumberException(req.number);
+    }
+    ```
+    {% hint style="warning" %}
+    **Important / Warning:**
+    **Race Conditions**: Even with the Java check, two concurrent requests could try to create the same company. The database constraint is the final safety net that will throw a `DataIntegrityViolationException`.
+    {% endhint %}
 
-#### 2. Multi-Tenancy Enforcement (Search & List)
-**Goal**: Users should only see their own company (unless they are System Admins).
+#### 2. Multi-Tenancy Enforcement
+**Goal**: Users see *only* what they own.
 
-**Logic**:
-*   The service checks `securityContextService.isSystemAdministrator()`.
-    *   **If Admin**: Call `findAllCandidates()` (Global view).
-    *   **If Regular User**:
-        1.  Extract `currentCompanyId` from the token.
-        2.  Force-filter the query to return **only** that specific company ID.
-        3.  Even if they request "page 1 of all companies", they effectively get a page containing just their own single record.
-
-### Validators
-
-#### `CreateCompanyRequest`
-*   `name`: Required (Max 255).
-*   `registrationNumber`: Required (Max 50).
+**The "View" Logic**:
+*   **System Admin**: Access Level = `GLOBAL`. Can query `findAll()`.
+*   **Company Admin**: Access Level = `TENANT`.
+    *   The Service intercepts the `findAll()` call.
+    *   It extracts the `currentCompanyId` from the JWT.
+    *   It ignores the user's request to "find all" and instead returns `findById(currentCompanyId)`.
+    *   This ensures a leaked API call cannot expose competitor data.
 
 ### Entities
 
 #### `Company` (Database Table: `companies`)
 
-*   **Keys**:
-    *   `id` (UUID, PK)
-*   **Fields**:
-    *   `name`: Display name.
-    *   `registrationNumber`: **Unique Index**. The legal identifier.
-    *   `hasCompletedOnboarding`: Boolean flag for UI state.
+*   **Primary Key**: `id` (UUID).
+*   **Business Key**: `registration_number` (String, Unique).
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `name` | Varchar(255) | Display name (e.g., "Acme Inc"). |
+| `registration_number` | Varchar(50) | **Unique**. Official Tax/CIPC ID. |
+| `has_completed_onboarding` | Boolean | UI Flag. `false` = Show Wizard. |
 
 {% hint style="info" %}
 **Note:**
-The `companies` table is the root of the entire data hierarchy. Most other tables in the database will have a `company_id` column that Foreign Keys back to this table.
+The `companies` table is the root of the entire data hierarchy. Most other tables in the database (Branches, Employees, Departments) will have a `company_id` column that Foreign Keys back to this table.
 {% endhint %}

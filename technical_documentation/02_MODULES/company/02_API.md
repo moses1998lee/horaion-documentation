@@ -3,7 +3,9 @@
 {% hint style="info" %}
 **Note:**
 **Base Path**: `/api/v1/companies`
-Unlike other modules, some of these endpoints (like `create`) might be accessible to System Admins only.
+**Access Level**: Many of these endpoints (like `GET /`) behave differently depending on who is calling them.
+*   **System Admin**: Sees everything (Global View).
+*   **Company Admin**: Sees only their own company (Tenant View).
 {% endhint %}
 
 ## Controller: `CompanyController`
@@ -13,13 +15,14 @@ Unlike other modules, some of these endpoints (like `create`) might be accessibl
 **Endpoint**: `GET /api/v1/companies`
 
 Retrieves a paginated list of companies.
-*   **Behavior**:
-    *   **System Admin**: Sees ALL companies.
-    *   **Company Admin**: Sees ONLY their own company.
 
-*   **Parameters**:
-    *   `page`: Page number (default: 0)
-    *   `size`: Items per page (default: 10)
+*   **Query Parameters**:
+
+| Parameter | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `page` | `int` | `0` | Page number. |
+| `size` | `int` | `10` | Items per page. |
+
 *   **Success Response** (`200 OK`):
     ```json
     {
@@ -45,9 +48,12 @@ Retrieves a paginated list of companies.
 
 Retrieves companies with flexible server-side sorting.
 
-*   **Parameters**:
-    *   `sortBy`: Field to sort by (default: `name`).
-    *   `sortDirection`: `ASC` or `DESC`.
+*   **Query Parameters**:
+
+| Parameter | Type | Default | Example |
+| :--- | :--- | :--- | :--- |
+| `sortBy` | `string` | `name` | `name`, `registrationNumber` |
+| `sortDirection` | `string` | `ASC` | `ASC`, `DESC` |
 
 ### 3. Get Company by ID
 
@@ -65,17 +71,15 @@ Fetches detailed profile for a specific company.
 
 Finds a company using its official business registration ID.
 
-*   **Parameters**:
-    *   `registrationNumber`: The string ID (e.g., `2023/001`).
 *   **Success Response** (`200 OK`): `CompanyResponse`.
 
 ### 5. Search Companies
 
 **Endpoint**: `GET /api/v1/companies/search?name={name}`
 
-Performs a case-insensitive fuzzy search on the company name.
-
-*   **Success Response** (`200 OK`): A list of matching `CompanyResponse` objects.
+Performs a case-insensitive fuzzy search.
+*   **System Admins**: Search across ALL companies.
+*   **Company Users**: Only find their own company (if it matches the name).
 
 ### 6. Create Company
 
@@ -92,13 +96,13 @@ Onboards a new company onto the platform.
     ```
 *   **Success Response** (`201 Created`): `CompanyResponse`.
 *   **Error Responses**:
-    *   `409 Conflict`: If `registrationNumber` is already taken.
+    *   `409 Conflict`: If `registrationNumber` matches an existing active company.
 
 ### 7. Update Company
 
 **Endpoint**: `PUT /api/v1/companies/{id}`
 
-Updates basic company details (currently just the name).
+Updates basic company details.
 
 *   **Request Body**: `UpdateCompanyRequest`
     ```json
@@ -111,14 +115,14 @@ Updates basic company details (currently just the name).
 
 **Endpoint**: `POST /api/v1/companies/{id}/complete-onboarding`
 
-Marks the company's initial setup as complete. This might unlock features or remove "Setup Guide" nags in the UI.
+Finalizes the setup process. This is usually called after the user has defined their first Branch and Department.
 
 {% hint style="success" %}
 **Tip / Success:**
-This is a dedicated lifecycle event endpoint. Instead of a generic update, this explicit action clearly signals a state change in the company's lifecycle.
+**Lifecycle Application**: This endpoint flips the `hasCompletedOnboarding` flag to `true`. The UI uses this flag to decide whether to show the "Setup Wizard" or the main Dashboard.
 {% endhint %}
 
-*   **Success Response** (`200 OK`): Returns updated entity with `hasCompletedOnboarding: true`.
+*   **Success Response** (`200 OK`): Returns updated entity.
 
 ### 9. Delete Company
 
@@ -128,7 +132,13 @@ Permanently removes a company.
 
 {% hint style="danger" %}
 **Critical:**
-**Cascade Effect**: Deleting a company is a destructive action that should theoretically cascade delete ALL branches, employees, and data associated with it. Use with extreme caution.
+**Cascade Effect**: Deleting a company is a **destructive root action**.
+It will wipe:
+*   All Branches
+*   All Departments
+*   All Employees
+*   All Shifts & Schedules
+**This cannot be undone.**
 {% endhint %}
 
 ## Exception Handling
