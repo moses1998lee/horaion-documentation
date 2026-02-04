@@ -1,6 +1,6 @@
 # System Architecture
 
-> **Genesis Workforce Management Platform - System Architecture**
+> **Horaion Workforce Management Platform - System Architecture**
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@
 
 ## Overview
 
-Genesis is built on **Spring Boot 3.4.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
+Horaion is built on **Spring Boot 3.4.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
 
 * **Multi-tenancy**: Supporting multiple companies with data isolation
 * **Scalability**: Async processing for long-running operations
@@ -34,7 +34,7 @@ Genesis is built on **Spring Boot 3.4.0** with **Java 21**, following a **Vertic
 
 ## System Context
 
-Genesis integrates with several external systems to provide complete workforce management capabilities.
+Horaion integrates with several external systems to provide complete workforce management capabilities.
 
 ```mermaid
 graph TB
@@ -48,7 +48,7 @@ graph TB
         LB[Load Balancer<br/>Nginx/AWS ALB]
     end
 
-    subgraph Application_Server [Genesis Application Server - Spring Boot]
+    subgraph Application_Server [Horaion Application Server - Spring Boot]
         subgraph Web_Layer [Web Layer]
             Filters[Security Filters]
             Exceptions[Exception Handlers]
@@ -136,7 +136,7 @@ graph TB
     style AI fill:#0288d1,color:white,stroke:#01579b
 ```
 
-> **Diagram Explanation**: This high-level overview shows the three main tiers of the Genesis ecosystem.
+> **Diagram Explanation**: This high-level overview shows the three main tiers of the Horaion ecosystem.
 
 **Component Breakdown**:
 1.  **Client Layer (The User's Device)**:
@@ -181,44 +181,33 @@ The following sequence describes the path of a standard API request (e.g., Sched
 The codebase follows a clean modular structure:
 
 ```
-com.resetrix.genesis/
-├── GenesisApplication.java          # Spring Boot entry point
-├── configurations/                   # Spring configuration classes
-│   ├── SecurityConfiguration.java   # JWT, CORS, auth rules
-│   ├── AsyncConfiguration.java      # Async executor setup
-│   ├── FeignConfiguration.java      # HTTP client config
-│   ├── DatabaseConfiguration.java   # DataSource, JPA config
-│   ├── WebServerConfiguration.java  # TC/Tomcat timeouts
-│   └── CognitoConfiguration.java    # AWS Cognito setup
+com.horaion.app/
+├── HoraionApplication.java           # Spring Boot entry point
 ├── modules/                          # Business domain modules
 │   ├── auth/                        # Authentication & registration
-│   ├── company/                     # Company management
 │   ├── branch/                      # Branch management
-│   ├── department/                  # Department management
-│   ├── employee/                    # Employee CRUD + Cognito sync
-│   ├── shift/                       # Shift templates
-│   ├── schedule/                    # Schedule generation & approval
-│   ├── rule/                        # Business rules engine
-│   ├── ruleanswer/                  # Rule answers & configurations
+│   ├── company/                     # Company management
 │   ├── demandforecast/              # Demand forecasting
-│   ├── employeeleaveavailability/   # Leave requests
-│   └── employeerole/                # Role definitions
+│   ├── department/                  # Department management
+│   ├── employee/                    # Employee management
+│   ├── employeeleaveavailability/   # Leave requests & availability
+│   ├── jobtitle/                    # Job title management
+│   ├── me/                          # User self-management
+│   ├── rule/                        # Business rules engine
+│   ├── schedule/                    # Schedule generation & approval
+│   └── shift/                       # Shift templates & management
 ├── shared/                           # Cross-cutting concerns
-│   ├── aspects/                     # AOP logging (LogAspect)
-│   ├── constants/                   # Global constants
-│   ├── converters/                  # JPA attribute converters
-│   ├── dtos/                        # Shared DTOs (ApiResponseDTO)
-│   ├── entities/                    # Base entities (BaseEntity)
-│   ├── enums/                       # Shared enumerations
-│   ├── feign/                       # Feign client interfaces
-│   ├── helpers/                     # Utility classes
-│   ├── processors/                  # Data processing logic
+│   ├── core/                        # Core utilities and base classes
+│   ├── database/                    # Database configurations & Base Entities
+│   ├── infrastructure/              # Infrastructure concerns
+│   ├── logging/                     # Logging configurations & Aspects
+│   ├── metrics/                     # Application metrics
+│   ├── providers/                   # External service providers
 │   ├── resolvers/                   # Custom argument resolvers
-│   ├── securities/                  # JWT validators, converters
-│   └── validations/                 # Custom validators
-├── exceptions/                       # Exception hierarchy
-│   └── handlers/                    # Global exception handlers
-└── diagnostics/                      # Health checks, connectivity tests
+│   └── security/                    # Security configurations & JWT
+└── resources/                        # Persistence resources
+    └── db/
+        └── migration/               # Flyway migration tables
 ```
 
 ### Vertical Slice Architecture
@@ -291,7 +280,7 @@ graph TB
 sequenceDiagram
     participant User
     participant Frontend
-    participant API as Genesis API
+    participant API as Horaion API
     participant Security as SecurityConfiguration
     participant Cognito as AWS Cognito
     participant DB as PostgreSQL
@@ -507,7 +496,7 @@ graph TD
 
 ## Async Processing
 
-Genesis uses Spring's `@Async` for long-running operations, particularly schedule generation.
+Horaion uses Spring's `@Async` for long-running operations, particularly schedule generation.
 
 ### Async Configuration
 
@@ -590,7 +579,7 @@ sequenceDiagram
 
 ### Timeout Configuration
 
-For long-running operations, Genesis configures extended timeouts:
+For long-running operations, Horaion configures extended timeouts:
 
 ```yaml
 # application.yaml
@@ -666,7 +655,7 @@ feign:
 * ❌ Small performance overhead
 * ❌ Debugging can be harder (proxy wrapping)
 
-**Implementation**: See `com.resetrix.genesis.shared.aspects.LogAspect`
+**Implementation**: See `com.horaion.app.shared.logging.LogAspect`
 
 ***
 
