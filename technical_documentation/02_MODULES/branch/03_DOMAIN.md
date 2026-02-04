@@ -2,56 +2,73 @@
 
 ## Service: `BranchService`
 
-This service encapsulates the business rules for managing branches.
+This service encapsulates the business rules for managing branches, ensuring data integrity across the organizational hierarchy.
 
-### Core Flows
+### Branch Lifecycle State Machine
 
-#### 1. Branch Creation
-**Goal**: Establish a new location with a unique identifier.
+A Branch is more than just a database row; it has a lifecycle.
 
-**Process Flow**:
-1.  **Validation**:
-    *   Checks if the parent `Company` exists.
-    *   {% hint style="warning" %}
-    *   **Important / Warning:**
-    *   **Uniqueness Check**: Verifies that `{companyId, branchCode}` is unique. You cannot have two branches with code `HQ-001` in the same company.
-    *   {% endhint %}
-2.  **Defaults**:
-    *   Sets default `country` to "South Africa" if missing.
-    *   Sets default `timezone` to "Africa/Johannesburg" if missing.
-3.  **Persistence**: Saves the entity to the database.
+```mermaid
+stateDiagram-v2
+    [*] --> Active: Create Branch
+    Active --> Inactive: Update (isActive=false)
+    Inactive --> Active: Update (isActive=true)
+    
+    Active --> SoftDeleted: Delete API Call
+    Inactive --> SoftDeleted: Delete API Call
+    
+    SoftDeleted --> [*]: Final State (Hidden)
+```
 
-#### 2. Soft Deletion
-**Goal**: "Remove" a branch without breaking history.
+*   **Active**: Fully operational. Shows up in dropdowns, can have shifts scheduled.
+*   **Inactive**: Temporarily closed (e.g., Renovations, off-season). Cannot schedule new shifts, but historical data is visible.
+*   **SoftDeleted**: Permanently closed. Hidden from UI. retained for DB referential integrity.
 
-**Why?**
-If you delete a Branch that had 1000 shifts last year, all those shifts would have a dangling reference (pointing to nothing). This breaks reporting.
+### Data Structures
 
-**Logic**:
-*   Instead of `DELETE FROM`, we set `softDelete = true` and `deletedAt = NOW()`.
-*   The branch is hidden from standard API calls but remains in the database for analytics.
+#### 1. Branch Types (`BranchType` Enum)
+We categorize branches to help with reporting and logic application.
 
-### Validators
+| Type | Description |
+| :--- | :--- |
+| `HEADQUARTERS` | The main office. Usually implies Corporate staff. |
+| `REGIONAL` | A regional hub overseeing multiple other branches. |
+| `SATELLITE` | A small office attached to a larger one. |
+| `WAREHOUSE` | Logistics only. Different overtime rules might apply here. |
+| `RETAIL` | A standard shop or storefront. |
+| `VIRTUAL` | **Crucial**: Used for remote employees who work from home. |
 
-#### `CreateBranchRequest`
-*   `name`: Required, max 255 chars.
-*   `code`: Required, max 20 chars.
-*   `timezone`: Max 50 chars.
+#### 2. Opening Hours (`JSONB`)
+We store opening hours as a flexible JSON object to accommodate varied schedules.
 
-### Entities
+**Schema Example:**
+```json
+{
+  "mon": "08:00-17:00",
+  "tue": "08:00-17:00",
+  "wed": "08:00-13:00,14:00-17:00", 
+  "thu": "08:00-17:00",
+  "fri": "08:00-16:00",
+  "sat": "closed",
+  "sun": "closed"
+}
+```
+*   **Note**: "Wed" shows a split shift (Lunch break closed).
+*   **Validation**: Handled at the application layer to ensure format is `HH:mm-HH:mm`.
 
-#### `Branch` (Database Table: `branches`)
+### Validators & Constraints
+
+#### `CreateBranchRequest` validations
+*   **Branch Code**: Must be **Unique** per Company.
+    *   *Allowed*: Company A (`HQ-01`) and Company B (`HQ-01`).
+    *   *Blocked*: Company A (`HQ-01`) and Company A (`HQ-01`).
+*   **Coordinates**: `latitude` and `longitude` are optional but highly recommended for Geofencing features.
+
+#### `Branch` Entity Fields
+
 *   **Keys**:
     *   `id` (UUID, PK)
-    *   `company_id` (FK to Companies)
-    *   `manager_id` (FK to Employees, optional)
-*   **Enums**:
-    *   `type`: `HEADQUARTERS`, `REGIONAL`, `SATELLITE`, `WAREHOUSE`, `RETAIL`, `VIRTUAL`.
-*   **JSON Fields**:
-    *   `opening_hours`: Stores complex weekly schedules (e.g., `{"mon": "09:00-17:00"}`).
-    *   `services`: List of services offered at this location.
-
-{% hint style="info" %}
-**Note:**
-We use **JSONB** for `opening_hours` to allow flexible schemas. Some branches might split shifts (09:00-12:00, 14:00-18:00), while others are 24/7. Validating this structure happens in the application layer.
-{% endhint %}
+    *   `company_id` (FK): The tenant owner.
+*   **Location**:
+    *   `timezone`: Defaults to `Africa/Johannesburg`. This is **vital** for the Scheduling Engine.
+    *   `country`: Defaults to `South Africa`.

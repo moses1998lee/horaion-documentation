@@ -2,16 +2,27 @@
 
 ## Database Configuration
 
-The Branch module shares the correct database connection with the rest of the application. No specific separate database configuration is required.
+The **Branch Module** relies on the core PostgreSQL database. It introduces the `branches` table.
 
-## Application Properties
+### Indexes & Performance
+To ensure fast lookups—especially when filtering by location or hierarchy—we explicitly index the following columns:
 
-There are no unique external API keys (like AWS Cognito keys) for the Branch module. It relies purely on:
-
-1.  **PostgreSQL**: For storing branch data.
-2.  **Security Context**: For validating user permissions (`@PermitCheck`).
+| Index Name | Column | Purpose |
+| :--- | :--- | :--- |
+| `idx_branches_company_id` | `company_id` | **Critical**: Every query filters by Company ID first (Multi-tenancy). |
+| `idx_branches_branch_code` | `branch_code` | User search (e.g., look up "HQ-01"). |
+| `idx_branches_city` | `city` | Reporting and filtering (e.g., "Show all Cape Town stores"). |
+| `idx_branches_country` | `country` | Regional reporting. |
 
 {% hint style="success" %}
 **Tip / Success:**
-Since this module is purely internal (CRUD logic), it is one of the easiest to deploy. It has zero external dependencies on 3rd party APIs.
+**Multi-Tenant Performance**: The composite uniqueness constraint `(company_id, branch_code)` also acts as a covering index for those two fields, speeding up existence checks during creation.
 {% endhint %}
+
+## Application Properties
+
+This module operates on standard defaults and does not require unique `application.yml` entries.
+However, it heavily influences the configuration of *other* modules:
+
+*   **Scheduling**: Relies on the `timezone` field stored in this module.
+*   **Geofencing**: Relies on `latitude`/`longitude` stored here.

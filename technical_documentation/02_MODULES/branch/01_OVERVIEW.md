@@ -4,34 +4,63 @@
 | :------------ | :--------------------------------------- |
 | **Namespace** | `com.horaion.app.modules.branch`         |
 | **Status**    | 🟢 Stable                                |
-| **Criticality** | Medium (Organizational Structure)       |
+| **Criticality** | High (Operational Compliance)            |
 | **Dependencies** | Company Module, Employee Module (Manager) |
 
 ## Executive Summary
 
-The **Branch Module** manages the physical locations (branches) of a company. It acts as the "Map" of the organization, defining where business operations actually happen.
+The **Branch Module** serves as the **operational backbone** of the Horaion platform. While the *Company* represents the legal entity, the *Branch* represents the physical or logical locations where work actually occurs.
 
 {% hint style="success" %}
 **Tip / Success:**
-Think of a **Branch** as a physical store, office, or site. Every employee is assigned to a specific branch, and every shift happens at a specific branch.
+**Analogy**: Think of the **Company** as the "Head Office" and the **Branches** as the individual "Franchise Stores". Even a fully remote company has a "Virtual" branch to house its employees.
 {% endhint %}
 
 {% hint style="warning" %}
 **Important / Warning:**
-**For New Developers**: Branches are usually tied to a specific **Timezone** and **Location**. This is critical for scheduling compliance (e.g., overtime rules based on local time).
+**Compliance Criticality**: Branches definition determines the **Timezone** and **Labor Laws** applicable to shifts.
+*   A shift at a "Cape Town" branch starts at 08:00 SAST (GMT+2).
+*   A shift at a "New York" branch starts at 08:00 EST (GMT-5).
+*   **Impact**: Scheduling engines read the Branch configuration to correctly calculate overtime, night-shift allowances, and public holiday pay.
 {% endhint %}
 
-### Core Capabilities
+## Hierarchy & Relationships
 
-1.  **Location Management**: Stores addresses, coordinates (lat/long), and contact info.
-2.  **Hierarchy**: Links branches to a parent **Company** and an assigned **Manager**.
-3.  **Operational Metadata**: Tracks opening hours and available services.
+The Branch sits in the middle of our organizational hierarchy:
+
+1.  **Company** (Root)
+2.  **Branch** (Location/Site)
+3.  **Department** (Functional Unit within a Branch)
+4.  **Employee** (Assigned to a Branch)
+
+```mermaid
+graph TD
+    Company[Company: Horaion Inc] --> |Owns| BranchA[Branch: Cape Town HQ]
+    Company --> |Owns| BranchB[Branch: Durban Warehouse]
+    
+    BranchA --> |Contains| Dept1[Department: IT Support]
+    BranchA --> |Contains| Dept2[Department: Sales]
+    
+    BranchA --> |Home Base For| Emp1[Employee: Alice]
+    BranchB --> |Home Base For| Emp2[Employee: Bob]
+```
+
+## Core Capabilities
+
+1.  **Geolocation Management**:
+    *   Stores `latitude` and `longitude` for geofencing (ensuring employees clock in only when physically on-site).
+    *   Manages address data for logistics and compliance.
+2.  **Operational Metadata**:
+    *   **Opening Hours**: Defines when the site is open (used to validate shift times).
+    *   **Services**: Lists capabilities of the branch (e.g., "Drive-thru", "24/7 Support").
+3.  **Lifecycle Management**:
+    *   Handles the opening, renovation (updates), and closing (soft delete) of locations.
 
 ## Responsibilities
 
-*   **CRUD Operations**: Create, Read, Update, and Delete branches.
-*   **Validation**: Ensuring Branch Codes are unique within a Company.
-*   **Search**: Finding branches by name or code.
+*   **Single Source of Truth**: For all location-based data.
+*   **Validation**: Enforcing that every branch code (e.g., `CPT-001`) is unique within a company.
+*   **Search Optimization**: Providing indexed lookups by City and Country.
 
 ## Module Architecture
 
@@ -48,22 +77,3 @@ graph TD
     BranchService --> SecurityContext[Security Context]
     BranchRepository --> DB[(Database)]
 ```
-
-## Key Interactions
-
-1.  **Company Module**:
-    *   **Dependency**: Strongly dependent on `CompanyRepository`.
-    *   **Reason**: A branch *cannot* exist without a parent Company.
-
-2.  **Security Module**:
-    *   **Dependency**: Uses `SecurityContextService`.
-    *   **Reason**: To ensure users only access branches belonging to their own company (Multi-tenancy isolation).
-
-## Configuration
-
-This module relies on standard database configurations. See `04_CONFIG.md`.
-
-## Events
-
-*   **Emits**: None currently.
-*   **Listens**: None.
