@@ -45,6 +45,8 @@ If you delete a Branch that had 1000 shifts last year, all those shifts would ha
     *   `id` (UUID, PK)
     *   `company_id` (FK to Companies)
     *   `manager_id` (FK to Employees, optional)
+*   **Enums**:
+    *   `type`: `HEADQUARTERS`, `REGIONAL`, `SATELLITE`, `WAREHOUSE`, `RETAIL`, `VIRTUAL`.
 *   **JSON Fields**:
     *   `opening_hours`: Stores complex weekly schedules (e.g., `{"mon": "09:00-17:00"}`).
     *   `services`: List of services offered at this location.

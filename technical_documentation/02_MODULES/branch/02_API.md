@@ -37,7 +37,17 @@ Retrieves a paginated list of branches for a specific company.
     }
     ```
 
-### 2. Get Branch by ID
+### 2. Get All Branches (Sorted)
+
+**Endpoint**: `GET /api/v1/companies/{companyId}/branches/sorted`
+
+Retrieves a list of branches with server-side sorting. Default sort is by `name`.
+
+*   **Parameters**:
+    *   `sort`: Sorting criteria (e.g., `name,asc`, `city,desc`).
+*   **Success Response** (`200 OK`): Returns a paginated list of `BranchResponse`.
+
+### 3. Get Branch by ID
 
 **Endpoint**: `GET /api/v1/companies/{companyId}/branches/{id}`
 
@@ -60,7 +70,27 @@ Fetches a single branch's detailed information.
 *   **Error Responses**:
     *   `404 Not Found`: If the branch does not exist or belongs to another company.
 
-### 3. Create Branch
+### 3. Get Active Branches
+
+**Endpoint**: `GET /api/v1/companies/{companyId}/branches/active`
+
+Retrieves only branches that are currently active (`isActive = true`). Useful for dropdown lists in the UI.
+
+*   **Success Response** (`200 OK`): Returns a list of `BranchResponse`.
+
+### 4. Get Branch by Code
+
+**Endpoint**: `GET /api/v1/companies/{companyId}/branches/code/{branchCode}`
+
+Finds a specific branch using its unique local code (e.g., `HQ-001`).
+
+*   **Parameters**:
+    *   `branchCode`: The unique code string.
+*   **Success Response** (`200 OK`): Returns `BranchResponse`.
+*   **Error Responses**:
+    *   `404 Not Found`: If no branch with that code exists in the company.
+
+### 5. Create Branch
 
 **Endpoint**: `POST /api/v1/companies/{companyId}/branches`
 
