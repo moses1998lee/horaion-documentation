@@ -172,14 +172,23 @@ jobs:
 
 ## Code Quality
 
-### Linting
-### Linting
-- **Standard**: Google Java Format (via Spotless plugin recommended).
+### Linting & Formatting
+- **Style Guide**: Enforced via **Checkstyle** (Maven Plugin).
+- **Configuration**: Rules defined in `checkstyle.xml`.
+- **Run Command**: `./mvnw checkstyle:check`
+
+### Static Analysis & Coverage
+- **Qodana**: Static analysis for code quality and security.
+  - Run: `./mvnw test` (Triggered via plugin)
+- **JaCoCo**: Code coverage reporting.
+  - Report Location: `target/site/jacoco/index.html`
+  - Min Coverage: **80%** (Enforced by build)
 
 ### Code Review Checklist
 - [ ] Tests added/updated (Green Build)
-- [ ] No security vulnerabilities (SonarLint check)
-- [ ] Performance considerations (N+1 queries check)
+- [ ] Coverage met (>80%)
+- [ ] No Checkstyle violations
+- [ ] No Qodana issues
 
 ---
 

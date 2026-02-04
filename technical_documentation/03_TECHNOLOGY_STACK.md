@@ -60,7 +60,7 @@ graph TD
 
 ### Runtime Environment
 - **Language**: Java 21 (LTS)
-- **Framework**: Spring Boot 3.4.0
+- **Framework**: Spring Boot 4.0.0
 - **Build Tool**: Maven 3.9+
 
 ### Core Dependencies
@@ -70,25 +70,25 @@ graph TD
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
-    <version>3.4.0</version>
+    <version>4.0.0</version>
 </dependency>
 
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-jpa</artifactId>
-    <version>3.4.0</version>
+    <version>4.0.0</version>
 </dependency>
 
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
-    <version>3.4.0</version>
+    <version>4.0.0</version>
 </dependency>
 
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-actuator</artifactId>
-    <version>3.4.0</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -223,11 +223,11 @@ graph TD
 
 ## Technology Decisions
 
-### Why Spring Boot 3.4.0?
-- Virtual threads for improved concurrency
+### Why Spring Boot 4.0.0?
+- Bleeding edge features and performance improvements
 - Native compilation support (GraalVM)
-- Latest security patches
-- OAuth 2.1 support
+- Enhanced observability with Micrometer
+- Jakarta EE 10+ baseline
 
 ### Why Java 21?
 - LTS release with long-term support
@@ -260,7 +260,7 @@ graph TD
 | Component | Version | Notes |
 |-----------|---------|-------|
 | Java | 21 (LTS) | Required |
-| Spring Boot | 3.4.0 | Core framework |
+| Spring Boot | 4.0.0 | Core framework |
 | PostgreSQL | 12+ | Database |
 | Maven | 3.9+ | Build tool |
 | Docker | 20.10+ | Containerization |

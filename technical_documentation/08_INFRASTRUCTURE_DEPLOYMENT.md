@@ -402,7 +402,7 @@ Configured in `application.yaml`:
 logging:
   level:
     root: INFO
-    com.resetrix.genesis: INFO  # Application logs
+    com.horaion.app: INFO  # Application logs
     org.springframework.web: WARN
     org.hibernate.SQL: DEBUG  # SQL queries (dev only)
 ```
@@ -565,7 +565,7 @@ jmap -dump:live,format=b,file=heap.bin <PID>
 Genesis includes a diagnostic tool to test engine connectivity:
 
 ```java
-// Located at: com.resetrix.genesis.diagnostics.EngineConnectivityTest
+// Located at: com.horaion.app.shared.diagnostics.EngineConnectivityTest
 ```
 
 Run manually or via endpoint (if exposed).
