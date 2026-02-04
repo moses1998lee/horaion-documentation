@@ -1,0 +1,61 @@
+# Employee Module Domain Logic
+
+## Service: `EmployeeService`
+
+The central hub for workforce management.
+
+### Multi-Department Assignment Logic
+
+Startups often have "Generalists" who wear multiple hats. Our system models this via the `EmployeeDepartmentAssignment` entity.
+
+*   **One Primary**: Every employee has exactly one "Home Base" (Primary Department). This is used for payroll cost center allocation.
+*   **Many Secondaries**: An employee can "float" into other departments (e.g., a Cashier who also helps stock shelves in Inventory).
+
+**Code Insight**:
+```java
+// Logic inside assignToDepartment()
+if (request.isPrimary()) {
+    // Find current primary and downgrade it
+    currentPrimary.setPrimary(false);
+    save(currentPrimary);
+}
+// Create new assignment as Primary
+newAssignment.setPrimary(true);
+save(newAssignment);
+```
+
+### Automated Code Generation
+
+When an employee is created, we generate a human-readable ID.
+Format: `EMP-{RANDOM_HEX}` (e.g., `EMP-A1B2C3D4`).
+*   **Why?**: UUIDs (`a0eebc99...`) are impossible for humans to type or remember. The `code` field gives HR a handle to search for.
+
+### Security Integration (Job Titles)
+
+The `assignJobTitle` method is not just a database update; it is a security provisioner.
+
+1.  **Update DB**: Links the `JobTitle` entity to the `Employee`.
+2.  **Update Cognito**:
+    *   Finds coverage of the Job Title (e.g., "Store Manager").
+    *   Calls `cognitoGroupService.addUserToGroup(...)`.
+    *   Grants the actual IAM/JWT permissions needed to perform that job.
+
+### Entities
+
+#### `Employee` (Database Table: `employees`)
+
+*   **Keys**:
+    *   `id` (UUID, PK)
+    *   `cognito_sub` (String, Unique): Link to Auth system.
+    *   `company_id`, `branch_id`: Multi-tenancy scopes.
+*   **Indexes**:
+    *   `idx_employees_name`: (`last_name`, `first_name`) for fast autocomplete.
+    *   `idx_employees_hire_date`: For "Anniversary" or "Probation" reports.
+*   **Fields**:
+    *   `employment_type`: `FULL_TIME`, `PART_TIME`, `CASUAL`, `CONTRACTOR`.
+    *   `profile_picture_url`: pointer to S3 bucket.
+
+{% hint style="warning" %}
+**Important / Warning:**
+**Privacy**: This table contains **PII** (Personally Identifiable Information) like Email, Phone, and DOB. Access to this entity is strictly audited and restricted via `PermitCheck`.
+{% endhint %}
