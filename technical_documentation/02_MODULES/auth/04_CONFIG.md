@@ -1,7 +1,7 @@
 # Auth Module Configuration
 
 ## Application Properties
-The module relies on the global `genesis` (soon to be `horaion`) configuration block.
+The module relies on the global `horaion` configuration block.
 
 | Property | Description | Required | Default |
 | :--- | :--- | :--- | :--- |

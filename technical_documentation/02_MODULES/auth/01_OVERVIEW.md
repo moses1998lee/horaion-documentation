@@ -57,8 +57,8 @@ graph TD
 
 ## Configuration
 This module relies on the following configurations (see `CONFIG.md`):
-*   `genesis.cognito.*` (Client ID, User Pool ID, Secret)
-*   `genesis.permit.*` (RBAC policies)
+*   `horaion.cognito.*` (Client ID, User Pool ID, Secret)
+*   `horaion.permit.*` (RBAC policies)
 
 ## Events
 *   **Emits**: None currently (Direct service calls).
