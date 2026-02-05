@@ -43,12 +43,20 @@ sequenceDiagram
     end
 ```
 
-> **Diagram Explanation**: The Identity Resolution process is the critical security bridge.
-> 1.  **Trust Core**: It blindly trusts the `sub` claim from the AWS-signed JWT to lookup the local `Employee` record.
-> 2.  **Parallel Enrichment**: Once the `Employee` is identified, the system spawns parallel threads to fetch their **Primary Department** (context) and **Permissions** (capabilities).
-> 3.  **Result**: This aggregation happens transparently to the client, which receives a single, fully hydrated `MeResponse`.
-
-### Context Aggregation
+> **Diagram Explanation**: The Identity Resolution process acts as the "Grand Central Station" for user context.
+>
+> 1.  **Security Handshake (The "Who")**:
+>     *   The system *never* trusts the client to say "I am User 123".
+>     *   Instead, it trusts the **AWS Cognito Signature**. It extracts the `sub` (Subject ID) from the verified JWT.
+>     *   This `sub` is essentially a Foreign Key linking the credentials world (AWS) to the business world (SQL).
+>
+> 2.  **Business Resolution (The "Role")**:
+>     *   The lookup `findByCognitoSub` is the moment we cross the bridge.
+>     *   **Zombie Check**: If AWS says "Valid Token" but the DB says "No Employee found", we return 404. This handles cases where IT disabled an employee account but forgot to revoke valid tokens immediately.
+>
+> 3.  **Parallel Context (The "What")**:
+>     *   Once the Employee is resolved, the `MeController` fires off parallel threads (using `CompletableFuture`) to fetch their **Department Context** and **Permission Set**.
+>     *   *Why?* Getting permissions involves complex Rule evaluations. Doing this sequentially would make the app start slow.
 
 ### Context Aggregation
 
@@ -78,8 +86,6 @@ The module delegates to `UserNotificationService`.
 The Me Module does not own any database tables. It reads from:
 *   `employees` (Profile)
 *   `employee_department_assignments` (Context)
-*   `user_notifications` (Alerts)
-
 *   `user_notifications` (Alerts)
 
 ### Frontend Integration Guide
