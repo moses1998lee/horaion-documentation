@@ -83,13 +83,13 @@ The system is designed for **Asynchronous Eventual Consistency**.
 
 ```mermaid
 graph TD
-    User[User] --> |1. Generate Schedule| Frontend[Frontend]
-    Frontend --> |2. API Request| Backend[Backend API]
-    Backend --> |3. Build Payload| EngineRequestBuilder
-    EngineRequestBuilder --> |4. Send to Engine| Engine[AI Optimization Engine]
-    Engine --> |5. Webhook| Callback[Callback API]
-    Callback --> |6. Save Result| DB[(Database)]
-    DB --> |7. Notify Frontend (WS)| Frontend
+    User[User] --> |"1. Generate Schedule"| Frontend[Frontend]
+    Frontend --> |"2. API Request"| Backend[Backend API]
+    Backend --> |"3. Build Payload"| Builder[EngineRequestBuilder]
+    Builder --> |"4. Send to Engine"| Engine[AI Optimization Engine]
+    Engine --> |"5. Webhook"| Callback[Callback API]
+    Callback --> |"6. Save Result"| DB[(Database)]
+    DB --> |"7. Notify Frontend (WS)"| Frontend
 ```
 
 > **Diagram Explanation**: The scheduling lifecycle is a high-speed ETL pipeline:
@@ -119,7 +119,6 @@ The result of the optimization. A specific instance of a `Shift` assigned to the
 **Audit Trail**: The `ScheduleRequest` table stores the *exact* JSON payload sent to the engine. This is invaluable for debugging "weird" schedules. You can replay this JSON locally against the engine to reproduce issues.
 {% hint style="success" %}
 **Tip:** This "Payload Snapshoting" is invaluable for debugging. You can extract the JSON and re-run the optimization locally to reproduce and fix edge-case scheduling issues.
-{% endhint %}
 {% endhint %}
 
 ### Frontend Integration Guide
