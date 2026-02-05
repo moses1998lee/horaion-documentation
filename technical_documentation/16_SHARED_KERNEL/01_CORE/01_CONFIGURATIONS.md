@@ -1,0 +1,77 @@
+# 01 - Core Configurations
+
+> **Infrastructure settings for the Application Context**
+
+Typically, a Spring Boot application requires global settings that apply to all modules. Instead of scattering these settings across random files, we centralize them in the `shared.core.configurations` package.
+
+---
+
+## 1. Async Configuration
+**File**: [`AsyncConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/configurations/AsyncConfiguration.java)
+
+This configuration powers the `@Async` annotation, allowing methods to run in a separate thread (fire-and-forget).
+
+### Why is this important?
+By default, Spring's `@Async` uses a simple thread pool. However, in our architecture, we need two advanced features:
+1.  **Virtual Threads**: Leveraging Java 21's lightweight threads for high-throughput concurrency.
+2.  **Context Propagation**: Ensuring that the "Logged In User" context (`SecurityContext`) is passed from the main thread to the background thread.
+
+### Thread Model Visualization
+
+```mermaid
+sequenceDiagram
+    participant Main as Main HTTP Thread
+    participant Async as Async Executor
+    participant Worker as Virtual Worker Thread
+    
+    Main->>Main: User Authenticates (User ID: 5)
+    Main->>Async: Trigger @Async Method
+    
+    Note over Main, Worker: ⚠️ Standard threads LOSE the User Context here!
+    
+    Async->>Worker: Copy SecurityContext (User ID: 5)
+    activate Worker
+    Worker->>Worker: Run Background Task
+    Note right of Worker: Can still access "CurrentUser"
+    Worker-->>Async: Task Complete
+    deactivate Worker
+```
+
+### Key Implementation Details
+
+{% hint style="info" %}
+**Note:** We use `DelegatingSecurityContextAsyncTaskExecutor`. This wrapper is the magic component that copies the security context to the new thread. Without this, calling `SecurityContextHolder.getContext()` in an async method would return `null`.
+{% endhint %}
+
+```java
+@Bean
+public Executor taskExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(10); 
+    // ... logic to enable Virtual Threads
+    return new DelegatingSecurityContextAsyncTaskExecutor(executor);
+}
+```
+
+---
+
+## 2. Jackson Configuration
+**File**: [`JacksonConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/configurations/JacksonConfiguration.java)
+
+This class configures the `ObjectMapper`, which is the engine Spring uses to convert Java Objects to JSON (and vice versa).
+
+### The "Dates" Problem
+By default, Java's `LocalDateTime` might serialize as an array of numbers: `[2023, 10, 5, 14, 30]`. This is terrible for Frontend Apps to parse.
+
+**Our Standard**: **ISO-8601 Strings**
+*   **Format**: `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'`
+*   **Example**: `"2023-10-05T14:30:00.000Z"`
+
+{% hint style="danger" %}
+**Critical:** Never override the `ObjectMapper` in your own modules unless absolutely necessary. Relying on this global default ensures that Date/Time formats are consistent across every single API endpoint in the platform.
+{% endhint %}
+
+### Features Enabled
+*   `WRITE_DATES_AS_TIMESTAMPS = false`: Forces String format instead of numeric timestamps.
+*   `FAIL_ON_UNKNOWN_PROPERTIES = false`: Makes the API robust. If the frontend sends an extra field we usually simply ignore it rather than crashing.
+*   `NON_NULL` Serialization: We do not send `field: null` in JSON responses to save bandwidth.

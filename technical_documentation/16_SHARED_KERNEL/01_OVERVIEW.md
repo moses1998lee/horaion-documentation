@@ -80,20 +80,53 @@ The arrows (`-->`) represent **dependency flow**.
 
 ```
 com.horaion.app.shared
-├── core/               # Domain-agnostic POJOs and Utilities
-│   ├── responses/      # Standardized API response envelopes
-│   ├── exceptions/     # Global exception hierarchy
-│   └── constants/      # System-wide constants
-├── infrastructure/     # Implementation of external adapters
-│   ├── aws/            # AWS SDK wrappers (S3, Cognito, SES)
-│   ├── notification/   # Email and message dispatching
-│   └── excel/          # Apache POI wrappers for import/export
-├── security/           # Application security configuration
-│   ├── context/        # User context holderes
-│   └── filters/        # JWT and Request filters
-└── database/           # Persistence extensions
-    ├── audit/          # JPA Auditing (CreatedBy, UpdatedAt)
-    └── repositories/   # Base repository interfaces
+├── core
+│   ├── configurations
+│   ├── constants
+│   ├── enums
+│   ├── exceptions
+│   ├── helpers
+│   ├── interfaces
+│   ├── repositories
+│   ├── responses
+│   └── utils
+├── database
+│   ├── configurations
+│   ├── constants
+│   ├── enums
+│   └── properties
+├── infrastructure
+│   ├── aws
+│   ├── engine
+│   ├── excel
+│   ├── genesis
+│   ├── messaging
+│   ├── notification
+│   └── properties
+├── logging
+│   ├── aspects
+│   ├── constants
+│   ├── exceptions
+│   └── properties
+├── metrics
+│   └── configurations
+├── providers
+│   ├── impl
+│   ├── FieldOptionConstants.java
+│   └── FieldOptionProvider.java
+├── resolvers
+│   └── RuleFieldOptionResolver.java
+└── security
+    ├── annotations
+    ├── aspects
+    ├── configurations
+    ├── constants
+    ├── exceptions
+    ├── handlers
+    ├── jwt
+    ├── properties
+    ├── services
+    └── utils
 ```
 
 ---
