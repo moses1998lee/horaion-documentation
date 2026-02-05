@@ -693,6 +693,6 @@ spring:
 
 ## Next Steps
 
-* [ARCHITECTURE.md](02_SYSTEM_ARCHITECTURE.md) - System design and patterns
-* [TECHNICAL.md](07_API_DESIGN.md) - Data models and API standards
-* [MODULES.md](04_BACKEND_SPECIFICATIONS.md) - Module-specific documentation
+* [System Architecture](02_SYSTEM_ARCHITECTURE.md) - System design and patterns
+* [API Design](07_API_DESIGN.md) - Data models and API standards
+* [Backend Strategy](04_BACKEND_SPECIFICATIONS.md) - Module-specific documentation

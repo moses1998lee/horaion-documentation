@@ -201,9 +201,9 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 
 ## Next Steps
 
-* [TECHNICAL.md](07_API_DESIGN.md) - Data models and API standards
-* [OPERATIONS.md](08_INFRASTRUCTURE_DEPLOYMENT.md) - Deployment and configuration
-* [ARCHITECTURE.md](02_SYSTEM_ARCHITECTURE.md) - System design patterns
+* [API Design](07_API_DESIGN.md) - Data models and API standards
+* [Infrastructure Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md) - Deployment and configuration
+* [System Architecture](02_SYSTEM_ARCHITECTURE.md) - System design patterns
 
 ## Advanced Module Patterns
 

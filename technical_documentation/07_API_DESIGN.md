@@ -706,5 +706,5 @@ if (tokenExpiresIn < 300) { // 5 minutes
 
 ## Next Steps
 
-- [MODULES.md](04_BACKEND_SPECIFICATIONS.md) - Detailed module documentation
-- [TECHNICAL.md](02_SYSTEM_ARCHITECTURE.md) - API specifications
+- [Backend Strategy](04_BACKEND_SPECIFICATIONS.md) - Detailed module documentation
+- [System Architecture](02_SYSTEM_ARCHITECTURE.md) - High-level design overview
