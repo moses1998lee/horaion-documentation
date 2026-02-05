@@ -27,6 +27,14 @@ flowchart TD
     500 --> Response
 ```
 
+### Flow Description
+1.  **Throw**: A method (e.g., `EmployeeService`) detects an error condition and throws a Java Exception.
+2.  **Catch**: The `GlobalExceptionHandler` interceptor catches the exception before it reaches the Tomcat container. It acts as a safety net.
+3.  **Analyze**: The handler checks the *class* of the exception.
+    *   If it's one of our `BaseException` children, it uses the specific status code defined there.
+    *   If it's an unknown `RuntimeException` (like a NullPointerException), it defaults to a **500 Internal Server Error** to protect the system's internal state.
+4.  **Response**: Finally, it constructs the standardized JSON payload so the Frontend always gets a consistent structure, regardless of what went wrong.
+
 ---
 
 ## 1. The Hierarchy (`BaseException`)

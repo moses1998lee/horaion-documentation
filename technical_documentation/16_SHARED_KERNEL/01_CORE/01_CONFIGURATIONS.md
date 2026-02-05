@@ -37,6 +37,12 @@ sequenceDiagram
     deactivate Worker
 ```
 
+### Visual Walkthrough
+1.  **Authentication**: The request starts on a standard Tomcat thread using the User's credentials.
+2.  **Context Loss Risk**: When we fire an asynchronous task, it usually runs on a *new* thread (the "Worker"). By default, this new thread is blank—it doesn't know who the user is.
+3.  **Propagation**: Our Custom Executor intervenes. It captures the `SecurityContext` from the Main thread and *injects* it into the Worker thread.
+4.  **Result**: The background task can safely call methods like `SecurityContextHolder.getContext().getAuthentication()` and get the correct User ID, enabling audit logging and security checks to work seamlessly.
+
 ### Key Implementation Details
 
 {% hint style="info" %}

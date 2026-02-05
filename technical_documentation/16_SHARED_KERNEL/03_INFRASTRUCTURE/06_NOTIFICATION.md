@@ -30,6 +30,15 @@ sequenceDiagram
     Worker->>Facade: Update Tracking Record (SENT)
 ```
 
+### System Walkthrough
+1.  **App Request**: The main application wants to send an email (e.g., "Welcome to Horaion"). It calls the `NotificationFacade`.
+2.  **Fast Path (Synchronous)**: The Facade does minimal work. It saves a `PENDING` record to the DB and fires an event to AWS SNS. It then returns immediately. This keeps the user interface snappy.
+3.  **Slow Path (Asynchronous)**:
+    *   **SNS -> SQS**: AWS routes the message to a Queue.
+    *   **Worker**: A background worker picks up the message. This happens independently of the user's request.
+    *   **Delivery**: The worker calls AWS SES to actually send the email.
+    *   **Confirmation**: Once sent, the worker updates the database record to `SENT`. If SES fails, it marks it as `FAILED`, allowing for retries or manual investigation.
+
 ---
 
 ## 1. Notification Facade

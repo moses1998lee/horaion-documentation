@@ -37,6 +37,13 @@ sequenceDiagram
     Hikari-->>Boot: DataSource Bean
 ```
 
+### Initialization Steps
+1.  **Bean Creation**: Spring Boot calls the `dataSource()` method during startup.
+2.  **Detection**: We parse the JDBC URL (`jdbc:postgresql:...`) to determine we are connecting to **PostgreSQL**.
+3.  **Optimization**: Instead of just using defaults, we inject Postgres-specific flags.
+    *   `reWriteBatchedInserts`: This is a massive performance booster. It takes individual SQL inserts (`INSERT INTO...`) and rewrites them into a single multi-row insert statement before sending bytes over the network.
+4.  **Pool Startup**: Only after configuring these performance settings do we start the Hikari Pool, which opens physical TCP connections to the database.
+
 ### Key Features
 1.  **Auto-Detection**: You don't need to specify the `driverClassName`. We detect it automatically from the JDBC URL (`jdbc:postgresql:...` -> `org.postgresql.Driver`).
 2.  **Smart Optimizations**:
