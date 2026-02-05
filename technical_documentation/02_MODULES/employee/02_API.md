@@ -104,7 +104,7 @@ Returns the history (or current list) of where this person works.
 
 Mapped in `EmployeeExceptionHandler`.
 
-| Exception | Index Name | Column | Purpose |
+| Index Name | Column | Purpose |
 | :--- | :--- | :--- |
 | `idx_employees_name` | `last_name`, `first_name` | **Composite Index**. Speeds up "Search by Name" which happens on every shift assignment screen. |
 | `idx_employees_company_id` | `company_id` | **Multi-tenant filter**. Ensures all queries are scoped to the correct company database partition. |

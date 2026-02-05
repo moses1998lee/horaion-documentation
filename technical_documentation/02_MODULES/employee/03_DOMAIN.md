@@ -128,6 +128,8 @@ sequenceDiagram
     AsyncService->>Webhook: Send completion report
 ```
 
+> **Diagram Explanation**: This sequence illustrates the **Async Job Pattern**. The client receives an immediate `202 Accepted` response with a `jobId`. A background service then iterates through the employee list, creating accounts in Cognito one by one, and finally reports completion via a webhook.
+
 ### Technical Implementation
 
 *   **Thread Pool**: Uses `generalTaskExecutor` (See [Async Config](../../16_SHARED_KERNEL/02_CORE/01_CONFIGURATIONS.md)).
