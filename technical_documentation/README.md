@@ -217,6 +217,7 @@
 2. **Understand Structure**: [02 - System Architecture](02_SYSTEM_ARCHITECTURE.md) for technical overview
 3. **Pick a Module**: Choose a business domain from **Part 4: Modules** and read its Overview
 4. **Dive Deep**: Explore the module's API, Domain Logic, and Configuration files
+5. **Don't Reinvent the Wheel**: Check **[Shared Kernel](16_SHARED_KERNEL/01_OVERVIEW.md)** for reusable core components (Security, DTOs, Utils) used across the entire application.
 
 ### For Backend Engineers
 1. **Architecture First**: [02 - System Architecture](02_SYSTEM_ARCHITECTURE.md)
