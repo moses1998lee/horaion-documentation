@@ -241,7 +241,7 @@ mindmap
 
 #### 4. HR Personnel
 - **Responsibilities**: Employee onboarding, data management, bulk imports
-- ** Access Level**: Company-wide employee access
+- **Access Level**: Company-wide employee access
 
 #### 5. Operations Teams
 - **Responsibilities**: System monitoring, deployment, infrastructure maintenance

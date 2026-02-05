@@ -342,13 +342,13 @@ sequenceDiagram
     API-->>Frontend: Response
 ```
 
+
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
 
-{% hint style="danger" %}
-**Critical:** The registration flow creates local `Employee` records _before_ Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
+{% hint style="danger" %}__
+**Critical:** The registration flow creates local `Employee` records *before* Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
 {% endhint %}
 
-```markdown
 **Step-by-Step Flow**:
 1.  **Registration**:
     *   User enters details -> API creates a "pending" user in AWS Cognito.
@@ -364,36 +364,27 @@ sequenceDiagram
 4.  **Authenticated Request**:
     *   For all future requests (like "Get Employees"), the Frontend attaches the Access Token in the `Authorization` header.
     *   The API validates the JWT signature against Cognito's public keys before processing.
-```
 
 {% hint style="info" %}
 **Note:** Access tokens are short-lived (typically 1 hour). The Frontend should use the `Refresh Token` to obtain new `Access Tokens` without forcing the user to re-login.
-{% endhint %}
 
-#### Security Configuration
-
-1. **Public Endpoints** (no authentication required): \*
-
-* &#x20;`/actuator/health` - Health checks
+#{% endhint %}
+### Security Configuration
+**Public Endpoints** (no authentication required):
+* `/actuator/health` - Health checks
 * `/auth/**` - Registration, login, confirmation
-* `/swagger-ui/**` - API documentation&#x20;
-
-2. **Protected Endpoints** (JWT required):
-
+* `/swagger-ui/**` - API documentation
+**Protected Endpoints** (JWT required):
 * All other endpoints require valid JWT in `Authorization: Bearer <token>` header
-
-3. **IP Whitelisting**:
-
+**IP Whitelisting**:
 * Engine callback endpoints (`/schedule/update-status`) validate source IP
-* Configured via `ENGINE_ALLOWED_IPS` environment variable&#x20;
-
-4. **JWT Validation**:&#x20;
-
+* Configured via `ENGINE_ALLOWED_IPS` environment variable
+**JWT Validation**:
 * Signature verification using Cognito's public keys (JWKS)
 * Expiration check
-* Audience (`aud`) and issuer (`iss`) validation
-
-#### Authorization Model
+   * Audience (`aud`) and issuer (`iss`) validation
+#
+### Authorization Model
 
 ```mermaid
 graph TD
@@ -419,15 +410,15 @@ graph TD
 
 > **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed to decide "Is this user allowed in?".
 
-**Authentication Logic**:
 
+**uthentication Logic**:
 1. **Incoming Request**: Arrives with a header `Authorization: Bearer <token>`.
 2. **Validate Signature**: The system checks the mathematical signature of the token against AWS's public key. If modified, it rejects it immediately.
-3. **Extract Claims**: It opens the token to read:
+3. *xtract Claims**: It opens the token to read:
    * **Sub**: The User ID.
    * **Email**: Who they are.
-   * **Groups**: Are they an Admin? A Manager?
-4. **Security Context**: These details are stored in the temporary memory (`SecurityContext`) for the duration of the request so the Controller knows who is calling it.
+   *   **Groups**: Are they an Admin? A Manager?
+4.  **Security Context**: These details are stored in the temporary memory (`SecurityContext`) for the duration of the request so the Controller knows who is calling it.
 
 ***
 
@@ -471,17 +462,17 @@ sequenceDiagram
 
 > **Diagram Explanation**: A standard request lifecycle for saving data (e.g., "Create Employee").
 
-**Step-by-Step Flow**:
 
+**tep-by-Step Flow**:
 1. **API Entry**: Client sends a POST request. The **Controller** receives it.
 2. **Validation**: Controller checks "Is the email valid? Is the name empty?".
-3. **Service Processing**:
+.  **rvice Processing**:
    * **LogAspect**: Automatically records "User X started Create Employee".
    * **Mapper**: Converts the JSON input (DTO) into a Database Object (Entity).
-   * **Repository**: Saves the Entity to the database (`INSERT`).
-4. **Completion**:
+   *   **Repository**: Saves the Entity to the database (`INSERT`).
+.  **mpletion**:
    * The Service takes the saved data, converts it back to JSON (Response DTO), and returns it.
-   * **LogAspect**: Records "User X finished in 50ms".
+    *   **LogAspect**: Records "User X finished in 50ms".
 
 **Step-by-Step Breakdown:**
 
@@ -522,15 +513,15 @@ graph TD
 
 > **Diagram Explanation**: The centralized exception handling mechanism. It acts as a safety net for the whole application.
 
-**How it Works**:
 
+**ow it Works**:
 1. **Something Goes Wrong**: A bug occurs, or a user asks for ID 999 (which doesn't exist). An `Exception` is thrown.
 2. **Global Handler Catches It**: Instead of crashing or showing a raw stack trace, the `GlobalExceptionHandler` typically intercepts it.
-3. **Categorization**:
+3. *ategorization**:
    * **ResourceNotFound**: Becomes a `404 Not Found`.
    * **ValidationException**: Becomes a `400 Bad Request`.
-   * **RuntimeException**: Becomes a `500 Server Error`.
-4. **Response**: The user gets a clean JSON error message explaining exactly what went wrong.
+   *   **RuntimeException**: Becomes a `500 Server Error`.
+4.  **Response**: The user gets a clean JSON error message explaining exactly what went wrong.
 
 ***
 
@@ -597,19 +588,19 @@ sequenceDiagram
 
 > **Diagram Explanation**: The asynchronous optimization process. This allows the system to do "heavy lifting" (math) without making the user wait.
 
-**Step-by-Step Flow**:
 
-1. **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and _immediately_ says "OK, we're working on it" (202 Accepted).
-2. **Background Work**:
+**tep-by-Step Flow**:__
+1. **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and *immediately* says "OK, we're working on it" (202 Accepted).
+.  **ckground Work**:
    * A hidden background thread wakes up.
-   * It grabs all the necessary data (Rules, Shifts, People).
-3. **External Engine**:
-   * This thread sends the problem to the **Schedule Engine** (a separate heavy-duty calculator).
-   * It waits patiently (up to 45 mins) _without_ blocking the main web server.
-4. **Completion**:
+   *   It grabs all the necessary data (Rules, Shifts, People).
+3. **ternal Engine**:
+   * This thread sends the problem to th_ **Sche_ule Engine** (a separate heavy-duty calculator).
+   *   It waits patiently (up to 45 mins) *without* blocking the main web server.
+4. *ompletion**:
    * The Engine replies.
-   * The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
-5. **Notification**: A webhook or email tells the user "Your schedule is ready!".
+   *   The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
+5.  **Notification**: A webhook or email tells the user "Your schedule is ready!".
 
 **Step-by-Step Breakdown:**
 
@@ -646,8 +637,8 @@ feign:
 
 {% hint style="danger" %}
 **Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency.
-{% endhint %}
 
+{% endhint %}
 ***
 
 ## Architectural Decisions
@@ -808,12 +799,12 @@ graph TD
 
 > **Diagram Explanations**: This dependency graph shows the "Rules of Engagement" between modules.
 
-**Understanding the Arrows**:
 
+*nderstanding the Arrows**:
 * **Arrow Direction**: `A --> B` means "Module A needs Module B to work".
-* **Core Hierarchy**:
-  * **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
-* **Scheduling Domain**:
-  * **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
-* **Shared Layer**:
-  * Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.
+* *ore Hierarchy**:
+  *   **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
+* *cheduling Domain**:
+  *   **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
+* *hared Layer**:
+    *   Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.

@@ -23,6 +23,14 @@ Unlike traditional hardcoded parameters, this module allows System Administrator
 
 It follows a **Class-Instance** pattern.
 
+```mermaid
+graph LR
+    Admin[Admin] --> |1. Define Schema| Rule[Rule Definition]
+    Rule --> |2. Define Inputs| Field[Rule Fields]
+    
+    Manager[Manager] --> |3. Select Rule| Answer[Rule Answer]
+    Answer --> |4. Fill Values| Field
+    
     Answer --> |5. Serialize| Engine[Scheduling Engine]
 ```
 
