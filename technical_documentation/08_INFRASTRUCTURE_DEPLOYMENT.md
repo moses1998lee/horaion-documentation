@@ -284,7 +284,7 @@ Logs are piped to `stdout` (for Docker capture) and written to rolling files in 
 *   `userId`
 *   `tenantId`
 
-For Logback configuration details, see [Shared Kernel - Logging](../technical_documentation/16_SHARED_KERNEL/05_LOGGING/02_CONFIGURATIONS.md).
+For Logback configuration details, see [Shared Kernel - Logging](../technical_documentation/16_SHARED_KERNEL/05_LOGGING/04_PROPERTIES.md).
 
 ### Environment Variables Reference
 
@@ -693,6 +693,6 @@ spring:
 
 ## Next Steps
 
-* [ARCHITECTURE.md](../compiled/technical_documentation/ARCHITECTURE.md) - System design and patterns
-* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models and API standards
-* [MODULES.md](../compiled/technical_documentation/MODULES.md) - Module-specific documentation
+* [ARCHITECTURE.md](02_SYSTEM_ARCHITECTURE.md) - System design and patterns
+* [TECHNICAL.md](07_API_DESIGN.md) - Data models and API standards
+* [MODULES.md](04_BACKEND_SPECIFICATIONS.md) - Module-specific documentation

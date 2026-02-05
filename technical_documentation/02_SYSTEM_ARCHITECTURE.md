@@ -740,9 +740,9 @@ feign:
 
 For implementation details, see:
 
-* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models, API patterns, error handling
-* [MODULES.md](../compiled/technical_documentation/MODULES.md) - Individual module documentation
-* [OPERATIONS.md](../compiled/technical_documentation/OPERATIONS.md) - Deployment and monitoring
+* [TECHNICAL.md](07_API_DESIGN.md) - Data models, API patterns, error handling
+* [MODULES.md](04_BACKEND_SPECIFICATIONS.md) - Individual module documentation
+* [OPERATIONS.md](08_INFRASTRUCTURE_DEPLOYMENT.md) - Deployment and monitoring
 
 ***
 

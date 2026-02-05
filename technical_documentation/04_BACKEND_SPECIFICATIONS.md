@@ -48,21 +48,21 @@ modules/{module-name}/
 > **For detailed implementation guides, please refer to the specific module documentation.**
 
 ### Core Modules
-* [Auth Module](MODULES/auth/01_OVERVIEW.md) - Authentication & Registration
-* [Company Module](MODULES/company/01_OVERVIEW.md) - Multi-tenant Root
-* [Branch Module](MODULES/branch/01_OVERVIEW.md) - Location Management
-* [Department Module](MODULES/department/01_OVERVIEW.md) - Scheduling Scope
+* [Auth Module](02_MODULES/auth/01_OVERVIEW.md) - Authentication & Registration
+* [Company Module](02_MODULES/company/01_OVERVIEW.md) - Multi-tenant Root
+* [Branch Module](02_MODULES/branch/01_OVERVIEW.md) - Location Management
+* [Department Module](02_MODULES/department/01_OVERVIEW.md) - Scheduling Scope
 
 ### Employee Domain
-* [Employee Module](MODULES/employee/01_OVERVIEW.md) - Staff Management
-* [Employee Role Module](MODULES/employeerole/01_OVERVIEW.md) - Permissions & Levels
-* [Leave Availability](MODULES/employeeleaveavailability/01_OVERVIEW.md) - Time Off Management
+* [Employee Module](02_MODULES/employee/01_OVERVIEW.md) - Staff Management
+* [Job Title Module](02_MODULES/jobtitle/01_OVERVIEW.md) - Permissions & Levels
+* [Leave Availability](02_MODULES/employeeleaveavailability/01_OVERVIEW.md) - Time Off Management
 
 ### Scheduling Domain
-* [Schedule Module](MODULES/schedule/01_OVERVIEW.md) - Roster Generation
-* [Shift Module](MODULES/shift/01_OVERVIEW.md) - Template Management
-* [Demand Forecast](MODULES/demandforecast/01_OVERVIEW.md) - AI Prediction Integration
-* [Rule Module](MODULES/rule/01_OVERVIEW.md) - Business Constraints
+* [Schedule Module](02_MODULES/schedule/01_OVERVIEW.md) - Roster Generation
+* [Shift Module](02_MODULES/shift/01_OVERVIEW.md) - Template Management
+* [Demand Forecast](02_MODULES/demandforecast/01_OVERVIEW.md) - AI Prediction Integration
+* [Rule Module](02_MODULES/rule/01_OVERVIEW.md) - Business Constraints
 
 ---
 
@@ -201,9 +201,9 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 
 ## Next Steps
 
-* [TECHNICAL.md](../compiled/technical_documentation/TECHNICAL.md) - Data models and API standards
-* [OPERATIONS.md](../compiled/technical_documentation/OPERATIONS.md) - Deployment and configuration
-* [ARCHITECTURE.md](../compiled/technical_documentation/ARCHITECTURE.md) - System design patterns
+* [TECHNICAL.md](07_API_DESIGN.md) - Data models and API standards
+* [OPERATIONS.md](08_INFRASTRUCTURE_DEPLOYMENT.md) - Deployment and configuration
+* [ARCHITECTURE.md](02_SYSTEM_ARCHITECTURE.md) - System design patterns
 
 ## Advanced Module Patterns
 

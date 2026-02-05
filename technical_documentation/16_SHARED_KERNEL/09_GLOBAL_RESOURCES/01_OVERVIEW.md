@@ -19,7 +19,7 @@ In the spirit of Domain-Driven Design (DDD), we categorize these based on their 
 | **Templates** | `src/main/resources/templates/` | The "Static Assets". Excel templates, HTML email bodies, and other non-code files. |
 
 {% hint style="info" %}
-**Note:** Logback configuration (`logback-spring.xml`) is documented separately in the **Logging** module because it is closely tied to the `shared.logging` aspect. See [Logging Configuration](../05_LOGGING/02_CONFIGURATIONS.md).
+**Note:** Logback configuration (`logback-spring.xml`) is documented separately in the **Logging** module because it is closely tied to the `shared.logging` aspect. See [Logging Properties](../05_LOGGING/04_PROPERTIES.md).
 {% endhint %}
 
 ---

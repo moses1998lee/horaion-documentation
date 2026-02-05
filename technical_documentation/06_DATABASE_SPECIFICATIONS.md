@@ -56,10 +56,10 @@ For detailed column references and entity implementation details, refer to the s
 
 | Domain | Documentation Link |
 | :--- | :--- |
-| **Employees** | [Employee Domain](../technical_documentation/02_MODULES/employee/03_DOMAIN.md) |
-| **Schedules** | [Schedule Domain](../technical_documentation/02_MODULES/schedule/03_DOMAIN.md) |
-| **Shifts** | [Shift Domain](../technical_documentation/02_MODULES/shift/03_DOMAIN.md) |
-| **Rules** | [Rule Domain](../technical_documentation/02_MODULES/rule/03_DOMAIN.md) |
+| **Employees** | [Employee Domain](02_MODULES/employee/03_DOMAIN.md) |
+| **Schedules** | [Schedule Domain](02_MODULES/schedule/03_DOMAIN.md) |
+| **Shifts** | [Shift Domain](02_MODULES/shift/03_DOMAIN.md) |
+| **Rules** | [Rule Domain](02_MODULES/rule/03_DOMAIN.md) |
 
 ---
 

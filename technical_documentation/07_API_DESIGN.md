@@ -706,7 +706,5 @@ if (tokenExpiresIn < 300) { // 5 minutes
 
 ## Next Steps
 
-- [GLOSSARY.md](GLOSSARY.md) - Technical terms reference
-- [FAQ.md](FAQ.md) - Frequently asked questions
-- [MODULES.md](MODULES.md) - Detailed module documentation
-- [TECHNICAL.md](TECHNICAL.md) - API specifications
+- [MODULES.md](04_BACKEND_SPECIFICATIONS.md) - Detailed module documentation
+- [TECHNICAL.md](02_SYSTEM_ARCHITECTURE.md) - API specifications
