@@ -22,17 +22,17 @@ Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertic
 **Note:** The system follows the **Vertical Slice Architecture** pattern, which favors cohesion over generic layers. Each "slice" contains all code necessary for a specific feature, from API controllers to database repositories.
 {% endhint %}
 
-*   **Multi-tenancy**: Supporting multiple companies with strict logical data isolation.
-*   **Scalability**: Asynchronous processing and non-blocking I/O for long-running operations.
-*   **Security**: Enterprise-grade JWT authentication via AWS Cognito.
-*   **Extensibility**: Modular shared kernel and vertical slices for rapid feature development.
+* **Multi-tenancy**: Supporting multiple companies with strict logical data isolation.
+* **Scalability**: Asynchronous processing and non-blocking I/O for long-running operations.
+* **Security**: Enterprise-grade JWT authentication via AWS Cognito.
+* **Extensibility**: Modular shared kernel and vertical slices for rapid feature development.
 
 ### Core Design Principles
 
-1.  **Domain-Driven Design**: Business logic is organized around business entities rather than technical layers.
-2.  **API-First**: All functionality is exposed via standardized RESTful APIs with strict contracts.
-3.  **Security by Default**: Zero-trust approach; all endpoints require explicit authorization.
-4.  **Observability**: Distributed tracing and centralized logging for all requests.
+1. **Domain-Driven Design**: Business logic is organized around business entities rather than technical layers.
+2. **API-First**: All functionality is exposed via standardized RESTful APIs with strict contracts.
+3. **Security by Default**: Zero-trust approach; all endpoints require explicit authorization.
+4. **Observability**: Distributed tracing and centralized logging for all requests.
 
 ***
 
@@ -147,43 +147,46 @@ graph TB
 > **Diagram Explanation**: This high-level overview shows the three main tiers of the Horaion ecosystem.
 
 **How to Read This Diagram**:
-*   **Top (Pink)**: The **Client Layer** is where users like you sit. You use the Web or Mobile app.
-*   **Middle (Yellow/White)**: The **Gateway** and **Application Server** are "Horaion" itself. The Gateway directs traffic, and the App Server does the thinking.
-*   **Bottom/Right (Grey/Blue)**: The **Data** and **External Services** are where information lives or where we ask for help (like AWS).
+
+* **Top (Pink)**: The **Client Layer** is where users like you sit. You use the Web or Mobile app.
+* **Middle (Yellow/White)**: The **Gateway** and **Application Server** are "Horaion" itself. The Gateway directs traffic, and the App Server does the thinking.
+* **Bottom/Right (Grey/Blue)**: The **Data** and **External Services** are where information lives or where we ask for help (like AWS).
 
 **Component Breakdown**:
-1.  **Client Layer (The User's Device)**:
-    *   **Web App**: The React application used by employees and managers.
-    *   **Mobile App**: Native apps for on-the-go access.
-    *   **Tools**: Postman/Insomnia used by developers to test the API directly.
-2.  **Gateway Layer (The Traffic Cop)**:
-    *   **Load Balancer**: The entry point that distributes traffic, ensuring no single server is overwhelmed.
-3.  **Application Server (The Core)**:
-    *   **Web Layer**: Receives the request, checks security (Filters), and routes it to the right controller.
-    *   **Business Layer**: The actual logic (e.g., "Calculate Demand", "Approve Schedule").
-    *   **Integration Layer**: Helpers that talk to the outside world (Cognito, Webhooks).
-    *   **Data Layer**: Translates Java objects into SQL queries for the database.
-4.  **External Services**: Dependencies we don't host ourselves (AWS for auth, AI Engine for math).
+
+1. **Client Layer (The User's Device)**:
+   * **Web App**: The React application used by employees and managers.
+   * **Mobile App**: Native apps for on-the-go access.
+   * **Tools**: Postman/Insomnia used by developers to test the API directly.
+2. **Gateway Layer (The Traffic Cop)**:
+   * **Load Balancer**: The entry point that distributes traffic, ensuring no single server is overwhelmed.
+3. **Application Server (The Core)**:
+   * **Web Layer**: Receives the request, checks security (Filters), and routes it to the right controller.
+   * **Business Layer**: The actual logic (e.g., "Calculate Demand", "Approve Schedule").
+   * **Integration Layer**: Helpers that talk to the outside world (Cognito, Webhooks).
+   * **Data Layer**: Translates Java objects into SQL queries for the database.
+4. **External Services**: Dependencies we don't host ourselves (AWS for auth, AI Engine for math).
 
 ### Request Lifecycle Flow (Follow the Arrows)
+
 The diagram arrows show how a request travels through the system:
 
-1.  **Client Initiation**: The client (Web or Mobile) transmits a secure HTTP request (`POST /approve`) -> **Load Balancer**.
-2.  **Gateway Routing**: **Load Balancer** -> **Controllers** (inside the App Server).
-3.  **Security Verification**: **Controllers** use **Filters** to valid the user.
-4.  **Business Processing**: **Controllers** -> **Business Services** (e.g., Schedule Service) -> **Integration/Data Layers**.
-5.  **External Calls**: If needed, **Integration Layer** -> **External Services** (e.g., AWS).
-6.  **Response**: The path reverses to send the answer back to you.
+1. **Client Initiation**: The client (Web or Mobile) transmits a secure HTTP request (`POST /approve`) -> **Load Balancer**.
+2. **Gateway Routing**: **Load Balancer** -> **Controllers** (inside the App Server).
+3. **Security Verification**: **Controllers** use **Filters** to valid the user.
+4. **Business Processing**: **Controllers** -> **Business Services** (e.g., Schedule Service) -> **Integration/Data Layers**.
+5. **External Calls**: If needed, **Integration Layer** -> **External Services** (e.g., AWS).
+6. **Response**: The path reverses to send the answer back to you.
 
 ### External Dependencies
 
-| System | Purpose | Protocol | Notes |
-| --- | --- | --- | --- |
-| **AWS Cognito** | User authentication, user pool management | AWS SDK | JWT token provider |
-| **Schedule Engine** | Optimization algorithm for shift scheduling | REST API (Feign) | Timeout: 45 minutes |
-| **AWS SES** | Transactional emails (welcome, notifications) | AWS SDK | Async via SQS |
-| **AWS SQS/SNS** | Event-driven messaging | AWS SDK | Decouples heavy operations |
-| **PostgreSQL** | Primary data store | JDBC | HikariCP connection pool |
+| System              | Purpose                                       | Protocol         | Notes                      |
+| ------------------- | --------------------------------------------- | ---------------- | -------------------------- |
+| **AWS Cognito**     | User authentication, user pool management     | AWS SDK          | JWT token provider         |
+| **Schedule Engine** | Optimization algorithm for shift scheduling   | REST API (Feign) | Timeout: 45 minutes        |
+| **AWS SES**         | Transactional emails (welcome, notifications) | AWS SDK          | Async via SQS              |
+| **AWS SQS/SNS**     | Event-driven messaging                        | AWS SDK          | Decouples heavy operations |
+| **PostgreSQL**      | Primary data store                            | JDBC             | HikariCP connection pool   |
 
 ***
 
@@ -280,16 +283,18 @@ graph TB
 > **Diagram Explanation**: Unlike traditional layered architectures (Controller -> Service -> Repository), Vertical Slices group code by **feature**. This keeps related code together.
 
 **Architectural Analysis**:
-1.  **Feature Boundaries**: The blue boxes represent functional boundaries. All logic for "Employees" is encapsulated within its own slice.
-2.  **Layered Responsibility**: Each slice still maintains internal separation (Controller for HTTP, Service for Logic, Repository for DB), but these layers are private to the slice.
-3.  **Low Coupling**: The thin dotted line represents the only interaction point between modules, minimizing the ripple effect of changes.
+
+1. **Feature Boundaries**: The blue boxes represent functional boundaries. All logic for "Employees" is encapsulated within its own slice.
+2. **Layered Responsibility**: Each slice still maintains internal separation (Controller for HTTP, Service for Logic, Repository for DB), but these layers are private to the slice.
+3. **Low Coupling**: The thin dotted line represents the only interaction point between modules, minimizing the ripple effect of changes.
 
 **Strategic Benefits of Vertical Slices:**
 
-*   **High Cohesion**: Changes to a specific business rule only affect one package.
-*   **Rapid Onboarding**: New developers only need to understand one module to start contributing.
-*   **Testability**: Features can be verified in isolation with minimal mocking of external layers.
-*   **Deployment Readiness**: The structure simplifies a future migration to microservices if required.
+* **High Cohesion**: Changes to a specific business rule only affect one package.
+* **Rapid Onboarding**: New developers only need to understand one module to start contributing.
+* **Testability**: Features can be verified in isolation with minimal mocking of external layers.
+* **Deployment Readiness**: The structure simplifies a future migration to microservices if required.
+
 ***
 
 ## Security Architecture
@@ -335,13 +340,17 @@ sequenceDiagram
     API->>DB: Query with user context
     DB-->>API: Data
     API-->>Frontend: Response
+```
 
+```mermaid
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
+```
 
 {% hint style="danger" %}
-**Critical:** The registration flow creates local `Employee` records *before* Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
+**Critical:** The registration flow creates local `Employee` records _before_ Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
 {% endhint %}
 
+```markdown
 **Step-by-Step Flow**:
 1.  **Registration**:
     *   User enters details -> API creates a "pending" user in AWS Cognito.
@@ -357,29 +366,36 @@ sequenceDiagram
 4.  **Authenticated Request**:
     *   For all future requests (like "Get Employees"), the Frontend attaches the Access Token in the `Authorization` header.
     *   The API validates the JWT signature against Cognito's public keys before processing.
+```
 
-{% hint style="info" %}
+{% hint style="danger" %}
 **Note:** Access tokens are short-lived (typically 1 hour). The Frontend should use the `Refresh Token` to obtain new `Access Tokens` without forcing the user to re-login.
 {% endhint %}
-### Security Configuration
 
-The `SecurityConfiguration` class defines:
+#### Security Configuration
 
-1. **Public Endpoints** (no authentication required):
-   * `/actuator/health` - Health checks
-   * `/auth/**` - Registration, login, confirmation
-   * `/swagger-ui/**` - API documentation
+1. **Public Endpoints** (no authentication required): \*
+
+* &#x20;`/actuator/health` - Health checks
+* `/auth/**` - Registration, login, confirmation
+* `/swagger-ui/**` - API documentation&#x20;
+
 2. **Protected Endpoints** (JWT required):
-   * All other endpoints require valid JWT in `Authorization: Bearer <token>` header
-3. **IP Whitelisting**:
-   * Engine callback endpoints (`/schedule/update-status`) validate source IP
-   * Configured via `ENGINE_ALLOWED_IPS` environment variable
-4. **JWT Validation**:
-   * Signature verification using Cognito's public keys (JWKS)
-   * Expiration check
-   * Audience (`aud`) and issuer (`iss`) validation
 
-### Authorization Model
+* All other endpoints require valid JWT in `Authorization: Bearer <token>` header
+
+3. **IP Whitelisting**:
+
+* Engine callback endpoints (`/schedule/update-status`) validate source IP
+* Configured via `ENGINE_ALLOWED_IPS` environment variable&#x20;
+
+4. **JWT Validation**:&#x20;
+
+* Signature verification using Cognito's public keys (JWKS)
+* Expiration check
+* Audience (`aud`) and issuer (`iss`) validation
+
+#### Authorization Model
 
 ```mermaid
 graph TD
@@ -401,16 +417,19 @@ graph TD
     Check -->|Denied| Error[403 Forbidden]
 ```
 
+
+
 > **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed to decide "Is this user allowed in?".
 
 **Authentication Logic**:
-1.  **Incoming Request**: Arrives with a header `Authorization: Bearer <token>`.
-2.  **Validate Signature**: The system checks the mathematical signature of the token against AWS's public key. If modified, it rejects it immediately.
-3.  **Extract Claims**: It opens the token to read:
-    *   **Sub**: The User ID.
-    *   **Email**: Who they are.
-    *   **Groups**: Are they an Admin? A Manager?
-4.  **Security Context**: These details are stored in the temporary memory (`SecurityContext`) for the duration of the request so the Controller knows who is calling it.
+
+1. **Incoming Request**: Arrives with a header `Authorization: Bearer <token>`.
+2. **Validate Signature**: The system checks the mathematical signature of the token against AWS's public key. If modified, it rejects it immediately.
+3. **Extract Claims**: It opens the token to read:
+   * **Sub**: The User ID.
+   * **Email**: Who they are.
+   * **Groups**: Are they an Admin? A Manager?
+4. **Security Context**: These details are stored in the temporary memory (`SecurityContext`) for the duration of the request so the Controller knows who is calling it.
 
 ***
 
@@ -455,15 +474,16 @@ sequenceDiagram
 > **Diagram Explanation**: A standard request lifecycle for saving data (e.g., "Create Employee").
 
 **Step-by-Step Flow**:
-1.  **API Entry**: Client sends a POST request. The **Controller** receives it.
-2.  **Validation**: Controller checks "Is the email valid? Is the name empty?".
-3.  **Service Processing**:
-    *   **LogAspect**: Automatically records "User X started Create Employee".
-    *   **Mapper**: Converts the JSON input (DTO) into a Database Object (Entity).
-    *   **Repository**: Saves the Entity to the database (`INSERT`).
-4.  **Completion**:
-    *   The Service takes the saved data, converts it back to JSON (Response DTO), and returns it.
-    *   **LogAspect**: Records "User X finished in 50ms".
+
+1. **API Entry**: Client sends a POST request. The **Controller** receives it.
+2. **Validation**: Controller checks "Is the email valid? Is the name empty?".
+3. **Service Processing**:
+   * **LogAspect**: Automatically records "User X started Create Employee".
+   * **Mapper**: Converts the JSON input (DTO) into a Database Object (Entity).
+   * **Repository**: Saves the Entity to the database (`INSERT`).
+4. **Completion**:
+   * The Service takes the saved data, converts it back to JSON (Response DTO), and returns it.
+   * **LogAspect**: Records "User X finished in 50ms".
 
 **Step-by-Step Breakdown:**
 
@@ -505,13 +525,14 @@ graph TD
 > **Diagram Explanation**: The centralized exception handling mechanism. It acts as a safety net for the whole application.
 
 **How it Works**:
-1.  **Something Goes Wrong**: A bug occurs, or a user asks for ID 999 (which doesn't exist). An `Exception` is thrown.
-2.  **Global Handler Catches It**: Instead of crashing or showing a raw stack trace, the `GlobalExceptionHandler` typically intercepts it.
-3.  **Categorization**:
-    *   **ResourceNotFound**: Becomes a `404 Not Found`.
-    *   **ValidationException**: Becomes a `400 Bad Request`.
-    *   **RuntimeException**: Becomes a `500 Server Error`.
-4.  **Response**: The user gets a clean JSON error message explaining exactly what went wrong.
+
+1. **Something Goes Wrong**: A bug occurs, or a user asks for ID 999 (which doesn't exist). An `Exception` is thrown.
+2. **Global Handler Catches It**: Instead of crashing or showing a raw stack trace, the `GlobalExceptionHandler` typically intercepts it.
+3. **Categorization**:
+   * **ResourceNotFound**: Becomes a `404 Not Found`.
+   * **ValidationException**: Becomes a `400 Bad Request`.
+   * **RuntimeException**: Becomes a `500 Server Error`.
+4. **Response**: The user gets a clean JSON error message explaining exactly what went wrong.
 
 ***
 
@@ -579,17 +600,18 @@ sequenceDiagram
 > **Diagram Explanation**: The asynchronous optimization process. This allows the system to do "heavy lifting" (math) without making the user wait.
 
 **Step-by-Step Flow**:
-1.  **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and *immediately* says "OK, we're working on it" (202 Accepted).
-2.  **Background Work**:
-    *   A hidden background thread wakes up.
-    *   It grabs all the necessary data (Rules, Shifts, People).
-3.  **External Engine**:
-    *   This thread sends the problem to the **Schedule Engine** (a separate heavy-duty calculator).
-    *   It waits patiently (up to 45 mins) *without* blocking the main web server.
-4.  **Completion**:
-    *   The Engine replies.
-    *   The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
-5.  **Notification**: A webhook or email tells the user "Your schedule is ready!".
+
+1. **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and _immediately_ says "OK, we're working on it" (202 Accepted).
+2. **Background Work**:
+   * A hidden background thread wakes up.
+   * It grabs all the necessary data (Rules, Shifts, People).
+3. **External Engine**:
+   * This thread sends the problem to the **Schedule Engine** (a separate heavy-duty calculator).
+   * It waits patiently (up to 45 mins) _without_ blocking the main web server.
+4. **Completion**:
+   * The Engine replies.
+   * The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
+5. **Notification**: A webhook or email tells the user "Your schedule is ready!".
 
 **Step-by-Step Breakdown:**
 
@@ -598,9 +620,7 @@ sequenceDiagram
 3. **Optimize**: The system calls the external Schedule Engine (up to 45 min wait).
 4. **Complete**: Engine returns the result. The system saves the schedule and notifies the user via Webhook.
 
-{% hint style="warning" %}
-**Important:** The system is explicitly configured for long-running operations. Standard Tomcat/Feign timeouts are bypassed to support the 15-30 minute generation window required by the optimization engine.
-{% endhint %}
+\{% hint style="warning" %\} **Important:** The system is explicitly configured for long-running operations. Standard Tomcat/Feign timeouts are bypassed to support the 15-30 minute generation window required by the optimization engine. \{% endhint %\}
 
 ### Timeout Configuration
 
@@ -624,9 +644,8 @@ feign:
         retryer: never     # Idempotency safety: No automatic retries
 ```
 
-{% hint style="danger" %}
-**Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency.
-{% endhint %}
+\{% hint style="danger" %\} **Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency. \{% endhint %\}
+
 ***
 
 ## Architectural Decisions
@@ -788,10 +807,11 @@ graph TD
 > **Diagram Explanations**: This dependency graph shows the "Rules of Engagement" between modules.
 
 **Understanding the Arrows**:
-*   **Arrow Direction**: `A --> B` means "Module A needs Module B to work".
-*   **Core Hierarchy**:
-    *   **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
-*   **Scheduling Domain**:
-    *   **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
-*   **Shared Layer**:
-    *   Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.
+
+* **Arrow Direction**: `A --> B` means "Module A needs Module B to work".
+* **Core Hierarchy**:
+  * **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
+* **Scheduling Domain**:
+  * **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
+* **Shared Layer**:
+  * Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.
