@@ -23,6 +23,11 @@ This simplifies the querying logic for the scheduling engine: it just asks "What
 
 The flow moves from Employee -> Approval -> Scheduler.
 
+```mermaid
+graph LR
+    Emp[Employee] --> |Request| Manager[Manager]
+    Manager --> |Approve| Event[Event Publisher]
+    Event --> |Notify| Email[Email Service]
     Event --> |Update| Scheduler[Auto-Scheduler]
 ```
 
@@ -47,6 +52,15 @@ The flow moves from Employee -> Approval -> Scheduler.
 
 ## Module Architecture
 
+```mermaid
+graph TD
+    Client[Client App] --> LRC[LeaveRequestController]
+    Client --> ELAC[EmployeeLeaveAvailabilityController]
+    
+    LRC --> Service[EmployeeLeaveAvailabilityService]
+    ELAC --> Service
+    
+    Service --> |Validate| ELARepository[ELARepository]
     ELARepository --> DB[(Database)]
 ```
 

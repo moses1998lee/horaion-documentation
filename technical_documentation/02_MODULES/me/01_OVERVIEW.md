@@ -26,7 +26,19 @@ Instead of asking "Get details for Employee #123", the frontend simply asks "Who
 
 ## Hierarchy & Data Flow
 
-    MeController --> |Aggregate| Response[MeResponse]
+```mermaid
+graph TD
+    Client[Frontend App] --> |GET /me| Ctrl[MeController]
+    
+    Ctrl --> |1. Auth| ID[Identity System]
+    Ctrl --> |2. Profile| Emp[Employee Service]
+    Ctrl --> |3. Context| Notif[Notification Service]
+    
+    ID --> |Cognito SUB| Ctrl
+    Emp --> |Role & Dept| Ctrl
+    Notif --> |Unread Count| Ctrl
+    
+    Ctrl --> |Aggregate| Response[MeResponse]
 ```
 
 > **Diagram Explanation**: This flowchart shows the **BFF (Backend for Frontend)** pattern in action. A single request to `/me` triggers a parallel scatter-gather operation. The Controller fetches the User's identity, their permissions, and their unread notifications, stitching them into a unified response for the client.

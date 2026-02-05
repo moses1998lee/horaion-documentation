@@ -58,6 +58,8 @@ sequenceDiagram
     end
 ```
 
+> **Diagram Explanation**: This sequence demonstrates the **Event-Driven Pattern**. When a leave request is approved, the service does *not* wait for emails to send. Instead, it publishes a `LeaveApprovedEvent`. Async listeners then pick this up to handle notifications and cache invalidation in parallel, ensuring the API remains fast and responsive.
+
 ### Entities
 
 #### `EmployeeLeaveAvailability`
