@@ -13,6 +13,10 @@ Performance is critical here because the Scheduler queries this table *thousands
 | `idx_leave_availability_dates` | `start_date`, `end_date` | **Range Queries**: "Who is on leave next week?" |
 | `idx_leave_availability_status` | `status` | Filtering `APPROVED` vs `PENDING`. |
 
+{% hint style="danger" %}
+**Critical:** Without the `idx_leave_availability_dates` index, the Scheduler's "Conflict Check" (which runs thousands of times per generation) would degenerate into full table scans, potentially freezing the application during roster generation.
+{% endhint %}
+
 ## Application Properties
 
 No specific external API keys are required.

@@ -46,14 +46,11 @@ sequenceDiagram
     
     Service->>DB: Check Duplicate ("Chef")
     alt Exists
-        Service-->>API: 409 Conflict
-    else Unique
-        Service->>DB: Save Entity (Pending)
-        Service->>AWS: CreateUserGroup("Chef")
-        AWS-->>Service: Success
         Service-->>API: 201 Created
     end
 ```
+
+> **Diagram Explanation**: This sequence illustrates the distributed nature of the transaction. The local database is the "Source of Truth" for the application, but **Cognito** is the "Source of Truth" for security. The Service Layer orchestrates writes to both, gracefully handling conflicts if the name is already taken.
 
 ### Frontend Integration Guide
 

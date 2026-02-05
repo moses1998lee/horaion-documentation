@@ -26,19 +26,10 @@ Instead of asking "Get details for Employee #123", the frontend simply asks "Who
 
 ## Hierarchy & Data Flow
 
-```mermaid
-graph TD
-    Client[Frontend App] --> |GET /me| MeController
-    
-    subgraph "Context Resolution"
-        MeController --> |1. Get Token ID| Auth[Security Context]
-        MeController --> |2. Find Identity| Emp[Employee Repo]
-        MeController --> |3. Get Perms| Perms[Permission Svc]
-        MeController --> |4. Get Alerts| Notif[Notification Svc]
-    end
-    
     MeController --> |Aggregate| Response[MeResponse]
 ```
+
+> **Diagram Explanation**: This flowchart shows the **BFF (Backend for Frontend)** pattern in action. A single request to `/me` triggers a parallel scatter-gather operation. The Controller fetches the User's identity, their permissions, and their unread notifications, stitching them into a unified response for the client.
 
 ## Security Design
 

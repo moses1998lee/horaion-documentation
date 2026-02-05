@@ -95,6 +95,8 @@ stateDiagram-v2
     Cancelled --> [*]: Final State
 ```
 
+> **Diagram Explanation**: The Request Lifecycle is designed to be fail-safe. The **Pending** state acts as a lock, preventing employees from spamming multiple requests for the same dates. **Approved** is the only state that propagates to the Scheduler, while **Rejected** and **Cancelled** serve as historical records.
+
 1.  **Pending**: Waiting for action. Blocks the employee from submitting overlapping requests.
 2.  **Approved**: Confirmed. This is the only state that the **Scheduler** cares about.
 3.  **Rejected**: Denied. The constraints are ignored by the Scheduler.

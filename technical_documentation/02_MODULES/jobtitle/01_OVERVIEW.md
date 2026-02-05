@@ -25,14 +25,10 @@ When a Job Title is created in Horaion, it **mechanically provisions** the corre
 
 ## Hierarchy & Data Flow
 
-```mermaid
-graph LR
-    Admin[Sys Admin] --> |POST /job-titles| API[Job Title API]
-    API --> |Save Entity| DB[(Database)]
-    API --> |Create Group| Cognito[AWS Cognito]
-    
     Cognito --> |Permissions| Future[Future Logins]
 ```
+
+> **Diagram Explanation**: The Job Title Module demonstrates the **Infrastructure as Code (IaC)** principle applied to application logic. A simple API call to creating a "Job Title" triggers a provisioning workflow in **AWS Cognito**, creating a corresponding `User Group`. This ensures that security roles are always synced with business titles.
 
 ## Module Architecture
 
