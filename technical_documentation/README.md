@@ -81,73 +81,73 @@
 - [Overview](02_MODULES/auth/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/auth/02_API.md)
 - [Domain Logic](02_MODULES/auth/03_DOMAIN.md)
-- [Configuration](02_MODULES/auth/04_CONFIG.md)
+- [Configuration](02_MODULES/auth/04_CONFIGURATION.md)
 
 #### **[Branch Module](02_MODULES/branch/01_OVERVIEW.md)**
 - [Overview](02_MODULES/branch/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/branch/02_API.md)
 - [Domain Logic](02_MODULES/branch/03_DOMAIN.md)
-- [Configuration](02_MODULES/branch/04_CONFIG.md)
-
+- [Configuration](02_MODULES/branch/04_CONFIGURATION.md)
+    
 #### **[Company Module](02_MODULES/company/01_OVERVIEW.md)**
 - [Overview](02_MODULES/company/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/company/02_API.md)
 - [Domain Logic](02_MODULES/company/03_DOMAIN.md)
-- [Configuration](02_MODULES/company/04_CONFIG.md)
+- [Configuration](02_MODULES/company/04_CONFIGURATION.md)
 
 #### **[Demand Forecast Module](02_MODULES/demandforecast/01_OVERVIEW.md)**
 - [Overview](02_MODULES/demandforecast/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/demandforecast/02_API.md)
 - [Domain Logic](02_MODULES/demandforecast/03_DOMAIN.md)
-- [Configuration](02_MODULES/demandforecast/04_CONFIG.md)
+- [Configuration](02_MODULES/demandforecast/04_CONFIGURATION.md)
 
 #### **[Department Module](02_MODULES/department/01_OVERVIEW.md)**
 - [Overview](02_MODULES/department/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/department/02_API.md)
 - [Domain Logic](02_MODULES/department/03_DOMAIN.md)
-- [Configuration](02_MODULES/department/04_CONFIG.md)
+- [Configuration](02_MODULES/department/04_CONFIGURATION.md)
 
 #### **[Employee Module](02_MODULES/employee/01_OVERVIEW.md)**
 - [Overview](02_MODULES/employee/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/employee/02_API.md)
 - [Domain Logic](02_MODULES/employee/03_DOMAIN.md) *(includes Cognito Workflow)*
-- [Configuration](02_MODULES/employee/04_CONFIG.md)
+- [Configuration](02_MODULES/employee/04_CONFIGURATION.md)
 
 #### **[Employee Leave & Availability Module](02_MODULES/employeeleaveavailability/01_OVERVIEW.md)**
 - [Overview](02_MODULES/employeeleaveavailability/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/employeeleaveavailability/02_API.md)
 - [Domain Logic](02_MODULES/employeeleaveavailability/03_DOMAIN.md)
-- [Configuration](02_MODULES/employeeleaveavailability/04_CONFIG.md)
+- [Configuration](02_MODULES/employeeleaveavailability/04_CONFIGURATION.md)
 
 #### **[Job Title Module](02_MODULES/jobtitle/01_OVERVIEW.md)**
 - [Overview](02_MODULES/jobtitle/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/jobtitle/02_API.md)
 - [Domain Logic](02_MODULES/jobtitle/03_DOMAIN.md)
-- [Configuration](02_MODULES/jobtitle/04_CONFIG.md)
+- [Configuration](02_MODULES/jobtitle/04_CONFIGURATION.md)
 
 #### **[Me (User Context) Module](02_MODULES/me/01_OVERVIEW.md)**
 - [Overview](02_MODULES/me/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/me/02_API.md)
 - [Domain Logic](02_MODULES/me/03_DOMAIN.md)
-- [Configuration](02_MODULES/me/04_CONFIG.md)
+- [Configuration](02_MODULES/me/04_CONFIGURATION.md)
 
 #### **[Rule Module](02_MODULES/rule/01_OVERVIEW.md)**
 - [Overview](02_MODULES/rule/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/rule/02_API.md)
 - [Domain Logic](02_MODULES/rule/03_DOMAIN.md)
-- [Configuration](02_MODULES/rule/04_CONFIG.md)
+- [Configuration](02_MODULES/rule/04_CONFIGURATION.md)
 
 #### **[Schedule Module](02_MODULES/schedule/01_OVERVIEW.md)**
 - [Overview](02_MODULES/schedule/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/schedule/02_API.md)
 - [Domain Logic](02_MODULES/schedule/03_DOMAIN.md)
-- [Configuration](02_MODULES/schedule/04_CONFIG.md)
+- [Configuration](02_MODULES/schedule/04_CONFIGURATION.md)
 
 #### **[Shift Module](02_MODULES/shift/01_OVERVIEW.md)**
 - [Overview](02_MODULES/shift/01_OVERVIEW.md)
 - [API Endpoints](02_MODULES/shift/02_API.md)
 - [Domain Logic](02_MODULES/shift/03_DOMAIN.md)
-- [Configuration](02_MODULES/shift/04_CONFIG.md)
+- [Configuration](02_MODULES/shift/04_CONFIGURATION.md)
 
 ---
 
