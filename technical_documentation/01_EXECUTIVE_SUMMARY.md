@@ -50,12 +50,13 @@ Automate complex scheduling operations while maintaining compliance with labor r
 ## 1.3 Technology Stack Summary
 
 ### Backend
-- **Runtime**: Java 21 with Spring Boot 3.4.0
+- **Runtime**: Java 21 LTS
+- **Framework**: Spring Boot 4.0.0
 - **Database**: PostgreSQL 12+ with JSONB support
 - **Authentication**: AWS Cognito with JWT validation
 - **API**: RESTful API (Level 2 maturity)
-- **Build Tool**: Maven
-- **Connection Pool**: HikariCP with PostgreSQL optimizations
+- **Build Tool**: Maven 3.9+
+- **Connection Pool**: HikariCP
 
 ### Infrastructure
 - **Containerization**: Docker

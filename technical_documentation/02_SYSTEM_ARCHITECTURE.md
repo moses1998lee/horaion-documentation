@@ -16,7 +16,7 @@
 
 ## Overview
 
-Horaion is built on **Spring Boot 3.4.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
+Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
 
 * **Multi-tenancy**: Supporting multiple companies with data isolation
 * **Scalability**: Async processing for long-running operations
