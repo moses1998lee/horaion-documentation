@@ -48,6 +48,8 @@ graph TD
     Solver --> |Generates| Roster[Final Schedule]
 ```
 
+> **Diagram Explanation**: This flow shows the Shift Template as a **Blueprints** provider. The Manager defines the "Shapes" of the shifts (Time, Role Constraints) which act as input parameters for the Optimization Engine. The engine then tries to fit available employees into these pre-defined shapes.
+
 ## Key Interactions
 
 ### 1. Department Module (Upstream)

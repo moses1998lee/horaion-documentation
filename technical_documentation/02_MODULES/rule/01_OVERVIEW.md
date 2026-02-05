@@ -23,16 +23,10 @@ Unlike traditional hardcoded parameters, this module allows System Administrator
 
 It follows a **Class-Instance** pattern.
 
-```mermaid
-graph TD
-    Admin[System Admin] --> |1. Define Rule| Rule[Rule Definition]
-    Admin --> |2. Define Schema| Fields[Rule Fields]
-    
-    Manager[Dept Manager] --> |3. View Form| UI[Dynamic Form]
-    Manager --> |4. Save Config| Answer[Rule Answer]
-    
     Answer --> |5. Serialize| Engine[Scheduling Engine]
 ```
+
+> **Diagram Explanation**: This flow demonstrates the **Dynamic Configuration Lifecycle**. Instead of hardcoding rules, the Admin defines the *structure* (Schema). The Manager then fills in the *values* (Answer). Finally, the System serializes these answers into a payload that the **Scheduling Engine** can understand to apply constraints.
 
 ## Module Architecture
 

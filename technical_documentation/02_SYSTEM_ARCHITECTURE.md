@@ -342,9 +342,7 @@ sequenceDiagram
     API-->>Frontend: Response
 ```
 
-```mermaid
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
-```
 
 {% hint style="danger" %}
 **Critical:** The registration flow creates local `Employee` records _before_ Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.

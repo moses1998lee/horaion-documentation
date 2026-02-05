@@ -43,6 +43,8 @@ sequenceDiagram
     end
 ```
 
+> **Diagram Explanation**: The Identity Resolution process is the critical security bridge. It blindly trusts the `sub` claim from the AWS-signed JWT to lookup the local `Employee` record. This ensures that a user can never impersonate another employee, as the ID is derived cryptographically, not from a user-controlled parameter.
+
 ### Context Aggregation
 
 ### Context Aggregation

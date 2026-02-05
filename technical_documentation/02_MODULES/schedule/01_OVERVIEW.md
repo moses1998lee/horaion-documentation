@@ -44,6 +44,8 @@ graph TD
     Callback --> |6. Save Result| DB[(Database)]
 ```
 
+> **Diagram Explanation**: The Schedule Generation process follows an asynchronous **Scatter-Gather** pattern. The API first gathers all necessary context (Employees, Rules, Forecasts) from their respective modules. This aggregated "Snapshot" is then sent to the external Optimization Engine. Because the math is complex (NP-Hard), the engine processes it asynchronously and calls a webhook when finished.
+
 ## Module Architecture
 
 ### The "Two-Status" System

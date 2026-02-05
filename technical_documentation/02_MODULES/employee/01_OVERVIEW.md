@@ -34,6 +34,8 @@ graph TD
     JobTitle[Job Title: Senior Manager] --> |Defines Rank| Emp
 ```
 
+> **Diagram Explanation**: This relationship graph places the **Employee** at the center of the ecosystem. They are "owned" by a Company (tenant), "located" at a specific Branch, and "assigned" to one or more Departments. Their rank and permissions are derived from their **Job Title**.
+
 ### Core Capabilities
 
 1.  **Profile Management**: Storing PII (Name, Email, Phone, DOB) and business data (Hire Date, Code).

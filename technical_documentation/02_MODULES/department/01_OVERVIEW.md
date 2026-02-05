@@ -25,6 +25,14 @@ The **Department Module** allows companies to organize their workforce into func
 
 The Department sits below the Branch in the organizational tree.
 
+```mermaid
+graph TD
+    Branch[Branch: Cape Town HQ] --> |Contains| DeptRoot[Department: Engineering]
+
+    DeptRoot --> |Parent Of| SubDept1[Sub-Dept: Backend Team]
+    DeptRoot --> |Parent Of| SubDept2[Sub-Dept: Frontend Team]
+
+    SubDept1 --> |Assigned| Emp1[Employee: Alice]
     SubDept2 --> |Assigned| Emp2[Employee: Bob]
 ```
 
@@ -52,7 +60,18 @@ In the frontend UI, this hierarchy translates to easy navigation:
 
 ## Module Architecture
 
-    DepartmentRepository --> DB[(Database)]
+```mermaid
+graph TD
+    Client[Client App] --> DeptController
+    
+    subgraph "Department Module"
+        DeptController --> DeptService[DepartmentService]
+        DeptService --> DeptRepo[DepartmentRepository]
+    end
+    
+    DeptService --> BranchRepo[BranchRepository]
+    DeptService --> Security[Security Context]
+    DeptRepo --> DB[(Database)]
 ```
 
 > **Diagram Explanation**: The Department Module manages the internal structure of a Branch. The **DepartmentService** coordinates with the **BranchRepository** to ensure parent-child relationships remain valid and with the **Security Context** to handle privileged access assignments (HoD).

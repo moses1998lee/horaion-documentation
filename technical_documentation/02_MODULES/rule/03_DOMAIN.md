@@ -59,6 +59,8 @@ sequenceDiagram
     Note over DB: Stores as JSONB: {"X": 10, "Y": 20}
 ```
 
+> **Diagram Explanation**: This sequence illustrates the separation of concerns. The **App** (Frontend) requests the metadata (Schema) first to render the UI. The Manager interacts with this dynamic form, and the values are saved back as a structured JSON blob, decoupling the database schema from business rule changes.
+
 ### Frontend Integration Guide
 
 #### Rendering Dynamic Forms
