@@ -240,7 +240,51 @@ docker-compose up -d
 
 ***
 
-## Configuration
+## Configuration Strategy
+
+We follow the **12-Factor App** methodology. Configurations are stored in environment variables, not code.
+
+For a detailed reference of all configuration properties (YAML) and their Java mappings, see:
+
+*   **Global Properties**: [Shared Resouces - Properties](../technical_documentation/16_SHARED_KERNEL/09_GLOBAL_RESOURCES/02_PROPERTIES.md)
+*   **Java Beans**: [Shared Kernel - Configurations](../technical_documentation/16_SHARED_KERNEL/02_CORE/01_CONFIGURATIONS.md)
+
+### Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `POSTGRES_DB_HOST` | Yes | Database Hostname |
+| `AWS_COGNITO_USER_POOL_ID` | Yes | Auth Provider ID |
+| `SCHEDULE_ENGINE_HOST` | Yes | Optimization Service URL |
+| `SPRING_PROFILES_ACTIVE` | No | `dev`, `prod`, or `local` |
+
+---
+
+## Database Management
+
+We use **Flyway** for schema migrations. This ensures that the database schema is versioned along with the code.
+
+*   To see the full history of migrations, refer to: [Global Resources - Migrations](../technical_documentation/16_SHARED_KERNEL/09_GLOBAL_RESOURCES/03_MIGRATIONS.md).
+
+---
+
+## Monitoring & Health Checks
+
+### Spring Boot Actuator
+
+The application exposes standard health endpoints for the load balancer:
+
+*   `GET /actuator/health`: Returns 200 OK if DB and Disk are healthy.
+*   `GET /actuator/info`: Git build information.
+
+### Logging
+
+Logs are piped to `stdout` (for Docker capture) and written to rolling files in `/var/log`. We use **MDC (Mapped Diagnostic Context)** to tag every log line with:
+*   `requestId`
+*   `userId`
+*   `tenantId`
+
+For Logback configuration details, see [Shared Kernel - Logging](../technical_documentation/16_SHARED_KERNEL/05_LOGGING/02_CONFIGURATIONS.md).
 
 ### Environment Variables Reference
 

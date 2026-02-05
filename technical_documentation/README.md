@@ -79,8 +79,6 @@
 - [11 - Development Workflow](11_DEVELOPMENT_WORKFLOW.md)
 - [12 - Application Flowcharts](12_APPLICATION_FLOWCHARTS.md)
 - [13 - Resource Requirements](13_RESOURCE_REQUIREMENTS.md)
-- [14 - Configuration Reference](14_CONFIGURATION_REFERENCE.md)
-- [15 - Technical Deep Dive](15_TECHNICAL_DEEP_DIVE.md)
 
 ---
 

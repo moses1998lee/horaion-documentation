@@ -84,3 +84,51 @@ stateDiagram-v2
 2.  **Active**: Fully confirmed staff member.
 3.  **Terminated**: `isActive = false`. Login access is revoked code-side immediately.
 4.  **SoftDeleted**: Removed from standard lists but kept for tax/audit purposes.
+
+---
+
+## Cognito Account Creation Workflow
+
+### Async Job Processing Strategy
+
+When creating multiple employees via import (or even singly), we do not block the HTTP request. Instead, we use a **Job-Based Async Pattern**.
+
+> [!TIP]
+> This pattern ensures that if you upload 500 employees, the browser doesn't time out while waiting for AWS Cognito to respond 500 times.
+
+#### Workflow Diagram
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant AsyncService
+    participant DB
+    participant Cognito
+    participant Webhook
+    
+    Client->>Controller: POST /employees/{id}/cognito-account
+    Controller->>Service: initiateAsyncCognitoCreation()
+    Service->>DB: Create Job (PENDING)
+    Service-->>Controller: Return jobId
+    Controller-->>Client: 202 Accepted {jobId}
+    
+    Note over AsyncService: Async execution starts
+    AsyncService->>DB: Update Job (IN_PROGRESS)
+    
+    loop For each employee
+        AsyncService->>Cognito: Create user account
+        Cognito-->>AsyncService: Success/Failure
+        AsyncService->>DB: Update employee.cognitoSub
+    end
+    
+    AsyncService->>DB: Update Job (COMPLETED)
+    AsyncService->>Webhook: Send completion report
+```
+
+### Technical Implementation
+
+*   **Thread Pool**: Uses `generalTaskExecutor` (See [Async Config](../../16_SHARED_KERNEL/02_CORE/01_CONFIGURATIONS.md)).
+*   **Job Entity**: `CognitoCreationJob` tracks `successful_creations`, `failed_creations`, and status.
+*   **Webhooks**: External systems can listen for the job completion event.
