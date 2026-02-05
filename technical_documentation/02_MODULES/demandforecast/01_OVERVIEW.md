@@ -38,6 +38,8 @@ graph LR
     AutoScheduler --> |Generates| Shift[Shift]
 ```
 
+> **Diagram Explanation**: This flow illustrates the **Planning Pipeline**. The **Demand Forecast** is the explicit "Requirement" input. It is owned by a **Department** (e.g., "We need 5 people in Sales"). The **Auto-Scheduler** then takes this requirement and generates **Shifts** (assignments) to fulfill it.
+
 ## Core Capabilities
 
 1.  **Granular Staffing Requirements**:
@@ -67,3 +69,5 @@ graph TD
     DemandForecastService --> DepartmentRepository
     DemandForecastRepository --> DB[(Database)]
 ```
+
+> **Diagram Explanation**: The Demand Forecast Module manages the "Budgeted Hours". The **DemandForecastService** ensures that the forecasts are correctly associated with their parent **Department** before persisting the sparse JSON data to the **Database**.

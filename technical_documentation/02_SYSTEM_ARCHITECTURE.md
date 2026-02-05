@@ -368,7 +368,7 @@ sequenceDiagram
     *   The API validates the JWT signature against Cognito's public keys before processing.
 ```
 
-{% hint style="danger" %}
+{% hint style="info" %}
 **Note:** Access tokens are short-lived (typically 1 hour). The Frontend should use the `Refresh Token` to obtain new `Access Tokens` without forcing the user to re-login.
 {% endhint %}
 
@@ -620,7 +620,9 @@ sequenceDiagram
 3. **Optimize**: The system calls the external Schedule Engine (up to 45 min wait).
 4. **Complete**: Engine returns the result. The system saves the schedule and notifies the user via Webhook.
 
-\{% hint style="warning" %\} **Important:** The system is explicitly configured for long-running operations. Standard Tomcat/Feign timeouts are bypassed to support the 15-30 minute generation window required by the optimization engine. \{% endhint %\}
+{% hint style="warning" %}
+**Important:** The system is explicitly configured for long-running operations. Standard Tomcat/Feign timeouts are bypassed to support the 15-30 minute generation window required by the optimization engine.
+{% endhint %}
 
 ### Timeout Configuration
 
@@ -644,7 +646,9 @@ feign:
         retryer: never     # Idempotency safety: No automatic retries
 ```
 
-\{% hint style="danger" %\} **Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency. \{% endhint %\}
+{% hint style="danger" %}
+**Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency.
+{% endhint %}
 
 ***
 

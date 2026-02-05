@@ -23,15 +23,10 @@ This simplifies the querying logic for the scheduling engine: it just asks "What
 
 The flow moves from Employee -> Approval -> Scheduler.
 
-```mermaid
-graph LR
-    Emp[Employee] --> |Submits Request| Module[Leave Module]
-    Module --> |Pending| Manager[Manager]
-    Manager --> |Approves| Event{Event Publisher}
-    
-    Event --> |Notify| Email[Email Service]
     Event --> |Update| Scheduler[Auto-Scheduler]
 ```
+
+> **Diagram Explanation**: This flow demonstrates the **Approval Pipeline**. An employee initiative (request) must pass through the **Manager's Gate** before it becomes a concrete constraint for the **Auto-Scheduler**. The **Event Publisher** ensures that approved leaves immediately trigger email notifications and update the scheduling engine's cache.
 
 ## Core Capabilities
 
@@ -52,17 +47,7 @@ graph LR
 
 ## Module Architecture
 
-```mermaid
-graph TD
-    Client[Client App] --> EmployeeLeaveAvailabilityController
-    Client --> LeaveRequestController
-    
-    subgraph "Leave Module"
-        EmployeeLeaveAvailabilityController --> ELAService[EmployeeLeaveAvailabilityService]
-        LeaveRequestController --> ELAService
-        ELAService --> ELARepository
-    end
-    
-    ELAService --> EventPublisher[Event Publisher]
     ELARepository --> DB[(Database)]
 ```
+
+> **Diagram Explanation**: The Leave Module architecture highlights its dual-controller design. The **LeaveRequestController** manages the employee-facing submission process, while the **EmployeeLeaveAvailabilityController** handles administrative overrides and system-wide availability queries. Both feed into a unified **Service Layer** that enforces conflict detection.
