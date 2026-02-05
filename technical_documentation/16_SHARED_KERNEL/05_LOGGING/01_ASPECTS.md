@@ -45,6 +45,12 @@ sequenceDiagram
     AOP-->>Client: Return Result
 ```
 
+> **Diagram Explanation**: This sequence visualization shows the "Around Advice" pattern for automated observability:
+> 1.  **Correlation ID**: The `LogAspect` intercepts the call and injects a unique Request ID into the SLF4J MDC. This ID follows the request across all log lines on that thread.
+> 2.  **Telemetry Phase**: Before the target method runs, the system records the start time.
+> 3.  **Encapsulation**: The target method (`createUser`) runs within a try-catch-finally block, ensuring metrics are recorded and MDC is cleared even if an error occurs.
+> 4.  **Reporting**: After successful execution, the aspect logs the duration and pushes a timer metric to the Micrometer registry.
+
 ### How to Read This Diagram
 This **Sequence Diagram** visualizes the "Around" advice pattern used by AOP.
 1.  **Intercept**: The `AOP` (LogAspect) sits between the `Client` and the `Service`. The client thinks it's calling the service directly, but it's actually calling the proxy.

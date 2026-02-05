@@ -64,3 +64,9 @@ graph TD
     EmployeeService --> CognitoService[Cognito Group Service]
     EmployeeRepository --> DB[(Database)]
 ```
+
+> **Diagram Explanation**: This module structure follows the standard Horaion pattern. The **EmployeeController** exposes the API, which delegates to the **EmployeeService**. The service interacts with both the local **EmployeeRepository** (database) and the external **CognitoService** (AWS integration) to ensure data synchronization.
+
+{% hint style="warning" %}
+**Important:** The `Employee` record is the "Source of Truth" for business data, but the `Auth` system (AWS Cognito) remains the "Source of Truth" for authentication credentials. Never store passwords or raw Cognito identities in the local database.
+{% endhint %}

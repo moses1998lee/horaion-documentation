@@ -30,6 +30,12 @@ sequenceDiagram
     Worker->>Facade: Update Tracking Record (SENT)
 ```
 
+> **Diagram Explanation**: The Notification system implements an event-driven, horizontally scalable dispatch pipeline:
+> 1.  **Ingestion**: The Application Service submits a request to the Facade, which immediately creates a persistent `PENDING` tracking record.
+> 2.  **Decoupling**: By publishing to **AWS SNS**, we decouple the high-speed API thread from the relatively slow process of email delivery.
+> 3.  **Buffering**: **AWS SQS** acts as a buffer, ensuring that even during high-traffic spikes (e.g., weekly roster notifications), no messages are lost.
+> 4.  **Acknowledgment**: The background worker only acknowledges the message after successful upstream delivery (AWS SES), providing "At-Least-Once" delivery guarantees.
+
 ### System Walkthrough
 1.  **App Request**: The main application wants to send an email (e.g., "Welcome to Horaion"). It calls the `NotificationFacade`.
 2.  **Fast Path (Synchronous)**: The Facade does minimal work. It saves a `PENDING` record to the DB and fires an event to AWS SNS. It then returns immediately. This keeps the user interface snappy.

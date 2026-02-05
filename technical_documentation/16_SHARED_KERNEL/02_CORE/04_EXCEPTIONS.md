@@ -27,6 +27,11 @@ flowchart TD
     500 --> Response
 ```
 
+> **Diagram Explanation**: The Horaion error handling chain ensures no raw stack traces ever leak to the client:
+> 1.  **Interception**: The `GlobalExceptionHandler` (using `@RestControllerAdvice`) functions as a prioritized interceptor for all controller-thrown exceptions.
+> 2.  **Normalization**: It maps varied Java exceptions to a clean set of HTTP status codes (404, 400, etc.) based on our RFC-compliant standard.
+> 3.  **Serialization**: The final output is a standardized `ProblemDetail` JSON, ensuring that FE developers only need to learn one error structure for the entire platform.
+
 ### Flow Description
 1.  **Throw**: A method (e.g., `EmployeeService`) detects an error condition and throws a Java Exception.
 2.  **Catch**: The `GlobalExceptionHandler` interceptor catches the exception before it reaches the Tomcat container. It acts as a safety net.

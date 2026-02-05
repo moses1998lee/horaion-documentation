@@ -40,5 +40,9 @@ spring:
 ```
 
 {% hint style="warning" %}
-**Warning:** Be careful when increasing `maximum-pool-size`. PostgreSQL has a limit on specific connections (usually 100). If you have 5 Application Instances each with a pool size of 50, you will exhaust the database limit (5 * 50 = 250 connections).
+**Warning:** Be careful when increasing `maximum-pool-size`. PostgreSQL has a limit on concurrent connections (often 100). If you have 5 Application Instances each with a pool size of 50, you will exhaust the database limit (5 * 50 = 250 connections).
+{% endhint %}
+
+{% hint style="info" %}
+**Note:** For most Horaion deployments, the default `maximum-pool-size` of 10 is sufficient. Increase it only if you observe connection acquisition timeouts in your logs.
 {% endhint %}

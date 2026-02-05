@@ -3,7 +3,11 @@
 {% hint style="info" %}
 **Note:**
 **Base Path**: `/api/v1`
-**Scope**: Most endpoints are nested under `/companies/{cid}/branches/{bid}/employees` to enforce strict tenant isolation.
+**Scope**: Most endpoints are nested under `/companies/{cid}/branches/{bid}/employees` to enforce strict tenant isolation and logical data partitioning.
+{% endhint %}
+
+{% hint style="danger" %}
+**Critical:** Access to these endpoints requires the `SCOPE_EMPLOYEE_READ` or `SCOPE_EMPLOYEE_WRITE` permission. Unauthorized access attempts are logged and flagged for security review.
 {% endhint %}
 
 ## Controller: `EmployeeController`
@@ -100,7 +104,12 @@ Returns the history (or current list) of where this person works.
 
 Mapped in `EmployeeExceptionHandler`.
 
-| Exception | HTTP Status | Description |
+| Exception | Index Name | Column | Purpose |
 | :--- | :--- | :--- |
-| `EntityNotFoundException` | `404 Not Found` | Employee or Department ID invalid. |
-| `DuplicateDepartmentAssignmentException` | `409 Conflict` | Employee is already active in this department. |
+| `idx_employees_name` | `last_name`, `first_name` | **Composite Index**. Speeds up "Search by Name" which happens on every shift assignment screen. |
+| `idx_employees_company_id` | `company_id` | **Multi-tenant filter**. Ensures all queries are scoped to the correct company database partition. |
+| `idx_employees_employment_type` | `employment_type` | Filtering (e.g., "Show me all Contractors"). |
+
+{% hint style="success" %}
+**Tip:** The `idx_employees_name` index is optimized for *prefix* searches. Use queries like `last_name LIKE 'Smi%'` for maximum performance.
+{% endhint %}

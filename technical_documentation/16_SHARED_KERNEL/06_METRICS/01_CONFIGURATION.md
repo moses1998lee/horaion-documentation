@@ -24,9 +24,18 @@ sequenceDiagram
     Prom->>App: GET /actuator/prometheus
     App-->>Prom: Return Aggregate Data
     
-    Graf->>Prom: Query (rate(http_requests[5m]))
     Prom-->>Graf: Time Series Data
 ```
+
+> **Diagram Explanation**: The Horaion monitoring stack uses a "Pull-Based" telemetry model:
+> 1.  **Metric Buffet**: The application continuously aggregates performance data (JMV, HTTP, SQL) in its local memory.
+> 2.  **Scrape Interface**: The `/actuator/prometheus` endpoint serves this data in a specialized text format optimized for Prometheus.
+> 3.  **Persistence**: The Prometheus server periodically polls the application, ensuring that monitoring traffic is controlled by the monitoring server, not the application itself.
+> 4.  **Dashboards**: Grafana queries Prometheus using PromQL to build high-fidelity, real-time visualizations of system health.
+
+{% hint style="success" %}
+**Design Choice:** We use the local Pull model instead of a Push model to prevent the application from being overwhelmed by its own monitoring traffic during heavy load or network congestion.
+{% endhint %}
 
 ### Visual Walkthrough
 1.  **Instrumentation**: Code (like `LogAspect`) records events into the `Micrometer Registry`. This happens in memory and is extremely fast.

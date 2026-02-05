@@ -39,6 +39,8 @@ graph TD
     CompanyB --> Branch3[Branch: Main Office]
 ```
 
+> **Diagram Explanation**: This hierarchy illustrates the **Multi-Tenant Root**. The **Global Platform** acts as the umbrella for all client instances. **Company A** and **Company B** are strictly isolated silos; data cannot leak between them. All downstream entities (Branches, Employees) are owned by their respective Company root.
+
 ## Core Capabilities
 
 1.  **Tenant Management**:
@@ -69,3 +71,5 @@ graph TD
     CompanyService --> SecurityContext[Security Context]
     CompanyRepository --> DB[(Database)]
 ```
+
+> **Diagram Explanation**: The Company Module sits at the top of the internal service hierarchy. The **CompanyService** interacts with the **Security Context** to verify administrative permissions before allowing the **CompanyRepository** to perform CRUD operations on the `companies` table.

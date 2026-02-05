@@ -45,6 +45,8 @@ graph TD
     BranchB --> |Home Base For| Emp2[Employee: Bob]
 ```
 
+> **Diagram Explanation**: This hierarchy shows the **Multi-Tenant Data Partitioning**. A **Company** acts as the root container, while **Branches** serve as the physical or logical silos for resource allocation. **Departments** then subdivide the branch into functional units, allowing for granular scheduling and reporting.
+
 ## Core Capabilities
 
 1.  **Geolocation Management**:
@@ -77,3 +79,5 @@ graph TD
     BranchService --> SecurityContext[Security Context]
     BranchRepository --> DB[(Database)]
 ```
+
+> **Diagram Explanation**: The Branch Module integrates with the **Security Context** to ensure that all operations are scoped to the user's authorized company. The **BranchService** acts as the primary orchestrator, validating business rules before persisting data to the PostgreSQL database.

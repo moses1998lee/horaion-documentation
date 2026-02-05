@@ -32,6 +32,10 @@ aws:
 **Note**: The backend verifies JWT tokens issued by Cognito. It constructs the **Issuer URI** dynamically using the `region` and `userPoolId` (e.g., `https://cognito-idp.us-east-1.amazonaws.com/us-east-1_AbCdEf`).
 {% endhint %}
 
+{% hint style="success" %}
+**Tip:** Use the `AwsCredentialsProvider` bean to automatically handle instance-profile or environment-variable based credentials, avoiding hardcoded access keys in properties files.
+{% endhint %}
+
 ---
 
 ## 2. SES (Simple Email Service)

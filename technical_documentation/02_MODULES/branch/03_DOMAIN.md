@@ -20,6 +20,12 @@ stateDiagram-v2
     SoftDeleted --> [*]: Final State (Hidden)
 ```
 
+> **Diagram Explanation**: The Branch lifecycle manages operational availability. **Active** branches are visible for scheduling. **Inactive** status preserves historical data while preventing new operations. **SoftDeleted** ensures data integrity by hiding records without breaking foreign key relationships in historical shifts.
+
+{% hint style="info" %}
+**Operational Note**: Switching a branch to `Inactive` does not cancel existing shifts, but it prevents the "Auto-Schedule" engine from assigning new staff to that location until it is reactivated.
+{% endhint %}
+
 *   **Active**: Fully operational. Shows up in dropdowns, can have shifts scheduled.
 *   **Inactive**: Temporarily closed (e.g., Renovations, off-season). Cannot schedule new shifts, but historical data is visible.
 *   **SoftDeleted**: Permanently closed. Hidden from UI. retained for DB referential integrity.

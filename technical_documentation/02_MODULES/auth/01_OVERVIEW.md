@@ -45,6 +45,12 @@ graph TD
     NotificationFacade --> Email[AWS SES]
 ```
 
+> **Diagram Explanation**: The Auth Module acts as a high-level orchestrator. The **AuthController** provides a unified interface for the client, while the **AuthService** manages the multi-step transaction between **AWS Cognito** for identity, the **EmployeeService** for local profile persistence, and the **NotificationFacade** for welcome emails.
+
+{% hint style="info" %}
+**Note:** This module follows the "Bouncer" pattern—every external identity must be successfully validated and synced to a local `Employee` record before any business operations can take place.
+{% endhint %}
+
 ## Key Interactions
 1.  **Employee Module**:
     *   **Dependency**: Strongly dependent on `IEmployeeService`.

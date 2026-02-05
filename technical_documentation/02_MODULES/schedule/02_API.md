@@ -3,7 +3,11 @@
 {% hint style="info" %}
 **Note:**
 **Base Path**: `/api/v1/companies/{cid}/departments/{did}/schedules`
-**Async Pattern**: This module relies heavily on HTTP `202 Accepted` for generation endpoints.
+**Async Pattern**: This module relies on HTTP `202 Accepted` for generation. The client must poll for results or listen for webhooks.
+{% endhint %}
+
+{% hint style="warning" %}
+**Important:** A schedule is "Locked" once approved. Any further optimization requests will be rejected until the approval status is reset by an administrator.
 {% endhint %}
 
 ## Controller: `ScheduleController`
@@ -70,10 +74,10 @@ Finalizes the schedule. This makes the shifts visible to employees in their mobi
 
 **Path**: `/api/v1/schedules/{id}/callback`
 
-{% hint style="warning" %}
-**Important / Warning:**
-**Public Endpoint**: This endpoint is technically public (no JWT required) to allow the external Engine to call it.
-**Security**: It relies on the obscure/unguessable `scheduleId` UUID and potentially IP allow-listing at the WAF level.
+{% hint style="danger" %}
+**Critical Security:**
+**Public Endpoint**: This callback is unauthenticated to allow external engine communication. It relies on **UUID Obscurity** and **IP Allow-listing**.
+**WAF Rule**: It is strongly recommended to restrict access to the `/callback` path to only the optimization engine's known outbound IP addresses.
 {% endhint %}
 
 ### 1. Receive Results

@@ -19,6 +19,10 @@ To ensure data integrity at the root level, specific constraints are applied:
 We use UUIDs (GUIDs) instead of Auto-Increment Integers (`1, 2, 3`) to prevent "ID Enumeration Attacks". You cannot guess that "Company 505" exists just because you are "Company 504".
 {% endhint %}
 
+{% hint style="danger" %}
+**Critical for Multi-Tenancy**: While the `registration_number` index ensures legal uniqueness, ensure that all cross-module queries linking to a Company ALWAYS use the `company_id` index on the child tables to maintain strict data isolation and performance.
+{% endhint %}
+
 ## Application Properties
 
 This module operates on core application logic and does not require specific `application.yml` configurations.

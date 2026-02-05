@@ -30,6 +30,10 @@ The engine is a separate microservice.
 *   **Protocol**: HTTP / REST.
 *   **Auth**: Currently internal-network trust or Shared Secret (check `EngineClient` implementation).
 
+{% hint style="success" %}
+**Tip:** For local development, use **ngrok** (`ngrok http 8080`) to provide a public URL for your local API. Update `schedule.callback-base-url` with your ngrok URL so the engine can "call back" to your developer machine.
+{% endhint %}
+
 {% hint style="danger" %}
 **Critical:**
 **Callback URL**: In non-production environments (e.g., localhost), the `callback-base-url` must be reachable by the Engine. You may need tools like **ngrok** to expose your local API to an external engine.

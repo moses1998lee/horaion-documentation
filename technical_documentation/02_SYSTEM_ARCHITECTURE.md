@@ -16,25 +16,33 @@
 
 ## Overview
 
-Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for:
+Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for high reliability, strict data isolation, and performance.
 
-* **Multi-tenancy**: Supporting multiple companies with data isolation
-* **Scalability**: Async processing for long-running operations
-* **Security**: JWT-based authentication with AWS Cognito
-* **Extensibility**: Plugin-like module system for new features
+{% hint style="info" %}
+**Note:** The system follows the **Vertical Slice Architecture** pattern, which favors cohesion over generic layers. Each "slice" contains all code necessary for a specific feature, from API controllers to database repositories.
+{% endhint %}
+
+*   **Multi-tenancy**: Supporting multiple companies with strict logical data isolation.
+*   **Scalability**: Asynchronous processing and non-blocking I/O for long-running operations.
+*   **Security**: Enterprise-grade JWT authentication via AWS Cognito.
+*   **Extensibility**: Modular shared kernel and vertical slices for rapid feature development.
 
 ### Core Design Principles
 
-1. **Domain-Driven Design**: Business logic organized by domain modules
-2. **API-First**: RESTful APIs with OpenAPI documentation
-3. **Security by Default**: All endpoints authenticated unless explicitly public
-4. **Observability**: Comprehensive logging with request tracing
+1.  **Domain-Driven Design**: Business logic is organized around business entities rather than technical layers.
+2.  **API-First**: All functionality is exposed via standardized RESTful APIs with strict contracts.
+3.  **Security by Default**: Zero-trust approach; all endpoints require explicit authorization.
+4.  **Observability**: Distributed tracing and centralized logging for all requests.
 
 ***
 
 ## System Context
 
-Horaion integrates with several external systems to provide complete workforce management capabilities.
+Horaion operates as a centralized orchestrator, integrating with specialized external providers to deliver a comprehensive workforce management experience.
+
+{% hint style="success" %}
+**Success:** This decoupled architecture allows individual components (like the Schedule Engine) to be scaled or replaced without affecting the core platform.
+{% endhint %}
 
 ```mermaid
 graph TB
@@ -183,7 +191,11 @@ The diagram arrows show how a request travels through the system:
 
 ### Package Structure
 
-The codebase follows a clean modular structure:
+The codebase follows a clean modular structure, ensuring that business logic is separated from cross-cutting concerns.
+
+{% hint style="info" %}
+**Note:** The root package is `com.horaion.app`. All business functionality is grouped within the `modules/` package, while system-level infrastructure resides in `shared/`.
+{% endhint %}
 
 ```
 com.horaion.app/
@@ -204,7 +216,7 @@ com.horaion.app/
 ├── shared/                           # Cross-cutting concerns
 │   ├── core/                        # Core utilities and base classes
 │   ├── database/                    # Database configurations & Base Entities
-│   ├── infrastructure/              # Infrastructure concerns
+│   ├── infrastructure/              # Infrastructure concerns (AWS, Engine)
 │   ├── logging/                     # Logging configurations & Aspects
 │   ├── metrics/                     # Application metrics
 │   ├── providers/                   # External service providers
@@ -212,12 +224,20 @@ com.horaion.app/
 │   └── security/                    # Security configurations & JWT
 └── resources/                        # Persistence resources
     └── db/
-        └── migration/               # Flyway migration tables
+        └── migration/               # Flyway schema evolution scripts
 ```
+
+{% hint style="success" %}
+**Tip:** When adding a new feature, start by creating a new package under `modules/`. This preserves the Vertical Slice integrity and makes the feature easier to maintain.
+{% endhint %}
 
 ### Vertical Slice Architecture
 
-Each module is a **vertical slice** containing all layers needed for that feature:
+Each module is a **vertical slice** containing all layers needed for that feature, eliminating the need to navigate across disparate layers for a single business operation.
+
+{% hint style="warning" %}
+**Important:** Avoid deep cross-module dependencies. If Module A needs data from Module B, consider using a shared DTO or a lightweight service call rather than directly accessing Module B's internal entities.
+{% endhint %}
 
 ```mermaid
 graph TB
@@ -259,22 +279,17 @@ graph TB
 
 > **Diagram Explanation**: Unlike traditional layered architectures (Controller -> Service -> Repository), Vertical Slices group code by **feature**. This keeps related code together.
 
-**How to Read This**:
-1.  **Horizontal Boxes**: These represent independent modules (like "Employee" or "Schedule").
-2.  **Vertical Flow**: Inside each box, you see the full stack for *just* that feature:
-    *   **Controller**: Receives the HTTP request.
-    *   **Service**: Do the work.
-    *   **Repository**: Save the data.
-    *   **Mapper/DTO**: Handle data formatting.
-3.  **Cross-Communication**: The dotted line (`Uses`) shows that sometimes one module needs to ask another for help (e.g., "Schedule" needs to know about "Employees"), but they are mostly separate.
+**Architectural Analysis**:
+1.  **Feature Boundaries**: The blue boxes represent functional boundaries. All logic for "Employees" is encapsulated within its own slice.
+2.  **Layered Responsibility**: Each slice still maintains internal separation (Controller for HTTP, Service for Logic, Repository for DB), but these layers are private to the slice.
+3.  **Low Coupling**: The thin dotted line represents the only interaction point between modules, minimizing the ripple effect of changes.
 
-**Benefits of Vertical Slices:**
+**Strategic Benefits of Vertical Slices:**
 
-* **Cohesion**: All code for a feature is in one place
-* **Independence**: Modules can evolve separately
-* **Testability**: Each module can be tested in isolation
-* **Ownership**: Clear boundaries for team ownership
-
+*   **High Cohesion**: Changes to a specific business rule only affect one package.
+*   **Rapid Onboarding**: New developers only need to understand one module to start contributing.
+*   **Testability**: Features can be verified in isolation with minimal mocking of external layers.
+*   **Deployment Readiness**: The structure simplifies a future migration to microservices if required.
 ***
 
 ## Security Architecture
@@ -320,31 +335,32 @@ sequenceDiagram
     API->>DB: Query with user context
     DB-->>API: Data
     API-->>Frontend: Response
-```
 
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
+
+{% hint style="danger" %}
+**Critical:** The registration flow creates local `Employee` records *before* Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
+{% endhint %}
 
 **Step-by-Step Flow**:
 1.  **Registration**:
     *   User enters details -> API creates a "pending" user in AWS Cognito.
     *   AWS Cognito sends a real email to the user with a code.
+    *   **Local Persistence**: A record is created in the `Employee` table linked by email.
 2.  **Confirmation**:
     *   User enters the code -> API tells Cognito to "verify" the user.
+    *   Once confirmed, the user is authorized to attempt their first login.
 3.  **Login**:
-    *   User sends Email/Password -> API forwards this to Cognito.
-    *   Cognito checks the password -> returns a **JWT Token**.
-    *   API gives this token to the Frontend.
+    *   User sends Email/Password -> API forwards this to Cognito via the AWS SDK.
+    *   Cognito checks the password -> returns a set of **JWT Tokens** (Access, ID, Refresh).
+    *   API returns these to the Frontend for storage.
 4.  **Authenticated Request**:
-    *   For all future requests (like "Get Employees"), the Frontend attaches this Token.
-    *   The API checks the signature ("Is this valid?") before answering.
+    *   For all future requests (like "Get Employees"), the Frontend attaches the Access Token in the `Authorization` header.
+    *   The API validates the JWT signature against Cognito's public keys before processing.
 
-**Step-by-Step Breakdown:**
-
-1. **Register**: User submits details; API creates a Cognito user (Unconfirmed) and a local Employee record.
-2. **Confirm**: User enters the verification code sent to their email to activate their Cognito account.
-3. **Login**: User authenticates with email/password and receives JWTs (Access, ID, Refresh).
-4. **Access**: User includes the `Access Token` in the Authorization header to call protected API endpoints.
-
+{% hint style="info" %}
+**Note:** Access tokens are short-lived (typically 1 hour). The Frontend should use the `Refresh Token` to obtain new `Access Tokens` without forcing the user to re-login.
+{% endhint %}
 ### Security Configuration
 
 The `SecurityConfiguration` class defines:
@@ -367,7 +383,7 @@ The `SecurityConfiguration` class defines:
 
 ```mermaid
 graph TD
-    Request[Incoming Request] --> JWT[JWT Token]
+    Request[HTTP Request] --> JWT[JWT Token]
     JWT --> Validate[Validate Signature]
     Validate --> Extract[Extract Claims]
     Extract --> Sub[User ID - sub claim]
@@ -582,6 +598,10 @@ sequenceDiagram
 3. **Optimize**: The system calls the external Schedule Engine (up to 45 min wait).
 4. **Complete**: Engine returns the result. The system saves the schedule and notifies the user via Webhook.
 
+{% hint style="warning" %}
+**Important:** The system is explicitly configured for long-running operations. Standard Tomcat/Feign timeouts are bypassed to support the 15-30 minute generation window required by the optimization engine.
+{% endhint %}
+
 ### Timeout Configuration
 
 For long-running operations, Horaion configures extended timeouts:
@@ -590,7 +610,7 @@ For long-running operations, Horaion configures extended timeouts:
 # application.yaml
 server:
   async:
-    request-timeout: -1  # No timeout (45 minutes)
+    request-timeout: -1  # Disable timeout for async processing
   tomcat:
     connection-timeout: 2700000  # 45 minutes
     keep-alive-timeout: 2700000
@@ -599,11 +619,14 @@ feign:
   client:
     config:
       engine:
-        connectTimeout: 0  # Infinite (45 minutes)
-        readTimeout: 0     # Infinite (45 minutes)
-        retryer: never     # No retries for idempotency
+        connectTimeout: 0  # Support long-tail connections
+        readTimeout: 0     # Support long-tail connections
+        retryer: never     # Idempotency safety: No automatic retries
 ```
 
+{% hint style="danger" %}
+**Critical:** Setting infinite or very high timeouts (`2700000ms`) can lead to resource exhaustion if too many concurrent requests are made. The `ThreadPoolTaskExecutor` core pool size (10) acts as the primary governor for concurrency.
+{% endhint %}
 ***
 
 ## Architectural Decisions

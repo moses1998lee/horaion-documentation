@@ -20,6 +20,9 @@ The service enforces a strict hierarchy:
 3.  **Privileged**: Can manage Regular users (but not other Privileged users).
 4.  **User**: Can only see their own data.
 
+{% hint style="success" %}
+**Best Practice:** Always use `SecurityContextService` for **Tenant/Ownership** checks (hard business rules). This prevents "Insecure Direct Object Reference" (IDOR) vulnerabilities at the data layer.
+{% endhint %}
 ```java
 // Example: Validating Access
 public void validateLeaveAvailabilityAccess(UUID employeeId) {
@@ -47,5 +50,5 @@ This service protects **Actions**. It delegates decisions to **Permit.io**, allo
 4.  **Enforce**: If denied, it throws `PermitAuthorizationException` (403 Forbidden).
 
 {% hint style="success" %}
-**Tip:** Use `SecurityContextService` for **Tenant/Ownership** checks (hard business rules). Use `PermitAuthorizationService` for **Feature/Action** checks (flexible policy).
+**Tip:** Use `SecurityContextService` for **Tenant/Ownership** checks (hard business rules). Use `PermitAuthorizationService` for **Feature/Action** checks (flexible policy defined in Permit.io).
 {% endhint %}

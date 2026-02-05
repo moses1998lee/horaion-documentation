@@ -37,6 +37,15 @@ sequenceDiagram
     deactivate Worker
 ```
 
+> **Diagram Explanation**: This sequence visualization shows the lifecycle of an asynchronous request:
+> 1.  **Context Capture**: In the Main HTTP Thread, the user's security identity is established.
+> 2.  **Hand-off**: When an `@Async` method is called, the custom executor "checks out" a worker thread (often a Virtual Thread in Java 21).
+> 3.  **Propagation**: The executor explicitly copies the `SecurityContext` into the worker's thread-local storage. This is critical for data-level security checks performed in background tasks.
+
+{% hint style="success" %}
+**Success:** This pattern allows us to perform background auditing, send tenant-specific emails, and execute secured business logic without complex manual context management.
+{% endhint %}
+
 ### Visual Walkthrough
 1.  **Authentication**: The request starts on a standard Tomcat thread using the User's credentials.
 2.  **Context Loss Risk**: When we fire an asynchronous task, it usually runs on a *new* thread (the "Worker"). By default, this new thread is blank—it doesn't know who the user is.

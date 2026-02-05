@@ -26,6 +26,40 @@ The core business logic resides here, orchestrating interactions between AWS Cog
 5.  **Notification**:
     *   Upon final success, a welcome email is queued.
 
+{% hint style="info" %}
+**Professional Hint**:
+The registration flow is a classic example of a distributed transaction. The "compensating transaction" (deleting the user from Cognito if local persistence fails) is crucial for maintaining data consistency across disparate systems (AWS Cognito and the local database). This prevents "ghost" identities in Cognito that have no corresponding business data.
+{% endhint %}
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant AuthController
+    participant AuthService
+    participant Cognito[AWS Cognito]
+    participant EmployeeService
+    participant EmployeeDB[Local DB]
+    participant NotificationFacade
+    participant Email[AWS SES]
+
+    Client->>AuthController: POST /register (username, password, ...)
+    AuthController->>AuthService: register(request)
+    AuthService->>Cognito: signUp(username, password, ...)
+    Cognito-->>AuthService: User Created (subId)
+    AuthService->>EmployeeService: createEmployee(subId, ...)
+    EmployeeService->>EmployeeDB: INSERT INTO Employee (...)
+    EmployeeDB-->>EmployeeService: Employee Record Created
+    EmployeeService-->>AuthService: Employee Created
+    AuthService->>NotificationFacade: queueWelcomeEmail(subId, email)
+    NotificationFacade->>Email: Send Welcome Email
+    Email-->>NotificationFacade: Email Sent
+    NotificationFacade-->>AuthService: Email Queued
+    AuthService-->>AuthController: Registration Successful
+    AuthController-->>Client: 201 Created
+```
+
+> **Diagram Explanation**: The Auth Module acts as a high-level orchestrator. The **AuthController** provides a unified interface for the client, while the **AuthService** manages the multi-step transaction between **AWS Cognito** for identity and the **EmployeeService** for local profile persistence. The **NotificationFacade** handles asynchronous email delivery. The critical rollback mechanism is implied: if `EmployeeService` or `EmployeeDB` fails, `AuthService` would call `Cognito.adminDeleteUser` to maintain consistency.
+
 ### 2. Secret Hash Calculation
 **Requirement**: AWS Cognito Security Compliance.
 
@@ -37,7 +71,6 @@ AWS Cognito requires a `SECRET_HASH` to verify the client's authenticity. This p
 *   **Algorithm**: `HMAC-SHA256`
 *   **Formula**: `Base64(HmacSHA256("Client Secret", "Username" + "Client ID"))`
 
-### Validators
 ### Validators
 Custom validators implemented:
 

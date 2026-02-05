@@ -31,4 +31,8 @@ Unlike Java code which is compiled:
 2.  **Migrations**: Are executed at startup (before the app accepts traffic).
 3.  **Templates**: Are loaded on-demand or verified at startup.
 
+{% hint style="success" %}
+**Success:** Automation of database schema evolution via **Flyway migrations** ensures that all developers and environments are always on the same version of the database schema, eliminating "It works on my machine" issues.
+{% endhint %}
+
 This separation ensures that a change in configuration (e.g., rotating a database password) typically only requires a restart, not a re-compilation (unless using baked-in container variables).

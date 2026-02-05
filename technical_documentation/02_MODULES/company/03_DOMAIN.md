@@ -17,6 +17,8 @@ stateDiagram-v2
     Active --> [*]: Delete Company
 ```
 
+> **Diagram Explanation**: The Company Onboarding Lifecycle ensures that tenants are adequately configured before being allowed to use the core scheduling features. **Active** status is only granted once essential organizational data (Branches, Departments) is present.
+
 1.  **Draft**: The company entity exists, but has no branches or employees (other than the creator).
 2.  **SettingUp**: The user is currently in the wizard flow.
 3.  **Active**: The `hasCompletedOnboarding` flag is `true`. The company is fully operational.
@@ -63,6 +65,10 @@ stateDiagram-v2
 | `registration_number` | Varchar(50) | **Unique**. Official Tax/CIPC ID. |
 | `has_completed_onboarding` | Boolean | UI Flag. `false` = Show Wizard. |
 
+{% hint style="success" %}
+**Success: Why UUIDs?**
+We use UUIDs (GUIDs) instead of Auto-Increment Integers (`1, 2, 3`) to prevent "ID Enumeration Attacks". You cannot guess that "Company B" exists just because you are "Company A", ensuring a high baseline for tenant privacy.
+{% endhint %}
 {% hint style="info" %}
 **Note:**
 The `companies` table is the root of the entire data hierarchy. Most other tables in the database (Branches, Employees, Departments) will have a `company_id` column that Foreign Keys back to this table.

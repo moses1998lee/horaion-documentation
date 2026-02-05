@@ -67,9 +67,9 @@ An employee's status changes over time, affecting their access and payroll.
 ```mermaid
 stateDiagram-v2
     [*] --> Probation: Hire (Create)
-    Probation --> Active: Probation End Date Passed
+    Probation --> Active: Pass Probation
     
-    Probation --> Terminated: Deactivate (isActive=false)
+    Probation --> Terminated: Deactivate
     Active --> Terminated: Resignation/Firing
     
     Terminated --> Active: Re-hired
@@ -77,13 +77,14 @@ stateDiagram-v2
     Terminated --> SoftDeleted: Delete API
     Active --> SoftDeleted: Delete API
     
-    SoftDeleted --> [*]: Data Retained for 5 Years (Legal)
+    SoftDeleted --> [*]: Data Retained (Legal Period)
 ```
 
-1.  **Probation**: Newly hired. `probationEndDate` is in the future.
-2.  **Active**: Fully confirmed staff member.
-3.  **Terminated**: `isActive = false`. Login access is revoked code-side immediately.
-4.  **SoftDeleted**: Removed from standard lists but kept for tax/audit purposes.
+> **Diagram Explanation**: The employee lifecycle governs access and reporting. An employee starts in **Probation** and transitions to **Active**. If they leave, they move to **Terminated**, which revokes their application access. **SoftDeleted** is a terminal state where the record remains in the database for legal/audit purposes but is hidden from all standard views.
+
+{% hint style="info" %}
+**Note:** Transitioning to `Terminated` status automatically invalidates any existing active sessions but does not delete the user from AWS Cognito (preserving the history for possible re-hiring).
+{% endhint %}
 
 ---
 

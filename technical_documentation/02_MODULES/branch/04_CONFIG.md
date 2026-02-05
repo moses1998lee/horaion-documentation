@@ -14,6 +14,10 @@ To ensure fast lookups—especially when filtering by location or hierarchy—we
 | `idx_branches_city` | `city` | Reporting and filtering (e.g., "Show all Cape Town stores"). |
 | `idx_branches_country` | `country` | Regional reporting. |
 
+{% hint style="danger" %}
+**Critical for Multi-Tenancy**: The `idx_branches_company_id` index is the most important for performance. Every SQL query in the Branch module (and most others) includes a `WHERE company_id = ?` clause to ensure data isolation. Without this index, system performance would degrade exponentially as the number of clients grows.
+{% endhint %}
+
 {% hint style="success" %}
 **Tip / Success:**
 **Multi-Tenant Performance**: The composite uniqueness constraint `(company_id, branch_code)` also acts as a covering index for those two fields, speeding up existence checks during creation.

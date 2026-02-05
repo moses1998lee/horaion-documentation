@@ -30,6 +30,11 @@ sequenceDiagram
     Ctrl-->>FE: JSON { type: "select", options: [...] }
 ```
 
+> **Diagram Explanation**: The Dynamic Provider system follows a classic **Strategy Pattern**:
+> 1.  **Uniform Request**: The Frontend uses a single endpoint (`/options`) but passes a `provider` name.
+> 2.  **Plugin Architecture**: The `ProviderFactory` resolves the specific Java bean at runtime, allowing the system to be extended without modifying the controller.
+> 3.  **Encapsulated Logic**: Data fetching and transformation (Entity -> Label/Value pair) are isolated within each specific provider class.
+
 ### Visual Walkthrough
 1.  **Request**: The Frontend component (e.g., a "Assign Manager" dropdown) knows it needs data from `employeeOptionProvider`.
 2.  **Resolution**: The Backend does not have a giant `if/else` block. It uses Spring's `ApplicationContext` to look up the bean by name.

@@ -22,3 +22,7 @@ Allows communication with AWS. Configured in `CognitoConfiguration` (Shared Infr
 ### `INotificationFacade`
 An optional dependency (`Optional<INotificationFacade>`).
 *   **Why Optional?**: Allows the Auth module to function (allow logins/registrations) even if the Notification system (SES/SNS) is down or not configured. It gracefully degrades by logging a warning instead of failing the transaction.
+
+{% hint style="success" %}
+**Success:** Graceful degradation of the `NotificationFacade` ensures that critical authentication flows remain functional even during downstream service interruptions, prioritizing user access over non-critical communications.
+{% endhint %}

@@ -31,6 +31,16 @@ sequenceDiagram
     Controller-->>Client: Response
 ```
 
+> **Diagram Explanation**: Every request undergoes a rigorous multi-stage security validation:
+> 1.  **Transport Security**: The request arrives at the Gateway via HTTPS with an encrypted Bearer Token.
+> 2.  **JWT Verification**: The Spring Security Filter Chain delegates to the `JWT Converter` to verify the cryptographic signature against AWS's public keys.
+> 3.  **Context Conversion**: If valid, the user's Cognito identity is converted into a structured `Authentication` object including their roles.
+> 4.  **Local Check**: The `SecurityContextService` performs a secondary "Logical Guard" check to ensure the authenticated user actually has permission to access the requested Company/Branch data (Data-level security).
+
+{% hint style="danger" %}
+**Critical:** CSRF protection is disabled (`.csrf().disable()`) because the API is stateless and uses Bearer tokens rather than cookies. Do not enable CSRF without first implementing a robust cookie-based strategy.
+{% endhint %}
+
 ### Visual Walkthrough
 1.  **Authentication**: Handled by AWS Cognito. The app receives a `Bearer <JWT>`.
 2.  **Validation**: `SecurityConfiguration` sets up the `OAuth2ResourceServer`. The token fingerprint is checked against the Cognito keyset (JWK).
@@ -53,4 +63,34 @@ sequenceDiagram
 
 {% hint style="info" %}
 **Note:** We use **Stateless Session Management**. No sessions are stored on the server; the JWT is the single source of truth for identity.
+{% endhint %}
+
+### 2.1 Public Endpoints
+
+The following endpoints are intentionally excluded from the security filter chain:
+
+*   `/actuator/health` (Health Checks)
+*   `/auth/login` (Initial Login)
+*   `/public/**` (Public Assets)
+
+{% hint style="success" %}
+**Tip:** Token invalidation is handled by the client. Upon logout, the client should discard the tokens. For server-side revocation, use the `globalSignOut` method provided in the `CognitoService`.
+{% endhint %}
+
+### 2.2 Role Mapping
+
+Cognito User Pool Groups are mapped to Spring Security roles as follows:
+
+| Cognito Group | Spring Security Role | `RoleConstant` |
+| :------------ | :------------------- | :------------- |
+| `system-admin` | `ROLE_SYSTEM_ADMIN` | `RoleConstant.ROLE_SYSTEM_ADMIN` |
+| `company-owner` | `ROLE_COMPANY_OWNER` | `RoleConstant.ROLE_COMPANY_OWNER` |
+| `user` | `ROLE_USER` | `RoleConstant.ROLE_USER` |
+
+{% hint style="info" %}
+**Note:** The `ROLE_` prefix is a mandatory Spring Security convention. All security checks (e.g., `@PreAuthorize("hasRole('ADMIN')")`) omit the prefix internally but require it to exist in the authority list.
+{% endhint %}
+
+{% hint style="warning" %}
+**Important:** If a user is in multiple groups, the application logic (via `AuthorizationHelper`) determines a **Primary Role** based on precedence (Admin > Owner > User).
 {% endhint %}
