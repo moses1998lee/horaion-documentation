@@ -38,7 +38,7 @@ flowchart TD
 ---
 
 ## 1. The Hierarchy (`BaseException`)
-**File**: [`BaseException.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/exceptions/BaseException.java)
+**File**: ``BaseException.java``
 
 All custom exceptions in Horaion extend this abstract class. This allows us to enforce that every custom exception *must* provide a user-friendly message.
 
@@ -58,7 +58,7 @@ All custom exceptions in Horaion extend this abstract class. This allows us to e
 ---
 
 ## 2. Global Exception Handler
-**File**: [`GlobalExceptionHandler.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/security/handlers/GlobalExceptionHandler.java)
+**File**: ``GlobalExceptionHandler.java``
 
 This class uses Spring's `@RestControllerAdvice` to act as a "Catch-All" net.
 

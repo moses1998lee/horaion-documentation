@@ -7,7 +7,7 @@ The `engine` package acts as the bridge to our high-performance computational co
 ---
 
 ## 1. Schedule Engine Client
-**File**: [`ScheduleEngineClient.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/engine/clients/ScheduleEngineClient.java)
+**File**: ``ScheduleEngineClient.java``
 
 This Interface describes the contract for offloading complex scheduling tasks.
 

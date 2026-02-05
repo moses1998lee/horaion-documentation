@@ -7,7 +7,7 @@ Spring Data JPA is powerful, but we extend it to enforce our specific security r
 ---
 
 ## 1. UUID Repository `<T>`
-**File**: [`UuidRepository.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/repositories/UuidRepository.java)
+**File**: ``UuidRepository.java``
 
 ### The "ID vs UUID" Strategy
 

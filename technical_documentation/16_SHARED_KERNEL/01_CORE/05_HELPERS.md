@@ -7,7 +7,7 @@ Helper classes are designed to encapsulate repetitive, low-level logic. If you f
 ---
 
 ## 1. Repository Helper
-**File**: [`RepositoryHelper.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/helpers/RepositoryHelper.java)
+**File**: ``RepositoryHelper.java``
 
 This is the most frequent helper you will use. It solves the common boilerplate of "Find by ID, and if empty, throw 404".
 
@@ -33,7 +33,7 @@ Employee emp = RepositoryHelper.findByIdOrThrow(employeeRepository, id, Employee
 ---
 
 ## 2. Validation Helper
-**File**: [`ValidationHelper.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/helpers/ValidationHelper.java)
+**File**: ``ValidationHelper.java``
 
 Centralizes common business validation checks.
 

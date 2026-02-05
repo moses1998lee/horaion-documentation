@@ -8,7 +8,7 @@ The application leverages **Amazon Web Services (AWS)** for critical infrastruct
 
 ## 1. Cognito (Identity Management)
 
-**Configuration**: [`CognitoProperty.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/properties/CognitoProperty.java)
+**Configuration**: ``CognitoProperty.java``
 
 We use **Amazon Cognito** as our Identity Provider (IdP). This handles User Sign-up, Sign-in, and Password recovery.
 

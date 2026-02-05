@@ -2,7 +2,7 @@
 
 > **Configuration as Code**
 
-**File**: [`LogAspectProperties.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/logging/properties/LogAspectProperties.java)
+**File**: ``LogAspectProperties.java``
 
 **Prefix**: `app.logging.aspect`
 

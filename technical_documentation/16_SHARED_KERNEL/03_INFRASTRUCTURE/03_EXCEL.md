@@ -7,7 +7,7 @@ Businesses love Excel. The `excel` package provides a high-level wrapper around 
 ---
 
 ## 1. Workbook Reader
-**File**: [`ExcelWorkbookReader.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/excel/helpers/ExcelWorkbookReader.java)
+**File**: ``ExcelWorkbookReader.java``
 
 Reads an uploaded file and converts it into a list of Java Objects.
 
@@ -18,7 +18,7 @@ Reads an uploaded file and converts it into a list of Java Objects.
 ---
 
 ## 2. Cell Utils
-**File**: [`ExcelCellUtils.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/excel/helpers/ExcelCellUtils.java)
+**File**: ``ExcelCellUtils.java``
 
 Helper methods to extract value from a Cell safely, avoiding `NullPointerException` if a cell is blank.
 

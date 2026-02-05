@@ -4,7 +4,7 @@
 
 We define sensible default values for our Connection Pool configuration. These values are used if you do *not* override them in `application.yaml`.
 
-**File**: [`DatabaseConstants.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/database/constants/DatabaseConstants.java)
+**File**: ``DatabaseConstants.java``
 
 ---
 

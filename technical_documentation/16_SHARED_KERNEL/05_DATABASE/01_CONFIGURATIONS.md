@@ -7,7 +7,7 @@ Establishing a reliable connection to the database is the most critical part of 
 ---
 
 ## 1. Database Configuration
-**File**: [`DatabaseConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/database/configurations/DatabaseConfiguration.java)
+**File**: ``DatabaseConfiguration.java``
 
 This configuration does far more than just reading the `url` and `password`. It intelligently optimizes the connection pool based on the **Database Type** (PostgreSQL vs H2).
 

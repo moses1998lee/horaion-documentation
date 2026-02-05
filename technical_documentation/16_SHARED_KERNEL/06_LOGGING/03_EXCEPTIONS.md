@@ -2,7 +2,7 @@
 
 > **AOP Error Handling**
 
-**File**: [`MethodExecutionException.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/logging/exceptions/MethodExecutionException.java)
+**File**: ``MethodExecutionException.java``
 
 This is a specific `RuntimeException` used by the AOP Aspect.
 

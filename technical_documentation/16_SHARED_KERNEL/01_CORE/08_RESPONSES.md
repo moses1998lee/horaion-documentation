@@ -7,7 +7,7 @@ To maintain a professional Frontend Developer Experience (DX), consistency is ke
 ---
 
 ## 1. The Wrapper (`ApiResponse`)
-**File**: [`ApiResponse.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/responses/ApiResponse.java)
+**File**: ``ApiResponse.java``
 
 This is the standard envelope. Whether you fetch a User, a Shift, or a Report, the outside box always looks the same.
 
@@ -50,7 +50,7 @@ classDiagram
 ---
 
 ## 2. Paged Response (`PagedResponse`)
-**File**: [`PagedResponse.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/responses/PagedResponse.java)
+**File**: ``PagedResponse.java``
 
 Used for lists of data. Spring Data's default `PageImpl` object is extremely verbose (containing internal implementation details). We map it to this simplified view.
 

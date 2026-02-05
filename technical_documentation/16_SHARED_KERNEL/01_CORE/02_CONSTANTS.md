@@ -7,7 +7,7 @@ Hardcoding strings or numbers (e.g., `"ADMIN"`, `45`) throughout the codebase is
 ---
 
 ## 1. Role Constants
-**File**: [`RoleConstant.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/constants/RoleConstant.java)
+**File**: ``RoleConstant.java``
 
 This file defines the exact string representations of the User Roles used by Spring Security.
 
@@ -36,7 +36,7 @@ public void deleteSystem() { ... }
 ---
 
 ## 2. Service Executor Constants
-**File**: [`ServiceOperationExecutorConstant.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/constants/ServiceOperationExecutorConstant.java)
+**File**: ``ServiceOperationExecutorConstant.java``
 
 These constants are used by the `ServiceOperationExecutor` to ensure logs are formatted identically across thousands of service calls.
 

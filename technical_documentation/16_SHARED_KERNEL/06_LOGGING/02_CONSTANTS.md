@@ -2,7 +2,7 @@
 
 > **Standardized MDC Keys**
 
-**File**: [`AspectConstant.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/logging/constants/AspectConstant.java)
+**File**: ``AspectConstant.java``
 
 To ensure our log aggregation system (e.g., Splunk, ELK Stack) can parse logs correctly, we use fixed keys for the Mapped Diagnostic Context.
 

@@ -7,7 +7,7 @@ We use Spring's `@ConfigurationProperties` to map `application.yaml` values into
 ---
 
 ## 1. DatabaseProperty
-**File**: [`DatabaseProperty.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/database/properties/DatabaseProperty.java)
+**File**: ``DatabaseProperty.java``
 
 **Prefix**: `spring.datasource`
 
@@ -21,7 +21,7 @@ We use Spring's `@ConfigurationProperties` to map `application.yaml` values into
 ---
 
 ## 2. HikariProperty
-**File**: [`HikariProperty.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/database/properties/HikariProperty.java)
+**File**: ``HikariProperty.java``
 
 **Prefix**: `spring.datasource.hikari`
 

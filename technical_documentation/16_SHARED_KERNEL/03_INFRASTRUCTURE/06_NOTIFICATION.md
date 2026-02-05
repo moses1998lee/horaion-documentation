@@ -42,7 +42,7 @@ sequenceDiagram
 ---
 
 ## 1. Notification Facade
-**File**: [`NotificationFacade.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/notification/services/NotificationFacade.java)
+**File**: ``NotificationFacade.java``
 
 This is the **Entry Point** for sending any notification (Email, SMS, Webhook).
 
@@ -58,7 +58,7 @@ This is the **Entry Point** for sending any notification (Email, SMS, Webhook).
 ---
 
 ## 2. Workers
-**File**: [`EmailNotificationWorker.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/notification/workers/EmailNotificationWorker.java)
+**File**: ``EmailNotificationWorker.java``
 
 Workers listen to **SQS Queues** that are subscribed to the SNS Topic.
 

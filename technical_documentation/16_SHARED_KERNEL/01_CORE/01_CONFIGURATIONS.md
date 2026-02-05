@@ -7,7 +7,7 @@ Typically, a Spring Boot application requires global settings that apply to all 
 ---
 
 ## 1. Async Configuration
-**File**: [`AsyncConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/configurations/AsyncConfiguration.java)
+**File**: ``AsyncConfiguration.java``
 
 This configuration powers the `@Async` annotation, allowing methods to run in a separate thread (fire-and-forget).
 
@@ -62,7 +62,7 @@ public Executor taskExecutor() {
 ---
 
 ## 2. Jackson Configuration
-**File**: [`JacksonConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/configurations/JacksonConfiguration.java)
+**File**: ``JacksonConfiguration.java``
 
 This class configures the `ObjectMapper`, which is the engine Spring uses to convert Java Objects to JSON (and vice versa).
 

@@ -2,7 +2,7 @@
 
 > **Supported Database Types**
 
-**File**: [`DatabaseType.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/database/enums/DatabaseType.java)
+**File**: ``DatabaseType.java``
 
 This enum acts as a registry for the databases our platform supports. It links the **JDBC Prefix** to the correct **Driver Class**.
 

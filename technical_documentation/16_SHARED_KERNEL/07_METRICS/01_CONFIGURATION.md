@@ -36,7 +36,7 @@ sequenceDiagram
 ---
 
 ## 2. Configuration Class
-**File**: [`MetricsConfiguration.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/metrics/configurations/MetricsConfiguration.java)
+**File**: ``MetricsConfiguration.java``
 
 Currently, this class is a **placeholder** for future customizations.
 

@@ -7,7 +7,7 @@ In a large application, adding `log.info(...)` to the start and end of every met
 ---
 
 ## 1. The Log Aspect
-**File**: [`LogAspect.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/logging/aspects/LogAspect.java)
+**File**: ``LogAspect.java``
 
 This class intercepts method calls to provide "Three Pillars of Observability" automatically:
 

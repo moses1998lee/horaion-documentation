@@ -7,7 +7,7 @@ Interfaces in the Core package define the "Rules of Engagement" for our services
 ---
 
 ## 1. IGenericService `<T, K, ID>`
-**File**: [`IGenericService.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/interfaces/IGenericService.java)
+**File**: ``IGenericService.java``
 
 **Purpose**: This is a **Marker Interface** that forces standardized naming convention for CRUD operations. If every service named their "Get All" method differently (`fetchAll`, `list`, `retrieveAll`), the codebase would be a mess.
 

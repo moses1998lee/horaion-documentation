@@ -5,7 +5,7 @@
 ---
 
 ## 1. Service Executor ("Safe Runner")
-**File**: [`ServiceOperationExecutor.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/utils/ServiceOperationExecutor.java)
+**File**: ``ServiceOperationExecutor.java``
 
 **Context**: Business logic often needs three things:
 1.  **Logging**: "Started X", "Finished X (15ms)".
@@ -47,7 +47,7 @@ public void doWork() {
 ---
 
 ## 2. Time Calculations
-**File**: [`TimeBlockCalculator.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/utils/TimeBlockCalculator.java)
+**File**: ``TimeBlockCalculator.java``
 
 A robust utility for handling time ranges, specifically for **Shift Management**.
 

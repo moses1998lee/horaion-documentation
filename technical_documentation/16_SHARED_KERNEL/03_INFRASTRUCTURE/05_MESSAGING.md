@@ -9,14 +9,14 @@ While the Notification System handles *orchestration*, the Messaging package han
 ## 1. Interfaces
 
 ### `IEmailService`
-**File**: [`IEmailService.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/messaging/services/IEmailService.java)
+**File**: ``IEmailService.java``
 
 Defines the contract for sending emails.
 *   **Inputs**: `EmailRequest` (To, Subject, Body, Template Data).
 *   **Output**: `CompletableFuture<MessageResponse>`.
 
 ### `INotificationService` (SNS)
-**File**: [`INotificationService.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/infrastructure/messaging/services/INotificationService.java)
+**File**: ``INotificationService.java``
 
 Defines the contract for publishing generic messages to a topic (used by the Facade).
 

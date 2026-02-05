@@ -7,7 +7,7 @@ Enums in the Shared Kernel represent fixed sets of values that act as "Configura
 ---
 
 ## 1. Operation Status
-**File**: [`OperationStatus.java`](file:///home/moses/genesis/api_app/horaion/src/main/java/com/horaion/app/shared/core/enums/OperationStatus.java)
+**File**: ``OperationStatus.java``
 
 This enum is widely used in **Batch Processing** and **Async Jobs** to indicate the final result of a task.
 
