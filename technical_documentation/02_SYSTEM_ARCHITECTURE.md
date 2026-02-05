@@ -345,7 +345,7 @@ sequenceDiagram
 
 > **Diagram Explanation**: This sequence details the security lifecycle: from **Registration**, to **Confirmation**, and finally **Login**.
 
-{% hint style="danger" %}__
+{% hint style="danger" %}
 **Critical:** The registration flow creates local `Employee` records *before* Cognito confirmation. Ensure your cleanup jobs handle unconfirmed accounts older than 24 hours to prevent data clutter.
 {% endhint %}
 
@@ -367,8 +367,7 @@ sequenceDiagram
 
 {% hint style="info" %}
 **Note:** Access tokens are short-lived (typically 1 hour). The Frontend should use the `Refresh Token` to obtain new `Access Tokens` without forcing the user to re-login.
-
-#{% endhint %}
+{% endhint %}
 ### Security Configuration
 **Public Endpoints** (no authentication required):
 * `/actuator/health` - Health checks
@@ -411,10 +410,10 @@ graph TD
 > **Diagram Explanation**: This flow demonstrates how an incoming JWT is processed to decide "Is this user allowed in?".
 
 
-**uthentication Logic**:
+**Authentication Logic**:
 1. **Incoming Request**: Arrives with a header `Authorization: Bearer <token>`.
 2. **Validate Signature**: The system checks the mathematical signature of the token against AWS's public key. If modified, it rejects it immediately.
-3. *xtract Claims**: It opens the token to read:
+3. **Extract Claims**: It opens the token to read:
    * **Sub**: The User ID.
    * **Email**: Who they are.
    *   **Groups**: Are they an Admin? A Manager?
@@ -463,14 +462,14 @@ sequenceDiagram
 > **Diagram Explanation**: A standard request lifecycle for saving data (e.g., "Create Employee").
 
 
-**tep-by-Step Flow**:
+**Step-by-Step Flow**:
 1. **API Entry**: Client sends a POST request. The **Controller** receives it.
 2. **Validation**: Controller checks "Is the email valid? Is the name empty?".
-.  **rvice Processing**:
+3. **Service Processing**:
    * **LogAspect**: Automatically records "User X started Create Employee".
    * **Mapper**: Converts the JSON input (DTO) into a Database Object (Entity).
    *   **Repository**: Saves the Entity to the database (`INSERT`).
-.  **mpletion**:
+4. **Completion**:
    * The Service takes the saved data, converts it back to JSON (Response DTO), and returns it.
     *   **LogAspect**: Records "User X finished in 50ms".
 
@@ -589,15 +588,15 @@ sequenceDiagram
 > **Diagram Explanation**: The asynchronous optimization process. This allows the system to do "heavy lifting" (math) without making the user wait.
 
 
-**tep-by-Step Flow**:__
+**Step-by-Step Flow**:
 1. **Initiate (The Hand-off)**: User clicks "Create Schedule". The system creates a placeholder record ("PENDING") and *immediately* says "OK, we're working on it" (202 Accepted).
-.  **ckground Work**:
+2. **Background Work**:
    * A hidden background thread wakes up.
    *   It grabs all the necessary data (Rules, Shifts, People).
-3. **ternal Engine**:
-   * This thread sends the problem to th_ **Sche_ule Engine** (a separate heavy-duty calculator).
+3. **External Engine**:
+   * This thread sends the problem to the **Schedule Engine** (a separate heavy-duty calculator).
    *   It waits patiently (up to 45 mins) *without* blocking the main web server.
-4. *ompletion**:
+4. **Completion**:
    * The Engine replies.
    *   The thread wakes up, saves the result to the DB, and marks the schedule "COMPLETED".
 5.  **Notification**: A webhook or email tells the user "Your schedule is ready!".
@@ -800,11 +799,11 @@ graph TD
 > **Diagram Explanations**: This dependency graph shows the "Rules of Engagement" between modules.
 
 
-*nderstanding the Arrows**:
+**Understanding the Arrows**:
 * **Arrow Direction**: `A --> B` means "Module A needs Module B to work".
-* *ore Hierarchy**:
+* **Core Hierarchy**:
   *   **Department** depends on **Branch**, which depends on **Company**. You cannot have a Department without a Branch.
-* *cheduling Domain**:
+* **Scheduling Domain**:
   *   **Schedule Module** is the "Conductor". It pulls data from **Shifts**, **Forecasts**, and **Rules** to build the roster.
-* *hared Layer**:
+* **Shared Layer**:
     *   Everything depends on **Shared Utilities** (bottom grey box). This is where common code lives so we don't repeat ourselves.

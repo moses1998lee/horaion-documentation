@@ -29,6 +29,13 @@ classDiagram
     ApiResponse --* Payload : Contains
 ```
 
+> **Diagram Explanation**: This Class Diagram illustrates the **Generic Wrapper Pattern** (`ApiResponse<T>`).
+> *   **The Envelope (`ApiResponse`)**: This is the rigid outer shell. It carries "Meta-Information" about the transaction:
+>     *   `success`: A simple boolean flag for quick frontend checks (`if (!res.success) ...`).
+>     *   `message`: Human-readable feedback for toasters/snackbars.
+>     *   `timestamp` & `path`: Critical debugging context for logging errors.
+> *   **The Payload (`T data`)**: This is the variable contents. It uses **Generics** (`<T>`) to be completely type-safe. Whether it holds a `User`, a `List<Shift>`, or a `Report`, it always sits safely inside the `data` field.
+
 ### JSON Example
 ```json
 {

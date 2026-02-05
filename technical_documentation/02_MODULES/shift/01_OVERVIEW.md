@@ -48,7 +48,10 @@ graph TD
     Solver --> |Generates| Roster[Final Schedule]
 ```
 
-> **Diagram Explanation**: This flow shows the Shift Template as a **Blueprints** provider. The Manager defines the "Shapes" of the shifts (Time, Role Constraints) which act as input parameters for the Optimization Engine. The engine then tries to fit available employees into these pre-defined shapes.
+> **Diagram Explanation**: This flow shows the Shift Template as a **Blueprints** provider.
+> 1.  **Definition (Manager)**: The Manager defines the "Shapes" of the shifts (Time, Color, Days) and the "Requirements" (Roles needed).
+> 2.  **Input (Template)**: These templates serve as the rigid scaffolding for the schedule. They tell the system *what* needs to be filled.
+> 3.  **Execution (Solver)**: The Optimization Engine takes these templates and tries to fit available employees into these pre-defined shapes to generate the final **Roster**.
 
 ## Key Interactions
 

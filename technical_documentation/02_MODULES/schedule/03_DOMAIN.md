@@ -120,6 +120,8 @@ The result of the optimization. A specific instance of a `Shift` assigned to the
 {% hint style="success" %}
 **Tip:** This "Payload Snapshoting" is invaluable for debugging. You can extract the JSON and re-run the optimization locally to reproduce and fix edge-case scheduling issues.
 {% endhint %}
+{% endhint %}
+
 ### Frontend Integration Guide
 
 Visualizing a schedule is complex. We recommend using a **Gantt Chart** library.

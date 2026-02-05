@@ -43,3 +43,18 @@ The module stores the *structure* of a form in the database.
 *   **Rule**: The form container (e.g., "Weekly Overtime").
 *   **RuleField**: The inputs (e.g., "Threshold Hours", "Multiplier").
 *   **RuleAnswer**: The submitted data (e.g., `{ "threshold": 40, "multiplier": 1.5 }`).
+
+```mermaid
+graph TD
+    subgraph "Form Definition"
+        Rule[Rule: Overtime Config] --> |1..*| Field[Field: Threshold]
+    end
+    
+    subgraph "Form Submission"
+        Dept[Dept: Sales] --> |Submits| Answer[Answer]
+        Answer --> |References| Rule
+        Answer --> |Contains| JSON["{ threshold: 40 }"]
+    end
+```
+
+> **Diagram Explanation**: This pattern mirrors a Dynamic Form Builder. The **Rule** acts as the blueprint (Class), defining what fields exist. The **Answer** acts as the submission (Instance), containing the actual data for a specific Department.
