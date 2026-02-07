@@ -1,10 +1,10 @@
-# 09 - Security Requirements
+# - Security Requirements
 
 > **Policies, Compliance, and Threat Model**
 
 ---
 
-## 9.1 Authentication Policy
+## Authentication Policy
 
 **Requirement**: All human and machine access must be authenticated via **AWS Cognito**.
 
@@ -17,7 +17,7 @@
 
 ---
 
-## 9.2 Authorization Policy
+## Authorization Policy
 
 **Requirement**: Zero Trust. Authenticated users generally have **no access** until explicitly granted.
 
@@ -33,7 +33,7 @@ Every API request must be validated against the `custom:companyId` claim in the 
 
 ---
 
-## 9.3 Data Protection
+## Data Protection
 
 ### At Rest
 *   **Database**: Encrypted bucket/volume (AWS/DO managed encryption).
@@ -53,7 +53,7 @@ Access to these fields must be logged via the Audit Trail.
 
 ---
 
-## 9.4 Network Security
+## Network Security
 
 *   **Public Access**: Only port 443 (HTTPS) is exposed to the internet via the Load Balancer.
 *   **Private Subnet**: The Database and private microservices (Engine) must reside in a private VPC subnet, inaccessible from the public internet.

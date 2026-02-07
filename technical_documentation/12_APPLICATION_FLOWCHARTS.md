@@ -1,4 +1,4 @@
-# 12 - Application Flowcharts
+# - Application Flowcharts
 
 > **Horaion Workforce Management Platform - Application Flowcharts**
 
@@ -6,7 +6,7 @@
 
 ## Required Flowcharts
 
-### 1. Excel Uploading Flow
+### Excel Uploading Flow
 
 **Description**:
 The system allows bulk importing of employees via an Excel file. The process is designed to be robust, handling variable header names and resolving dependencies (Branch, Department, Role) dynamically.
@@ -51,7 +51,7 @@ flowchart TD
 
 ---
 
-### 2. Employee View List & Individual
+### Employee View List & Individual
 
 **Description**:
 Standard CRUD view flows. The list view supports pagination and filtering, while the detail view fetches by ID.
@@ -87,7 +87,7 @@ flowchart TD
 
 ---
 
-### 3. Employee Update Flow
+### Employee Update Flow
 
 **Description**:
 Updates an existing employee's details.
@@ -126,7 +126,7 @@ flowchart TD
 
 ---
 
-### 4. Employee Create Flow (Single)
+### Employee Create Flow (Single)
 
 **Description**:
 Creates a single employee record manually.
@@ -164,10 +164,10 @@ flowchart TD
 
 ## Additional Workflows (Optional)
 
-### 5. Schedule Generation Flow
+### Schedule Generation Flow
 (Future Documentation)
 
-### 6. Authentication Flow
+### Authentication Flow
 (Future Documentation)
 
 

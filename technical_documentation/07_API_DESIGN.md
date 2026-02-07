@@ -17,7 +17,7 @@ Practical examples to help you understand how to work with the Horaion API.
 
 ## Authentication Examples
 
-### 1. Register a New User
+### Register a New User
 
 **What**: Create a new user account with email verification.
 
@@ -54,7 +54,7 @@ curl -X POST http://localhost:8080/auth/register \
 
 ---
 
-### 2. Confirm Email
+### Confirm Email
 
 **What**: Verify email address with the code sent via email.
 
@@ -80,7 +80,7 @@ curl -X POST http://localhost:8080/auth/confirm \
 
 ---
 
-### 3. Login
+### Login
 
 **What**: Authenticate and receive JWT tokens.
 
@@ -115,7 +115,7 @@ curl -X POST http://localhost:8080/auth/login \
 
 ---
 
-### 4. Making Authenticated Requests
+### Making Authenticated Requests
 
 **What**: Use the access token to call protected endpoints.
 
@@ -134,7 +134,7 @@ curl -X GET http://localhost:8080/api/v1/employees \
 
 ## Employee Management
 
-### 1. Create a Single Employee
+### Create a Single Employee
 
 **What**: Add a new employee to the system.
 
@@ -184,7 +184,7 @@ curl -X POST http://localhost:8080/api/v1/employees \
 
 ---
 
-### 2. Create Cognito Account for Employee
+### Create Cognito Account for Employee
 
 **What**: Create an AWS Cognito account so the employee can log in.
 
@@ -222,7 +222,7 @@ POST https://your-app.com/webhook
 
 ---
 
-### 3. Bulk Import Employees from Excel
+### Bulk Import Employees from Excel
 
 **What**: Upload an Excel file to create multiple employees at once.
 
@@ -260,7 +260,7 @@ curl -X POST http://localhost:8080/api/v1/employees/upload \
 
 ---
 
-### 4. Get Employees with Pagination
+### Get Employees with Pagination
 
 **What**: Retrieve a list of employees with pagination and sorting.
 
@@ -307,7 +307,7 @@ curl -X GET "http://localhost:8080/api/v1/employees?page=0&size=20&sortBy=lastNa
 
 ## Schedule Generation
 
-### 1. Create and Generate a Schedule
+### Create and Generate a Schedule
 
 **What**: Create a schedule request and trigger optimization.
 
@@ -353,7 +353,7 @@ curl -X POST http://localhost:8080/api/v1/schedules \
 
 ---
 
-### 2. Check Schedule Status
+### Check Schedule Status
 
 **What**: Monitor the progress of schedule generation.
 
@@ -411,7 +411,7 @@ curl -X GET http://localhost:8080/api/v1/schedules/123 \
 
 ---
 
-### 3. Approve a Schedule
+### Approve a Schedule
 
 **What**: Approve a completed schedule to make it active.
 
@@ -465,7 +465,7 @@ All errors follow RFC 7807 Problem Details format:
 
 ### Common Error Scenarios
 
-#### 1. Resource Not Found (404)
+#### Resource Not Found (404)
 
 ```bash
 curl -X GET http://localhost:8080/api/v1/employees/999 \
@@ -481,7 +481,7 @@ curl -X GET http://localhost:8080/api/v1/employees/999 \
 }
 ```
 
-#### 2. Validation Error (400)
+#### Validation Error (400)
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/employees \
@@ -502,7 +502,7 @@ curl -X POST http://localhost:8080/api/v1/employees \
 }
 ```
 
-#### 3. Unauthorized (401)
+#### Unauthorized (401)
 
 ```bash
 curl -X GET http://localhost:8080/api/v1/employees
@@ -529,7 +529,7 @@ curl -X GET http://localhost:8080/api/v1/employees
 **Steps**:
 
 ```bash
-# 1. Create employee record
+# Create employee record
 curl -X POST http://localhost:8080/api/v1/employees \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
@@ -544,13 +544,13 @@ curl -X POST http://localhost:8080/api/v1/employees \
   }'
 # Save the returned employee ID (e.g., 42)
 
-# 2. Create Cognito account
+# Create Cognito account
 curl -X POST http://localhost:8080/api/v1/employees/42/create-cognito \
   -H "Authorization: Bearer $TOKEN"
 
-# 3. Employee receives welcome email with temporary password
+# Employee receives welcome email with temporary password
 
-# 4. Employee logs in and changes password
+# Employee logs in and changes password
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
   -d '{
@@ -576,13 +576,13 @@ curl -X POST http://localhost:8080/auth/change-password \
 **Steps**:
 
 ```bash
-# 1. Ensure all prerequisites are set up
+# Ensure all prerequisites are set up
 # - Employees exist in the department
 # - Shifts are defined
 # - Rules are configured
 # - Demand forecasts are created
 
-# 2. Create schedule request
+# Create schedule request
 curl -X POST http://localhost:8080/api/v1/schedules \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
@@ -595,15 +595,15 @@ curl -X POST http://localhost:8080/api/v1/schedules \
   }'
 # Save the schedule ID (e.g., 456)
 
-# 3. Monitor status (or wait for webhook)
+# Monitor status (or wait for webhook)
 curl -X GET http://localhost:8080/api/v1/schedules/456 \
   -H "Authorization: Bearer $TOKEN"
 
-# 4. Review the generated schedule
+# Review the generated schedule
 curl -X GET http://localhost:8080/api/v1/schedules/456/data \
   -H "Authorization: Bearer $TOKEN"
 
-# 5. Approve the schedule
+# Approve the schedule
 curl -X POST http://localhost:8080/api/v1/schedules/456/approve \
   -H "Authorization: Bearer $TOKEN" \
   -d "approverId=5"
@@ -618,24 +618,24 @@ curl -X POST http://localhost:8080/api/v1/schedules/456/approve \
 **Steps**:
 
 ```bash
-# 1. Download template
+# Download template
 curl -X GET http://localhost:8080/api/v1/employees/template \
   -H "Authorization: Bearer $TOKEN" \
   -o template.xlsx
 
-# 2. Fill in employee data in Excel
+# Fill in employee data in Excel
 # Columns: firstName, lastName, emailAddress, phoneNumber, employeeCode, departmentId, employeeRoleId
 
-# 3. Upload file
+# Upload file
 curl -X POST http://localhost:8080/api/v1/employees/upload \
   -H "Authorization: Bearer $TOKEN" \
   -F "file=@employees_batch.xlsx" \
   -F "webhookUrl=https://your-app.com/webhook"
 
-# 4. Monitor webhook for completion
+# Monitor webhook for completion
 # Each employee creation will trigger a webhook callback
 
-# 5. Verify import
+# Verify import
 curl -X GET "http://localhost:8080/api/v1/employees?page=0&size=100" \
   -H "Authorization: Bearer $TOKEN"
 ```
@@ -644,7 +644,7 @@ curl -X GET "http://localhost:8080/api/v1/employees?page=0&size=100" \
 
 ## Tips for Developers
 
-### 1. Always Check Response Status
+### Always Check Response Status
 
 ```javascript
 // Good practice
@@ -661,7 +661,7 @@ if (!response.ok) {
 const data = await response.json();
 ```
 
-### 2. Use Pagination for Large Datasets
+### Use Pagination for Large Datasets
 
 ```bash
 # Don't fetch all employees at once
@@ -671,7 +671,7 @@ const data = await response.json();
 GET /api/v1/employees?page=0&size=50
 ```
 
-### 3. Handle Async Operations
+### Handle Async Operations
 
 ```javascript
 // Schedule generation is async
@@ -690,7 +690,7 @@ const checkStatus = async () => {
 };
 ```
 
-### 4. Store Tokens Securely
+### Store Tokens Securely
 
 ```javascript
 // Good: Store in httpOnly cookie or secure storage

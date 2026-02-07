@@ -746,7 +746,7 @@ For implementation details, see:
 
 ***
 
-## 2.5 Module Dependencies
+## Module Dependencies
 
 The following diagram illustrates the verified dependency graph between the core modules, derived from the codebase structure:
 

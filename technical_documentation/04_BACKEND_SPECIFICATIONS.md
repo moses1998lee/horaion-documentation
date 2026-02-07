@@ -66,7 +66,7 @@ modules/{module-name}/
 
 ---
 
-## 8. Layered Architecture
+## Layered Architecture
 
 The following diagram illustrates the verified flow from **Controllers** to **Services** to **Repositories**, including special handling for Authentication and Employee creation.
 

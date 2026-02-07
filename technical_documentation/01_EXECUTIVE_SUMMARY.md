@@ -1,10 +1,10 @@
-# 01 - Executive Summary
+# - Executive Summary
 
 > **Horaion Workforce Management Platform - Executive Summary**
 
 ---
 
-## 1.1 System Overview
+## System Overview
 
 **Horaion** is a comprehensive workforce management platform designed to optimize employee scheduling, manage organizational hierarchies, and streamline workforce operations for multi-location businesses.
 
@@ -57,7 +57,7 @@ graph TB
 
 ---
 
-## 1.2 Key Features
+## Key Features
 
 ### Organizational Management
 - **Multi-tenant Architecture**: Support multiple companies with complete data isolation
@@ -146,7 +146,7 @@ stateDiagram-v2
 
 ---
 
-## 1.3 Technology Stack Summary
+## Technology Stack Summary
 
 ### Backend
 - **Runtime**: Java 21 LTS
@@ -184,7 +184,7 @@ stateDiagram-v2
 
 ---
 
-## 1.4 Target Audience
+## Target Audience
 
 ### User Role Hierarchy
 
@@ -227,23 +227,23 @@ mindmap
    - **HR Personnel**: Handles administrative tasks like bulk importing employee data via Excel, managing employee onboarding workflows, and maintaining employee records
    - **Ops Team**: Technical staff (DevOps/SRE) who ensure the infrastructure is running smoothly, handle deployments, monitor system health, and manage database backups
 
-#### 1. System Administrators
+#### System Administrators
 - **Responsibilities**: Company, branch, department management
 - **Access Level**: Full system access across all tenants
 
-#### 2. Department Managers
+#### Department Managers
 - **Responsibilities**: Schedule creation, employee management within their department
 - **Access Level**: Department-scoped access (can only see their department's data)
 
-#### 3. Employees
+#### Employees
 - **Responsibilities**: View schedules, submit leave requests
 - **Access Level**: Self-service only (can only see their own data)
 
-#### 4. HR Personnel
+#### HR Personnel
 - **Responsibilities**: Employee onboarding, data management, bulk imports
 - **Access Level**: Company-wide employee access
 
-#### 5. Operations Teams
+#### Operations Teams
 - **Responsibilities**: System monitoring, deployment, infrastructure maintenance
 - **Access Level**: Infrastructure and backend access
 
@@ -253,7 +253,7 @@ mindmap
 
 ---
 
-## 1.5 Business Value Proposition
+## Business Value Proposition
 
 ### For Businesses
 
@@ -301,7 +301,7 @@ mindmap
 
 ---
 
-## 1.6 System Metrics
+## System Metrics
 
 ### Current Capabilities
 - **Entities**: 12 core business entities
@@ -338,7 +338,7 @@ graph LR
 
 ---
 
-## 1.7 Document Purpose
+## Document Purpose
 
 This technical documentation provides:
 1. **System Architecture**: Design patterns, component relationships, and architectural decisions
@@ -355,7 +355,7 @@ This technical documentation provides:
 
 ---
 
-## 1.8 Next Steps
+## Next Steps
 
 {% hint style="success" %}
 **Recommended Reading Path:**

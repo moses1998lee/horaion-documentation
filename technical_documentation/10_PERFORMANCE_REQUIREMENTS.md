@@ -1,4 +1,4 @@
-# 10 - Performance Requirements
+# - Performance Requirements
 
 > **Horaion Workforce Management Platform - Performance Requirements**
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 13.1 Response Time
+## Response Time
 
 ### Target Response Times (Established)
 
@@ -50,7 +50,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 13.2 Scalability
+## Scalability
 
 ### Current Configuration
 
@@ -103,7 +103,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 13.3 Monitoring & Logging
+## Monitoring & Logging
 
 ### Current Monitoring
 

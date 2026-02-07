@@ -1,10 +1,10 @@
-# 06 - Database Specifications
+# - Database Specifications
 
 > **Multi-Tenancy Strategy, Data Models, and Standards**
 
 ---
 
-## 6.1 Strategy Overview
+## Strategy Overview
 
 The Horaion platform is built on **PostgreSQL 15+** and employs a **Shared-Schema Multi-Tenancy** model. This balances cost-efficiency with logical data isolation.
 
@@ -31,7 +31,7 @@ erDiagram
 
 ---
 
-## 6.2 Key Data Patterns
+## Key Data Patterns
 
 ### Soft Deletion
 We rarely physically delete data. Instead, most entities extend `BaseEntity` which provides:
@@ -50,7 +50,7 @@ We leverage PostgreSQL's `JSONB` for flexible schema-less data:
 
 ---
 
-## 6.3 Module Schemas
+## Module Schemas
 
 For detailed column references and entity implementation details, refer to the specific module documentation:
 
@@ -63,7 +63,7 @@ For detailed column references and entity implementation details, refer to the s
 
 ---
 
-## 6.4 Shared Tables
+## Shared Tables
 
 Some tables belong to the Shared Kernel and are used by all modules:
 

@@ -1,19 +1,19 @@
-# 05 - Frontend Specifications
+# - Frontend Specifications
 
 > **Horaion Workforce Management Platform - Frontend Specifications**
 
-## 1. Runtime Environment
+## Runtime Environment
 - **Node Version**: Latest LTS
 - **Package Manager**: pnpm
 - **Build Tool**: Vite 6.3.5 (SWC)
 
-## 2. Core Dependencies
+## Core Dependencies
 - **Framework**: React 19.1.0
 - **Routing**: @tanstack/react-router
 - **State Management & Data Fetching**: @tanstack/react-query
 - **HTTP Client**: Axios
 
-## 3. UI/UX Stack
+## UI/UX Stack
 - **Styling Engine**: Tailwind CSS 4.x (via `@tailwindcss/vite`)
 - **Component Primitives**: Radix UI (@radix-ui/react-*) & Headless UI
 - **Icons**: Lucide React
@@ -22,27 +22,27 @@
   - `class-variance-authority` (Variant management)
 - **Toasts**: Sonner
 
-## 4. Forms & Validation
+## Forms & Validation
 - **Form Management**: React Hook Form
 - **Validation Schema**: Zod
 - **Resolver**: @hookform/resolvers
 
-## 5. Development Dependencies
+## Development Dependencies
 - **Language**: TypeScript 5.8.3
 - **Linting**: ESLint 9.x (with typescript-eslint)
 - **Formatting**: Prettier
 - **Sorting**: @trivago/prettier-plugin-sort-imports
 
-## 6. Utilities
+## Utilities
 - **Date Handling**: date-fns, dayjs, react-day-picker
 - **Internationalization**: i18next, react-i18next
 - **Analytics**: @vercel/analytics
 
-## 7. Deployment
+## Deployment
 - **Platform**: Vercel
 - **Config**: `vercel.json` present in root
 
-## 8. Directory Structure
+## Directory Structure
 ```
 horaion-app/
 ├── src/
@@ -62,14 +62,14 @@ horaion-app/
 └── package.json            # Dependencies
 ```
 
-## 9. Environment Configuration
+## Environment Configuration
 Required environment variables in `.env`:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `VITE_API_URL` | Base URL for the Horaion API | `https://api.horaion.com` |
 
-## 10. API Integration
+## API Integration
 - **Client**: Axios instance configured in `src/services/api.ts`
 - **Configuration**:
   - `baseURL`: Loaded from `VITE_API_URL`

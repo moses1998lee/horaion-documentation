@@ -1,4 +1,4 @@
-# 11 - Development Workflow
+# - Development Workflow
 
 > **Horaion Workforce Management Platform - Development Workflow**
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 14.1 Development Environment
+## Development Environment
 
 ### Local Setup
 
@@ -74,7 +74,7 @@ gitGraph
 
 ---
 
-## 14.2 CI/CD Pipeline
+## CI/CD Pipeline
 
 ### Deployment Pipeline (Manual - Bespoke Phase)
 

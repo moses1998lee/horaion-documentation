@@ -92,14 +92,14 @@ The deployment pipeline enforces environment consistency via immutable artifacts
 
 ### Local Development
 
-#### 1. Clone Repository
+#### Clone Repository
 
 ```bash
 git clone <repository-url>
 cd horaion/api_app/horaion-api
 ```
 
-#### 2. Configure Environment Variables
+#### Configure Environment Variables
 
 Create a `.env` file or set environment variables:
 
@@ -142,13 +142,13 @@ WEBHOOK_RETRY_ATTEMPTS=3
 WEBHOOK_RETRY_DELAY_MS=1000
 ```
 
-#### 3. Run Database Migrations
+#### Run Database Migrations
 
 ```bash
 ./mvnw flyway:migrate
 ```
 
-#### 4. Build and Run
+#### Build and Run
 
 ```bash
 # Build
@@ -158,7 +158,7 @@ WEBHOOK_RETRY_DELAY_MS=1000
 ./mvnw spring-boot:run
 ```
 
-#### 5. Verify Deployment
+#### Verify Deployment
 
 ```bash
 # Health check
@@ -172,14 +172,14 @@ curl http://localhost:8080/actuator/health
 
 ### Docker Deployment
 
-#### 1. Build Docker Image
+#### Build Docker Image
 
 ```bash
 # Multi-stage build
 docker build -t horaion-api:latest .
 ```
 
-#### 2. Run with Docker Compose
+#### Run with Docker Compose
 
 Create `docker-compose.yml`:
 
@@ -512,7 +512,7 @@ scrape_configs:
 
 ### Common Issues
 
-#### 1. Database Connection Failures
+#### Database Connection Failures
 
 **Symptom**: Application fails to start with `Connection refused` or `Unknown database`
 
@@ -530,7 +530,7 @@ echo $POSTGRES_DB_HOST
 echo $POSTGRES_DB_NAME
 ```
 
-#### 2. Flyway Migration Failures
+#### Flyway Migration Failures
 
 **Symptom**: `FlywayException: Validate failed: Migration checksum mismatch`
 
@@ -545,7 +545,7 @@ echo $POSTGRES_DB_NAME
 ./mvnw flyway:migrate
 ```
 
-#### 3. Cognito Authentication Errors
+#### Cognito Authentication Errors
 
 **Symptom**: `401 Unauthorized` or `Invalid JWT token`
 
@@ -562,7 +562,7 @@ echo $AWS_COGNITO_CLIENT_ID
 # Verify Cognito user pool region matches AWS_REGION
 ```
 
-#### 4. Schedule Generation Timeout
+#### Schedule Generation Timeout
 
 **Symptom**: `AsyncRequestTimeoutException` or `504 Gateway Timeout`
 
@@ -584,7 +584,7 @@ feign:
         readTimeout: 0
 ```
 
-#### 5. High Memory Usage
+#### High Memory Usage
 
 **Symptom**: `OutOfMemoryError` or slow performance
 

@@ -1,4 +1,4 @@
-# 03 - Technology Stack
+# - Technology Stack
 
 > **Horaion Workforce Management Platform - Technology Stack**
  

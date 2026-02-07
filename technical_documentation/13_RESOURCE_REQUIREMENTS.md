@@ -1,4 +1,4 @@
-# 13 - Resource Requirements
+# - Resource Requirements
 
 > **Horaion Workforce Management Platform - Resource Requirements**
  
