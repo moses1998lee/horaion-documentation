@@ -7,7 +7,7 @@
 | **Criticality** | **Critical (Security Infrastructure)**        |
 | **Dependencies** | Company Module, Auth Module (Cognito)         |
 
-## Executive Summary
+## Overview
 
 The **Job Title Module** is more than just a list of labels like "Manager" or "Cashier". It is the **Bridge to Security**. 
 

@@ -7,7 +7,7 @@
 | **Criticality** | **High** (Primary Context for Frontend)       |
 | **Dependencies** | Auth, Employee, Department, Notification      |
 
-## Executive Summary
+## Overview
 
 The **Me Module** is the "Personal Context" layer of the application.
 

@@ -7,7 +7,7 @@
 | **Criticality** | **Core (The Brain of the Operation)**         |
 | **Dependencies** | Demand, Employee, Leave, Rule, Shift          |
 
-## Executive Summary
+## Overview
 
 The **Schedule Module** is the orchestration engine of Horaion. It does not just "store" shifts; it **generates** them.
 

@@ -7,7 +7,7 @@
 | **Criticality** | Critical (Identity & Access Link)             |
 | **Dependencies** | Auth Module, Department Module, Job Title Module |
 
-## Executive Summary
+## Overview
 
 The **Employee Module** maintains the digital record of every staff member. While the **Auth Module** handles *login credentials* (email/password), the **Employee Module** handles *business context* (Did they sign a contract? Are they currently deployed to the Sales department?).
 

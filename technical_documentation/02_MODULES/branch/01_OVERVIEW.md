@@ -7,7 +7,7 @@
 | **Criticality** | High (Operational Compliance)            |
 | **Dependencies** | Company Module, Employee Module (Manager) |
 
-## Executive Summary
+## Overview
 
 The **Branch Module** serves as the **operational backbone** of the Horaion platform. While the *Company* represents the legal entity, the *Branch* represents the physical or logical locations where work actually occurs.
 

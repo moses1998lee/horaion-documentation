@@ -7,7 +7,7 @@
 | **Criticality** | **High** (Core input for Schedule Generation) |
 | **Dependencies** | Department, Employee (Role) |
 
-## Executive Summary
+## Overview
 
 The **Shift Module** is responsible for defining the **Templates of Work** within the organization. 
 

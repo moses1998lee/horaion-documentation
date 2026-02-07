@@ -7,7 +7,7 @@
 | **Criticality** | High (System Entry Point) |
 | **Dependencies** | AWS Cognito, Employee Module |
 
-## Executive Summary
+## Overview
 The **Auth Module** orchestrates user identity, authentication, and registration within the Horaion platform. It acts as the secure gateway ("The Bouncer") between the client application and our identity provider, **AWS Cognito**.
 
 {% hint style="warning" %}

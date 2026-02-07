@@ -7,7 +7,7 @@
 | **Criticality** | Medium (Organizational Structure)             |
 | **Dependencies** | Branch Module, Employee Module                |
 
-## Executive Summary
+## Overview
 
 The **Department Module** allows companies to organize their workforce into functional units. Unlike a **Branch** (which is a physical location), a **Department** is a logical team (e.g., "Sales", "IT", "Bakery").
 

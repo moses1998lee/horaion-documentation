@@ -7,7 +7,7 @@
 | **Criticality** | High (Core Scheduling Logic)                  |
 | **Dependencies** | Department Module, Security Module            |
 
-## Executive Summary
+## Overview
 
 The **Demand Forecast Module** is the "Brain" of the scheduling operation. Before you can assign shifts to people, you must first define **what the business needs**.
 

@@ -7,7 +7,7 @@
 | **Criticality** | **High** (Defines Legal/Business Constraints) |
 | **Dependencies** | Department, Schedule                          |
 
-## Executive Summary
+## Overview
 
 The **Rule Module** is a **Dynamic Configuration Engine**.
 

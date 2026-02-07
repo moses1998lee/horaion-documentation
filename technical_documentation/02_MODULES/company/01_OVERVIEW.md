@@ -7,7 +7,7 @@
 | **Criticality** | Critical (Root of Multi-tenancy)             |
 | **Dependencies** | None (Top-level entity)                      |
 
-## Executive Summary
+## Overview
 
 The **Company Module** is the foundation of Horaion's multi-tenant architecture. Every user, branch, shift, and schedule belongs to a **Company**. It manages the unique business entities that subscribe to our platform.
 

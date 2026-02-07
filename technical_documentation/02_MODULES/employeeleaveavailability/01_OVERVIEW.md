@@ -7,7 +7,7 @@
 | **Criticality** | High (Impacts Schedule Generation)            |
 | **Dependencies** | Employee Module, Department Module            |
 
-## Executive Summary
+## Overview
 
 This module is the "Constraint Engine" for the Scheduler. It defines **when an employee can work** and **when they cannot**.
 
