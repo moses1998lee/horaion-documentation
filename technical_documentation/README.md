@@ -8,23 +8,36 @@
 
 ### Part 1: Overview & Strategy
 - **[01 - Executive Summary](01_EXECUTIVE_SUMMARY.md)**
-  - [1. Introduction](01_EXECUTIVE_SUMMARY.md#1-introduction)
-  - [2. Strategic Importance](01_EXECUTIVE_SUMMARY.md#2-strategic-importance)
-  - [3. System Overview](01_EXECUTIVE_SUMMARY.md#3-system-overview)
-  - [4. Key Capabilities](01_EXECUTIVE_SUMMARY.md#4-key-capabilities)
-  - [5. Success Metrics](01_EXECUTIVE_SUMMARY.md#5-success-metrics)
-  
+  - [1.1 System Overview](01_EXECUTIVE_SUMMARY.md#11-system-overview)
+  - [1.2 Key Features](01_EXECUTIVE_SUMMARY.md#12-key-features)
+  - [1.3 Technology Stack Summary](01_EXECUTIVE_SUMMARY.md#13-technology-stack-summary)
+  - [1.4 Target Audience](01_EXECUTIVE_SUMMARY.md#14-target-audience)
+  - [1.5 Business Value Proposition](01_EXECUTIVE_SUMMARY.md#15-business-value-proposition)
+  - [1.6 System Metrics](01_EXECUTIVE_SUMMARY.md#16-system-metrics)
+  - [1.7 Document Purpose](01_EXECUTIVE_SUMMARY.md#17-document-purpose)
+  - [1.8 Next Steps](01_EXECUTIVE_SUMMARY.md#18-next-steps)
+
 - **[02 - System Architecture](02_SYSTEM_ARCHITECTURE.md)**
-  - [1. High-Level Architecture](02_SYSTEM_ARCHITECTURE.md#1-high-level-architecture)
-  - [2. Core Components](02_SYSTEM_ARCHITECTURE.md#2-core-components)
-  - [3. Data Flow Patterns](02_SYSTEM_ARCHITECTURE.md#data-flow-patterns)
-  - [4. Async Processing](02_SYSTEM_ARCHITECTURE.md#async-processing)
-  
+  - [Overview](02_SYSTEM_ARCHITECTURE.md#overview)
+  - [System Context](02_SYSTEM_ARCHITECTURE.md#system-context)
+  - [Application Architecture](02_SYSTEM_ARCHITECTURE.md#application-architecture)
+  - [Security Architecture](02_SYSTEM_ARCHITECTURE.md#security-architecture)
+  - [Data Flow Patterns](02_SYSTEM_ARCHITECTURE.md#data-flow-patterns)
+  - [Async Processing](02_SYSTEM_ARCHITECTURE.md#async-processing)
+  - [Architectural Decisions](02_SYSTEM_ARCHITECTURE.md#architectural-decisions)
+  - [2.5 Module Dependencies](02_SYSTEM_ARCHITECTURE.md#25-module-dependencies)
+
 - **[03 - Technology Stack](03_TECHNOLOGY_STACK.md)**
-  - [1. Backend Stack](03_TECHNOLOGY_STACK.md#1-backend-stack)
-  - [2. Frontend Stack](03_TECHNOLOGY_STACK.md#2-frontend-stack)
-  - [3. Database & Storage](03_TECHNOLOGY_STACK.md#3-database--storage)
-  - [4. DevOps & Infrastructure](03_TECHNOLOGY_STACK.md#4-devops--infrastructure)
+  - [System Stack Overview](03_TECHNOLOGY_STACK.md#system-stack-overview)
+  - [Backend Technology Stack](03_TECHNOLOGY_STACK.md#backend-technology-stack)
+  - [Database Technology](03_TECHNOLOGY_STACK.md#database-technology)
+  - [Infrastructure & Deployment](03_TECHNOLOGY_STACK.md#infrastructure--deployment)
+  - [Frontend Technology Stack](03_TECHNOLOGY_STACK.md#frontend-technology-stack)
+  - [Development Tools](03_TECHNOLOGY_STACK.md#development-tools)
+  - [Monitoring & Observability](03_TECHNOLOGY_STACK.md#monitoring--observability)
+  - [External Integrations](03_TECHNOLOGY_STACK.md#external-integrations)
+  - [Technology Decisions](03_TECHNOLOGY_STACK.md#technology-decisions)
+  - [Version Matrix](03_TECHNOLOGY_STACK.md#version-matrix)
 
 ---
 
@@ -33,23 +46,37 @@
 - **[04 - Backend Strategy](04_BACKEND_SPECIFICATIONS.md)**
   - [Overview](04_BACKEND_SPECIFICATIONS.md#overview)
   - [Module Catalog](04_BACKEND_SPECIFICATIONS.md#module-catalog)
+  - [8. Layered Architecture](04_BACKEND_SPECIFICATIONS.md#8-layered-architecture)
   - [Inter-Module Communication](04_BACKEND_SPECIFICATIONS.md#inter-module-communication)
   - [Best Practices](04_BACKEND_SPECIFICATIONS.md#best-practices)
+  - [Advanced Module Patterns](04_BACKEND_SPECIFICATIONS.md#advanced-module-patterns)
+  - [Module-Specific Patterns](04_BACKEND_SPECIFICATIONS.md#module-specific-patterns)
 
 - **[05 - Frontend Strategy](05_FRONTEND_SPECIFICATIONS.md)**
   - [1. Runtime Environment](05_FRONTEND_SPECIFICATIONS.md#1-runtime-environment)
   - [2. Core Dependencies](05_FRONTEND_SPECIFICATIONS.md#2-core-dependencies)
-  - [3. UI/UX Requirements](05_FRONTEND_SPECIFICATIONS.md#4-uiux-requirements)
+  - [3. UI/UX Stack](05_FRONTEND_SPECIFICATIONS.md#3-uiux-stack)
+  - [4. Forms & Validation](05_FRONTEND_SPECIFICATIONS.md#4-forms--validation)
+  - [5. Development Dependencies](05_FRONTEND_SPECIFICATIONS.md#5-development-dependencies)
+  - [6. Utilities](05_FRONTEND_SPECIFICATIONS.md#6-utilities)
+  - [7. Deployment](05_FRONTEND_SPECIFICATIONS.md#7-deployment)
+  - [8. Directory Structure](05_FRONTEND_SPECIFICATIONS.md#8-directory-structure)
+  - [9. Environment Configuration](05_FRONTEND_SPECIFICATIONS.md#9-environment-configuration)
+  - [10. API Integration](05_FRONTEND_SPECIFICATIONS.md#10-api-integration)
 
 - **[06 - Database Strategy](06_DATABASE_SPECIFICATIONS.md)**
   - [6.1 Strategy Overview](06_DATABASE_SPECIFICATIONS.md#61-strategy-overview)
   - [6.2 Key Data Patterns](06_DATABASE_SPECIFICATIONS.md#62-key-data-patterns)
   - [6.3 Module Schemas](06_DATABASE_SPECIFICATIONS.md#63-module-schemas)
+  - [6.4 Shared Tables](06_DATABASE_SPECIFICATIONS.md#64-shared-tables)
 
 - **[07 - API Design](07_API_DESIGN.md)**
-  - [REST API Standards](07_API_DESIGN.md#rest-api-standards)
-  - [Authentication](07_API_DESIGN.md#authentication)
+  - [Authentication Examples](07_API_DESIGN.md#authentication-examples)
+  - [Employee Management](07_API_DESIGN.md#employee-management)
+  - [Schedule Generation](07_API_DESIGN.md#schedule-generation)
+  - [Error Handling](07_API_DESIGN.md#error-handling)
   - [Common Workflows](07_API_DESIGN.md#common-workflows)
+  - [Tips for Developers](07_API_DESIGN.md#tips-for-developers)
 
 ---
 
@@ -57,9 +84,13 @@
 
 - **[08 - Infrastructure Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md)**
   - [Deployment Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md#deployment-strategy)
-  - [Configuration](08_INFRASTRUCTURE_DEPLOYMENT.md#configuration-strategy)
+  - [Deployment](08_INFRASTRUCTURE_DEPLOYMENT.md#deployment)
+  - [Configuration Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md#configuration-strategy)
   - [Database Management](08_INFRASTRUCTURE_DEPLOYMENT.md#database-management)
   - [Monitoring & Health Checks](08_INFRASTRUCTURE_DEPLOYMENT.md#monitoring--health-checks)
+  - [Troubleshooting](08_INFRASTRUCTURE_DEPLOYMENT.md#troubleshooting)
+  - [Performance Tuning](08_INFRASTRUCTURE_DEPLOYMENT.md#performance-tuning)
+  - [Security Best Practices](08_INFRASTRUCTURE_DEPLOYMENT.md#security-best-practices)
 
 - **[09 - Security Policy](09_SECURITY_REQUIREMENTS.md)**
   - [9.1 Authentication Policy](09_SECURITY_REQUIREMENTS.md#91-authentication-policy)
@@ -68,8 +99,22 @@
   - [9.4 Network Security](09_SECURITY_REQUIREMENTS.md#94-network-security)
 
 - **[10 - Performance Strategy](10_PERFORMANCE_REQUIREMENTS.md)**
+  - [13.1 Response Time](10_PERFORMANCE_REQUIREMENTS.md#131-response-time)
+  - [13.2 Scalability](10_PERFORMANCE_REQUIREMENTS.md#132-scalability)
+  - [13.3 Monitoring & Logging](10_PERFORMANCE_REQUIREMENTS.md#133-monitoring--logging)
+  - [Performance Optimization Checklist](10_PERFORMANCE_REQUIREMENTS.md#performance-optimization-checklist)
+  - [Performance Testing Plan](10_PERFORMANCE_REQUIREMENTS.md#performance-testing-plan)
+  
 - **[11 - Development Workflow](11_DEVELOPMENT_WORKFLOW.md)**
+  - [14.1 Development Environment](11_DEVELOPMENT_WORKFLOW.md#141-development-environment)
+  - [14.2 CI/CD Pipeline](11_DEVELOPMENT_WORKFLOW.md#142-cicd-pipeline)
+  - [Testing Strategy](11_DEVELOPMENT_WORKFLOW.md#testing-strategy)
+  - [Code Quality](11_DEVELOPMENT_WORKFLOW.md#code-quality)
+
 - **[12 - Application Flowcharts](12_APPLICATION_FLOWCHARTS.md)**
+  - [Required Flowcharts](12_APPLICATION_FLOWCHARTS.md#required-flowcharts)
+  - [Additional Workflows (Optional)](12_APPLICATION_FLOWCHARTS.md#additional-workflows-optional)
+
 - **[13 - Resource Requirements](13_RESOURCE_REQUIREMENTS.md)**
 
 ---
