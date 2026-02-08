@@ -4,7 +4,7 @@
 
 ---
 
-## Required Flowcharts
+## 12.1 Required Flowcharts
 
 ### Excel Uploading Flow
 
@@ -162,7 +162,7 @@ flowchart TD
 
 ---
 
-## Additional Workflows (Optional)
+## 12.2 Additional Workflows (Optional)
 
 ### Schedule Generation Flow
 (Future Documentation)

@@ -12,7 +12,7 @@
 
 ***
 
-## Deployment Strategy
+## 8.1 Deployment Strategy
 
 ### Environment Overview
 
@@ -80,7 +80,7 @@ The deployment pipeline enforces environment consistency via immutable artifacts
 
 ***
 
-## Deployment
+## 8.2 Deployment
 
 ### Prerequisites
 
@@ -240,7 +240,7 @@ docker-compose up -d
 
 ***
 
-## Configuration Strategy
+## 8.3 Configuration Strategy
 
 We follow the **12-Factor App** methodology. Configurations are stored in environment variables, not code.
 
@@ -260,7 +260,7 @@ For a detailed reference of all configuration properties (YAML) and their Java m
 
 ---
 
-## Database Management
+## 8.4 Database Management
 
 We use **Flyway** for schema migrations. This ensures that the database schema is versioned along with the code.
 
@@ -268,7 +268,7 @@ We use **Flyway** for schema migrations. This ensures that the database schema i
 
 ---
 
-## Monitoring & Health Checks
+## 8.5 Monitoring & Health Checks
 
 ### Spring Boot Actuator
 
@@ -331,7 +331,7 @@ spring:
 
 ***
 
-## Database Management
+## 8.6 Database Implementation
 
 ### Flyway Migrations
 
@@ -393,7 +393,7 @@ spring:
 
 ***
 
-## Monitoring & Health Checks
+## 8.7 Monitoring Implementation
 
 ### Spring Boot Actuator
 
@@ -508,7 +508,7 @@ scrape_configs:
 
 ***
 
-## Troubleshooting
+## 8.8 Troubleshooting
 
 ### Common Issues
 
@@ -635,7 +635,7 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 
 ***
 
-## Performance Tuning
+## 8.9 Performance Tuning
 
 ### JVM Options
 
@@ -680,7 +680,7 @@ spring:
 
 ***
 
-## Security Best Practices
+## 8.10 Security Best Practices
 
 1. **Never commit secrets**: Use environment variables or secret managers
 2. **Rotate credentials**: Regularly rotate database and AWS credentials

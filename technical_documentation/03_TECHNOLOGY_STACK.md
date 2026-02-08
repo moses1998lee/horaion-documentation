@@ -4,7 +4,7 @@
  
 ---
  
-## System Stack Overview
+## 3.1 System Stack Overview
  
 ```mermaid
 graph TD
@@ -56,7 +56,7 @@ graph TD
 
 ---
 
-## Backend Technology Stack
+## 3.2 Backend Technology Stack
 
 ### Runtime Environment
 - **Language**: Java 21 (LTS)
@@ -118,7 +118,7 @@ graph TD
 
 ---
 
-## Database Technology
+## 3.3 Database Technology
 
 ### PostgreSQL 12+
 **Why PostgreSQL?**
@@ -135,7 +135,7 @@ graph TD
 
 ---
 
-## Infrastructure & Deployment
+## 3.4 Infrastructure & Deployment
 
 ### Containerization
 - **Docker**: Application containerization
@@ -153,7 +153,7 @@ graph TD
 
 ---
 
-## Frontend Technology Stack
+## 3.5 Frontend Technology Stack
 
 - **Framework**: React 19.1.0
 - **Build Tool**: Vite 6.x (with SWC)
@@ -166,7 +166,7 @@ graph TD
 
 ---
 
-## Development Tools
+## 3.6 Development Tools
 
 ### Version Control
 - **Git**: Source control
@@ -187,7 +187,7 @@ graph TD
 
 ---
 
-## Monitoring & Observability
+## 3.7 Monitoring & Observability
 
 ### Application Monitoring
 - **Spring Boot Actuator**: Health checks, metrics
@@ -206,7 +206,7 @@ graph TD
 
 ---
 
-## External Integrations
+## 3.8 External Integrations
 
 ### Optimization Engine
 - **Protocol**: HTTP/REST
@@ -221,7 +221,7 @@ graph TD
 
 ---
 
-## Technology Decisions
+## 3.9 Technology Decisions
 
 ### Why Spring Boot 4.0.0?
 - Bleeding edge features and performance improvements
@@ -255,7 +255,7 @@ graph TD
 
 ---
 
-## Version Matrix
+## 3.10 Version Matrix
 
 | Component | Version | Notes |
 |-----------|---------|-------|

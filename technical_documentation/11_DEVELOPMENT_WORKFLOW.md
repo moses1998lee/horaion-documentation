@@ -6,7 +6,7 @@
 
 ---
 
-## Development Environment
+## 11.1 Development Environment
 
 ### Local Setup
 
@@ -74,7 +74,7 @@ gitGraph
 
 ---
 
-## CI/CD Pipeline
+## 11.2 CI/CD Pipeline
 
 ### Deployment Pipeline (Manual - Bespoke Phase)
 
@@ -152,7 +152,7 @@ jobs:
 
 ---
 
-## Testing Strategy
+## 11.3 Testing Strategy
 
 ### Unit Tests
 - **Framework**: JUnit 5
@@ -170,7 +170,7 @@ jobs:
 
 ---
 
-## Code Quality
+## 11.4 Code Quality
 
 ### Linting & Formatting
 - **Style Guide**: Enforced via **Checkstyle** (Maven Plugin).
