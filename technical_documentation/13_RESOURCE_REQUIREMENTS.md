@@ -2,7 +2,7 @@
 
 > **Horaion Workforce Management Platform - Resource Requirements**
  
-## 6.1 Hardware Requirements
+## 13.1 Hardware Requirements {#id-13.1-hardware-requirements}
  
  ### Server Specifications
  - **Minimum Server**: 2 vCPU, 2 GB RAM (Bespoke / Development)
@@ -23,7 +23,7 @@
  
  ---
  
-## 6.2 Software Requirements
+## 13.2 Software Requirements {#id-13.2-software-requirements}
  
  - **Operating System**: Docker-compatible Linux distribution (Ubuntu 22.04 LTS Recommended)
  - **Database**: PostgreSQL 15+ (Relational Database)
@@ -34,7 +34,7 @@
  
  ---
  
-## 6.3 Capacity Planning
+## 13.3 Capacity Planning {#id-13.3-capacity-planning}
  
  ### Growth Projections
  - **Storage Growth**: 20% annual growth in database size
@@ -49,7 +49,7 @@
  
  ---
  
-## 6.4 Scaling Strategy
+## 13.4 Scaling Strategy {#id-13.4-scaling-strategy}
  
  ### Vertical Scaling (Phase 1)
  - **Trigger**: Memory usage > 80% or CPU load > 70% sustained for 15 minutes.

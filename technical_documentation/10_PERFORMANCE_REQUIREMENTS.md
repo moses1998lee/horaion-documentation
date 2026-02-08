@@ -6,7 +6,7 @@
 
 ---
 
-## 10.1 Response Time
+## 10.1 Response Time {#id-10.1-response-time}
 
 ### Target Response Times (Established)
 
@@ -50,7 +50,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 10.2 Scalability
+## 10.2 Scalability {#id-10.2-scalability}
 
 ### Current Configuration
 
@@ -103,7 +103,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 10.3 Monitoring & Logging
+## 10.3 Monitoring & Logging {#id-10.3-monitoring-logging}
 
 ### Current Monitoring
 
@@ -152,7 +152,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 10.4 Performance Optimization Checklist
+## 10.4 Performance Optimization Checklist {#id-10.4-performance-optimization-checklist}
 
 ### Database ✅ Implemented
 - [x] HikariCP connection pooling
@@ -176,7 +176,7 @@ The following tools and scenarios are recommended for future validated performan
 
 ---
 
-## 10.5 Performance Testing Plan
+## 10.5 Performance Testing Plan {#id-10.5-performance-testing-plan}
 
 ### Phase 1: Baseline Testing
 1. **Setup**: Single instance, no load

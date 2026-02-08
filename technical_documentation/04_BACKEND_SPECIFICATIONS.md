@@ -11,7 +11,7 @@
 
 ***
 
-## 4.1 Overview
+## 4.1 Overview {#id-4.1-overview}
 
 Horaion follows **Vertical Slice Architecture**, where each module is a self-contained feature with its own:
 
@@ -43,7 +43,7 @@ modules/{module-name}/
 
 ***
 
-## 4.2 Module Catalog
+## 4.2 Module Catalog {#id-4.2-module-catalog}
 
 > **For detailed implementation guides, please refer to the specific module documentation.**
 
@@ -66,7 +66,7 @@ modules/{module-name}/
 
 ---
 
-## 4.3 Layered Architecture
+## 4.3 Layered Architecture {#id-4.3-layered-architecture}
 
 The following diagram illustrates the verified flow from **Controllers** to **Services** to **Repositories**, including special handling for Authentication and Employee creation.
 
@@ -142,7 +142,7 @@ graph LR
 
 ***
 
-## 4.4 Inter-Module Communication
+## 4.4 Inter-Module Communication {#id-4.4-inter-module-communication}
 
 ### Direct Service Calls
 
@@ -187,7 +187,7 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 
 ***
 
-## 4.5 Best Practices
+## 4.5 Best Practices {#id-4.5-best-practices}
 
 1. **Keep modules independent**: Avoid tight coupling between modules
 2. **Use service interfaces**: Program to interfaces, not implementations
@@ -205,7 +205,7 @@ public void onEmployeeCreated(EmployeeCreatedEvent event) {
 * [Infrastructure Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md) - Deployment and configuration
 * [System Architecture](02_SYSTEM_ARCHITECTURE.md) - System design patterns
 
-## 4.6 Advanced Module Patterns
+## 4.6 Advanced Module Patterns {#id-4.6-advanced-module-patterns}
 
 ### Module Communication Strategies
 
@@ -398,7 +398,7 @@ public class EmployeeMapper {
 
 ***
 
-## 4.7 Module-Specific Patterns
+## 4.7 Module-Specific Patterns {#id-4.7-module-specific-patterns}
 
 ### Employee Module: Bulk Operations
 

@@ -14,7 +14,7 @@
 
 ***
 
-## 2.1 Overview
+## 2.1 Overview {#id-2.1-overview}
 
 Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertical Slice Architecture** pattern. The system is designed for high reliability, strict data isolation, and performance.
 
@@ -36,7 +36,7 @@ Horaion is built on **Spring Boot 4.0.0** with **Java 21**, following a **Vertic
 
 ***
 
-## 2.2 System Context
+## 2.2 System Context {#id-2.2-system-context}
 
 Horaion operates as a centralized orchestrator, integrating with specialized external providers to deliver a comprehensive workforce management experience.
 
@@ -190,7 +190,7 @@ The diagram arrows show how a request travels through the system:
 
 ***
 
-## 2.3 Application Architecture
+## 2.3 Application Architecture {#id-2.3-application-architecture}
 
 ### Package Structure
 
@@ -297,7 +297,7 @@ graph TB
 
 ***
 
-## 2.4 Security Architecture
+## 2.4 Security Architecture {#id-2.4-security-architecture}
 
 ### Authentication Flow (AWS Cognito + JWT)
 
@@ -421,7 +421,7 @@ graph TD
 
 ***
 
-## 2.5 Data Flow Patterns
+## 2.5 Data Flow Patterns {#id-2.5-data-flow-patterns}
 
 ### Standard CRUD Flow
 
@@ -524,7 +524,7 @@ graph TD
 
 ***
 
-## 2.6 Async Processing
+## 2.6 Async Processing {#id-2.6-async-processing}
 
 Horaion uses Spring's `@Async` for long-running operations, particularly schedule generation.
 
@@ -640,7 +640,7 @@ feign:
 {% endhint %}
 ***
 
-## 2.7 Architectural Decisions
+## 2.7 Architectural Decisions {#id-2.7-architectural-decisions}
 
 ### ADR-001: Vertical Slice Architecture
 
@@ -746,7 +746,7 @@ For implementation details, see:
 
 ***
 
-## 2.8 Module Dependencies
+## 2.8 Module Dependencies {#id-2.8-module-dependencies}
 
 The following diagram illustrates the verified dependency graph between the core modules, derived from the codebase structure:
 

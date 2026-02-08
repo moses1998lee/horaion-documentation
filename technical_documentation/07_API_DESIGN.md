@@ -15,7 +15,7 @@ Practical examples to help you understand how to work with the Horaion API.
 
 ---
 
-## 7.1 Authentication Examples
+## 7.1 Authentication Examples {#id-7.1-authentication-examples}
 
 ### Register a New User
 
@@ -132,7 +132,7 @@ curl -X GET http://localhost:8080/api/v1/employees \
 
 ---
 
-## 7.2 Employee Management
+## 7.2 Employee Management {#id-7.2-employee-management}
 
 ### Create a Single Employee
 
@@ -305,7 +305,7 @@ curl -X GET "http://localhost:8080/api/v1/employees?page=0&size=20&sortBy=lastNa
 
 ---
 
-## 7.3 Schedule Generation
+## 7.3 Schedule Generation {#id-7.3-schedule-generation}
 
 ### Create and Generate a Schedule
 
@@ -440,7 +440,7 @@ curl -X POST http://localhost:8080/api/v1/schedules/123/approve \
 
 ---
 
-## 7.4 Error Handling
+## 7.4 Error Handling {#id-7.4-error-handling}
 
 ### Understanding Error Responses
 
@@ -520,7 +520,7 @@ curl -X GET http://localhost:8080/api/v1/employees
 
 ---
 
-## 7.5 Common Workflows
+## 7.5 Common Workflows {#id-7.5-common-workflows}
 
 ### Workflow 1: Onboarding a New Employee
 
@@ -642,7 +642,7 @@ curl -X GET "http://localhost:8080/api/v1/employees?page=0&size=100" \
 
 ---
 
-## 7.6 Tips for Developers
+## 7.6 Tips for Developers {#id-7.6-tips-for-developers}
 
 ### Always Check Response Status
 

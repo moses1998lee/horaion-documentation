@@ -12,7 +12,7 @@
 
 ***
 
-## 8.1 Deployment Strategy
+## 8.1 Deployment Strategy {#id-8.1-deployment-strategy}
 
 ### Environment Overview
 
@@ -80,7 +80,7 @@ The deployment pipeline enforces environment consistency via immutable artifacts
 
 ***
 
-## 8.2 Deployment
+## 8.2 Deployment {#id-8.2-deployment}
 
 ### Prerequisites
 
@@ -240,7 +240,7 @@ docker-compose up -d
 
 ***
 
-## 8.3 Configuration Strategy
+## 8.3 Configuration Strategy {#id-8.3-configuration-strategy}
 
 We follow the **12-Factor App** methodology. Configurations are stored in environment variables, not code.
 
@@ -260,7 +260,7 @@ For a detailed reference of all configuration properties (YAML) and their Java m
 
 ---
 
-## 8.4 Database Management
+## 8.4 Database Management {#id-8.4-database-management}
 
 We use **Flyway** for schema migrations. This ensures that the database schema is versioned along with the code.
 
@@ -268,7 +268,7 @@ We use **Flyway** for schema migrations. This ensures that the database schema i
 
 ---
 
-## 8.5 Monitoring & Health Checks
+## 8.5 Monitoring & Health Checks {#id-8.5-monitoring-health-checks}
 
 ### Spring Boot Actuator
 
@@ -331,7 +331,7 @@ spring:
 
 ***
 
-## 8.6 Database Implementation
+## 8.6 Database Implementation {#id-8.6-database-implementation}
 
 ### Flyway Migrations
 
@@ -393,7 +393,7 @@ spring:
 
 ***
 
-## 8.7 Monitoring Implementation
+## 8.7 Monitoring Implementation {#id-8.7-monitoring-implementation}
 
 ### Spring Boot Actuator
 
@@ -508,7 +508,7 @@ scrape_configs:
 
 ***
 
-## 8.8 Troubleshooting
+## 8.8 Troubleshooting {#id-8.8-troubleshooting}
 
 ### Common Issues
 
@@ -635,7 +635,7 @@ ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
 
 ***
 
-## 8.9 Performance Tuning
+## 8.9 Performance Tuning {#id-8.9-performance-tuning}
 
 ### JVM Options
 
@@ -680,7 +680,7 @@ spring:
 
 ***
 
-## 8.10 Security Best Practices
+## 8.10 Security Best Practices {#id-8.10-security-best-practices}
 
 1. **Never commit secrets**: Use environment variables or secret managers
 2. **Rotate credentials**: Regularly rotate database and AWS credentials

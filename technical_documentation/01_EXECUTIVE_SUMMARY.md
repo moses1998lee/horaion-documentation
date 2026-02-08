@@ -4,7 +4,7 @@
 
 ---
 
-## 1.1 System Overview
+## 1.1 System Overview {#id-1.1-system-overview}
 
 **Horaion** is a comprehensive workforce management platform designed to optimize employee scheduling, manage organizational hierarchies, and streamline workforce operations for multi-location businesses.
 
@@ -57,7 +57,7 @@ graph TB
 
 ---
 
-## 1.2 Key Features
+## 1.2 Key Features {#id-1.2-key-features}
 
 ### Organizational Management
 - **Multi-tenant Architecture**: Support multiple companies with complete data isolation
@@ -146,7 +146,7 @@ stateDiagram-v2
 
 ---
 
-## 1.3 Technology Stack Summary
+## 1.3 Technology Stack Summary {#id-1.3-technology-stack-summary}
 
 ### Backend
 - **Runtime**: Java 21 LTS
@@ -184,7 +184,7 @@ stateDiagram-v2
 
 ---
 
-## 1.4 Target Audience
+## 1.4 Target Audience {#id-1.4-target-audience}
 
 ### User Role Hierarchy
 
@@ -253,7 +253,7 @@ mindmap
 
 ---
 
-## 1.5 Business Value Proposition
+## 1.5 Business Value Proposition {#id-1.5-business-value-proposition}
 
 ### For Businesses
 
@@ -301,7 +301,7 @@ mindmap
 
 ---
 
-## 1.6 System Metrics
+## 1.6 System Metrics {#id-1.6-system-metrics}
 
 ### Current Capabilities
 - **Entities**: 12 core business entities
@@ -338,7 +338,7 @@ graph LR
 
 ---
 
-## 1.7 Document Purpose
+## 1.7 Document Purpose {#id-1.7-document-purpose}
 
 This technical documentation provides:
 1. **System Architecture**: Design patterns, component relationships, and architectural decisions
@@ -355,7 +355,7 @@ This technical documentation provides:
 
 ---
 
-## 1.8 Next Steps
+## 1.8 Next Steps {#id-1.8-next-steps}
 
 {% hint style="success" %}
 **Recommended Reading Path:**
