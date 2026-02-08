@@ -1,12 +1,29 @@
 # Table of contents
 
-## Technical Documentation
+## Part 1: Overview & Strategy
 
 * [Introduction](README.md)
 * [Executive Summary](01_EXECUTIVE_SUMMARY.md)
 * [System Architecture](02_SYSTEM_ARCHITECTURE.md)
+* [Technology Stack](03_TECHNOLOGY_STACK.md)
 
-## Modules
+## Part 2: Technical Specifications
+
+* [Backend Strategy](04_BACKEND_SPECIFICATIONS.md)
+* [Frontend Strategy](05_FRONTEND_SPECIFICATIONS.md)
+* [Database Strategy](06_DATABASE_SPECIFICATIONS.md)
+* [API Design](07_API_DESIGN.md)
+
+## Part 3: Infrastructure & Operations
+
+* [Infrastructure Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md)
+* [Security Policy](09_SECURITY_REQUIREMENTS.md)
+* [Performance Strategy](10_PERFORMANCE_REQUIREMENTS.md)
+* [Development Workflow](11_DEVELOPMENT_WORKFLOW.md)
+* [Application Flowcharts](12_APPLICATION_FLOWCHARTS.md)
+* [Resource Requirements](13_RESOURCE_REQUIREMENTS.md)
+
+## Part 4: Modules
 
 * [Auth](02_MODULES/auth/01_OVERVIEW.md)
   * [API](02_MODULES/auth/02_API.md)
@@ -57,7 +74,7 @@
   * [Domain](02_MODULES/shift/03_DOMAIN.md)
   * [Configuration](02_MODULES/shift/04_CONFIGURATION.md)
 
-## Shared Kernel
+## Part 5: Shared Kernel
 
 * [Overview](16_SHARED_KERNEL/01_OVERVIEW.md)
 * [Core](16_SHARED_KERNEL/02_CORE/01_CONFIGURATIONS.md)
@@ -96,17 +113,3 @@
   * [Properties](16_SHARED_KERNEL/09_GLOBAL_RESOURCES/02_PROPERTIES.md)
   * [Migrations](16_SHARED_KERNEL/09_GLOBAL_RESOURCES/03_MIGRATIONS.md)
   * [Templates](16_SHARED_KERNEL/09_GLOBAL_RESOURCES/04_TEMPLATES.md)
-
-## Strategy Documents
-
-* [Technology Stack](03_TECHNOLOGY_STACK.md)
-* [Backend Strategy](04_BACKEND_SPECIFICATIONS.md)
-* [Frontend Strategy](05_FRONTEND_SPECIFICATIONS.md)
-* [Database Strategy](06_DATABASE_SPECIFICATIONS.md)
-* [API Design](07_API_DESIGN.md)
-* [Infrastructure Strategy](08_INFRASTRUCTURE_DEPLOYMENT.md)
-* [Security Policy](09_SECURITY_REQUIREMENTS.md)
-* [Performance Strategy](10_PERFORMANCE_REQUIREMENTS.md)
-* [Development Workflow](11_DEVELOPMENT_WORKFLOW.md)
-* [Application Flowcharts](12_APPLICATION_FLOWCHARTS.md)
-* [Resource Requirements](13_RESOURCE_REQUIREMENTS.md)
