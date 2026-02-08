@@ -28,3 +28,38 @@ Storing the template in the backend ensures that the **validation logic** (in `E
 {% hint style="warning" %}
 **Warning:** If you modify this Excel file, ensure you also update the `EmployeeImportDto` and the parsing logic in `ExcelService` to match the new column order/names.
 {% endhint %}
+
+---
+
+## 4.3 Employee Import Specification
+
+### Required Columns
+
+The following columns **must** be present in the `Employee` sheet for a successful import:
+
+| Column Header | Data Type | Description | Example |
+| :--- | :--- | :--- | :--- |
+| `first_name` | String | Employee's given name | `John` |
+| `last_name` | String | Employee's family name | `Doe` |
+| `phone_number` | String | Contact number (E.164 format preferred) | `+12345678900` |
+| `email_address` | String | Unique email address | `john@example.com` |
+| `branch` | String | Exact name of the existing Branch | `Headquarters` |
+| `department` | String | Exact name of the existing Department | `Engineering` |
+| `role` | String | Functional role within the team | `Software Engineer` |
+| `job_title` | String | Official job title (Security Group) | `Senior Developer` |
+| `role_proficiency`| Boolean | Is this their primary skill? (`yes`/`no`) | `yes` |
+| `is_part_time` | Boolean | Employment status (`yes`/`no`) | `no` |
+
+### Optional Columns
+
+| Column Header | Data Type | Description | Example |
+| :--- | :--- | :--- | :--- |
+| `employee_code` | String | Custom ID (Auto-generated if blank) | `EMP-001` |
+| `hire_date` | Date | Date of joining (YYYY-MM-DD) | `2024-01-15` |
+| `date_of_birth` | Date | Birthday (YYYY-MM-DD) | `1990-05-20` |
+
+### Data Rules
+
+1.  **Headers**: Case-insensitive and space-insensitive (e.g., `First Name`, `first_name`, `FIRST_NAME` are all treated as `first_name`).
+2.  **References**: `Branch`, `Department`, and `Job Title` entries **must match existing records** in the database. If "Engineering" department does not exist, the row will fail validation.
+3.  **Booleans**: Accept `yes`/`no`, `true`/`false`, or `1`/`0`.
