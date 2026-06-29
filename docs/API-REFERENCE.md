@@ -25,6 +25,7 @@ Get access token via [`POST /auth/login`](#authentication-endpoints)
 - [Employee Bulk Import](#employee-bulk-import) - Excel import
 - [Employee Roles](#employee-roles) - Job roles
 - [Shift Management](#shift-management) - Shift patterns
+- [Shift Preferences](#shift-preferences) - Employee preferred shifts
 - [Rule Management](#rule-management) - Business rules
 - [Demand Forecast](#demand-forecast) - Workforce planning
 - [Schedule Management](#schedule-management) - Schedule generation
@@ -236,6 +237,31 @@ POST /api/v1/auth/refresh
 
 ---
 
+## Shift Preferences
+
+**Base**: `/api/v1`
+
+| Method | Endpoint | Permission | Description |
+|--------|----------|------------|-------------|
+| GET | `/employees/{employeeId}/shift-preferences` | read:shift_preference | Get the employee's preference groups |
+| POST | `/employees/{employeeId}/shift-preferences` | create:shift_preference | Reconcile preferred shifts for one date and department |
+| DELETE | `/employees/{employeeId}/shift-preferences/{date}?departmentId={departmentId}` | delete:shift_preference | Soft-delete a date/department preference group |
+| GET | `/departments/{departmentId}/shift-preferences` | read:shift_preference | Get department preference groups |
+
+**Request Shape**:
+
+```json
+{
+  "date": "2026-07-06",
+  "departmentId": "department-uuid",
+  "shiftIds": ["shift-uuid-1", "shift-uuid-2"]
+}
+```
+
+**Documentation**: [Shift Preference Module](./modules/12-shift-preference-module.md)
+
+---
+
 ## Rule Management
 
 **Base**: `/api/v1`
@@ -367,6 +393,7 @@ POST /api/v1/auth/refresh
 |--------|----------|------------|-------------|
 | GET | `/me` | Authenticated | Get current user profile |
 | GET | `/me/departments` | read:department | Get departments where user is HOD |
+| GET | `/me/department-assignments` | Authenticated | Get the current user's assigned departments |
 | GET | `/me/notifications` | Authenticated | Get user notifications (paginated) |
 | GET | `/me/notifications/unread` | Authenticated | Get unread notifications |
 | GET | `/me/notifications/unread/count` | Authenticated | Get unread count |

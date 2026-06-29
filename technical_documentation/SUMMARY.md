@@ -73,6 +73,10 @@
   * [API](02_MODULES/shift/02_API.md)
   * [Domain](02_MODULES/shift/03_DOMAIN.md)
   * [Configuration](02_MODULES/shift/04_CONFIGURATION.md)
+* [Shift Preference](02_MODULES/shiftpreference/01_OVERVIEW.md)
+  * [API](02_MODULES/shiftpreference/02_API.md)
+  * [Domain](02_MODULES/shiftpreference/03_DOMAIN.md)
+  * [Configuration](02_MODULES/shiftpreference/04_CONFIGURATION.md)
 
 ## Part 5: Shared Kernel
 

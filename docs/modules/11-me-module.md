@@ -146,6 +146,19 @@ Authorization: Bearer {token}
 
 **Response**: List of departments where current user is head of department
 
+#### Get My Department Assignments
+
+```http
+GET /api/v1/me/department-assignments
+Authorization: Bearer {token}
+```
+
+**Permission**: Authenticated (no additional permission check)
+
+**Access**: Any authenticated user, scoped to their own employee assignment records
+
+**Response**: List of departments assigned to the current user
+
 ### Notifications
 
 #### Get All Notifications
@@ -281,6 +294,10 @@ GET /api/v1/me/notifications/unread
 # Get departments I manage
 GET /api/v1/me/departments
 # Returns: list of departments where user is HOD
+
+# Get departments assigned to me
+GET /api/v1/me/department-assignments
+# Returns: list of departments assigned to current employee
 
 # Get pending leave requests for my departments
 GET /api/v1/departments/{deptId}/leave-availability/pending

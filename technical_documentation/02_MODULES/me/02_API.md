@@ -32,7 +32,22 @@ The "Boot Request". Called immediately after login to hydrate the application st
     }
     ```
 
-### 2. Get My Leave Requests
+### 2. Get My Department Assignments
+
+**Endpoint**: `GET .../me/department-assignments`
+
+Self-scoped department lookup for the currently authenticated employee.
+
+*   **Response**: `List<DepartmentResponse>`
+*   **Access**: Any authenticated user.
+*   **Use Case**: Shift preference forms can populate the departments assigned to the employee without requiring elevated department-read permissions.
+
+{% hint style="info" %}
+**Difference from `GET .../me/departments`:**
+`/me/departments` is restricted to privileged users and administrators. `/me/department-assignments` returns only the caller's own assigned departments.
+{% endhint %}
+
+### 3. Get My Leave Requests
 
 **Endpoint**: `GET .../me/leave-requests`
 
@@ -40,7 +55,7 @@ Self-service history of time-off requests.
 
 *   **Pagination**: Supported (`?page=0&size=10`).
 
-### 3. Get Notifications
+### 4. Get Notifications
 
 **Endpoint**: `GET .../me/notifications`
 

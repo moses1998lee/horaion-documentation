@@ -17,6 +17,7 @@ This directory contains comprehensive documentation for all Horaion modules foll
 - **[Company Module](./02-company-module.md)** - Organization management and multi-tenancy
 - **[Employee Module](./05-employee-module.md)** - Employee management, bulk import, role/department assignments
 - **[Schedule Module](./09-schedule-module.md)** - Schedule generation with external engine, approval workflow
+- **[Shift Preference Module](./12-shift-preference-module.md)** - Employee preferred shifts for scheduling workflows
 
 #### Additional Modules (See docs_suggestion.md for details)
 - **Branch Module** - Location and branch management
@@ -91,12 +92,22 @@ This directory contains comprehensive documentation for all Horaion modules foll
 | POST | `/api/v1/companies/{companyId}/departments/{deptId}/schedules/{id}/reject` | Reject schedule | schedule:reject |
 | DELETE | `/api/v1/companies/{companyId}/departments/{deptId}/schedules/{id}` | Delete schedule | delete:schedule |
 
+### Shift Preferences
+
+| Method | Endpoint | Purpose | Permission |
+|--------|----------|---------|------------|
+| GET | `/api/v1/employees/{employeeId}/shift-preferences` | Get employee preference groups | read:shift_preference |
+| POST | `/api/v1/employees/{employeeId}/shift-preferences` | Reconcile preferred shifts for one date and department | create:shift_preference |
+| DELETE | `/api/v1/employees/{employeeId}/shift-preferences/{date}?departmentId={departmentId}` | Delete a preference group | delete:shift_preference |
+| GET | `/api/v1/departments/{departmentId}/shift-preferences` | Get department preference groups | read:shift_preference |
+
 ### Current User (Me)
 
 | Method | Endpoint | Purpose | Permission |
 |--------|----------|---------|------------|
 | GET | `/api/v1/me` | Get current user profile | Authenticated |
 | GET | `/api/v1/me/departments` | Get departments where user is HOD | read:department |
+| GET | `/api/v1/me/department-assignments` | Get assigned departments for current user | Authenticated |
 | GET | `/api/v1/me/notifications` | Get user notifications | Authenticated |
 | GET | `/api/v1/me/notifications/unread` | Get unread notifications | Authenticated |
 | PUT | `/api/v1/me/notifications/{id}/read` | Mark notification as read | Authenticated |
@@ -172,6 +183,7 @@ graph TB
     
     subgraph "Scheduling Layer"
         Shift[Shift Module]
+        ShiftPref[Shift Preference]
         Rule[Rule Module]
         Demand[Demand Forecast]
         Schedule[Schedule Module]
@@ -192,7 +204,9 @@ graph TB
     Department -->|Defines| Rule
     Department -->|Forecasts| Demand
     Department -->|Creates| Schedule
+    Employee -->|Submits| ShiftPref
     Schedule -->|Uses| Shift
+    Schedule -->|Can use| ShiftPref
     Schedule -->|Uses| Rule
     Schedule -->|Uses| Demand
     Employee -->|Submits| Leave

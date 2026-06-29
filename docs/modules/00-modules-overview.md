@@ -33,6 +33,7 @@ The application follows **Vertical Slice Architecture** where each module contai
 | **[Department](./04-department-module.md)** | `modules/department/` | Organizational units | Hierarchical departments, budget tracking, head of department |
 | **[Employee](./05-employee-module.md)** | `modules/employee/` | Employee management | CRUD operations, bulk import, Cognito integration, role/department assignments |
 | **[Shift](./06-shift-module.md)** | `modules/shift/` | Shift patterns | Multiple shift types, role requirements, time blocks |
+| **[Shift Preference](./12-shift-preference-module.md)** | `modules/shiftpreference/` | Employee shift preferences | Date/department preference groups, reconciliation, department reads |
 | **[Rule](./07-rule-module.md)** | `modules/rule/` | Dynamic business rules | Template-based rules, provider system, field configurations |
 | **[Demand Forecast](./08-demand-forecast-module.md)** | `modules/demandforecast/` | Workforce demand planning | Role-based demand forecasting, date range planning |
 | **[Schedule](./09-schedule-module.md)** | `modules/schedule/` | Schedule generation | External engine integration, approval workflow, result tracking |
@@ -48,6 +49,7 @@ graph TB
     Branch[Branch Module] -->|Contains| Department
     Department[Department Module] -->|Contains| Employee[Employee Module]
     Employee -->|Assigned to| Shift[Shift Module]
+    Employee -->|Submits| ShiftPref[Shift Preference]
     Employee -->|Has| EmployeeRole[Employee Role]
     Department -->|Defines| Rule[Rule Module]
     Department -->|Creates| Schedule[Schedule Module]
@@ -55,6 +57,7 @@ graph TB
     Employee -->|Submits| Leave[Leave Availability]
     Employee -->|Receives| Notifications[User Notifications]
     Schedule -->|Uses| Shift
+    Schedule -->|Can use| ShiftPref
     Schedule -->|Uses| Rule
     Schedule -->|Uses| Demand
     
@@ -304,6 +307,7 @@ Each module has dedicated documentation covering:
 - [Company Module](./02-company-module.md) - Multi-tenant organization setup
 - [Employee Module](./05-employee-module.md) - Workforce management
 - [Schedule Module](./09-schedule-module.md) - Shift scheduling
+- [Shift Preference Module](./12-shift-preference-module.md) - Employee preferred shifts
 - [Rule Module](./07-rule-module.md) - Dynamic business rules
 
 ## Development Workflow
@@ -312,10 +316,11 @@ Each module has dedicated documentation covering:
 2. **Organization Setup**: Create companies, branches, departments
 3. **Workforce**: Import or create employees
 4. **Shift Configuration**: Define shift patterns and requirements
-5. **Business Rules**: Configure department-specific rules
-6. **Demand Planning**: Create demand forecasts
-7. **Schedule Generation**: Generate optimized schedules
-8. **Leave Management**: Handle employee leave requests
+5. **Shift Preferences**: Capture employee preferred shifts by date and department
+6. **Business Rules**: Configure department-specific rules
+7. **Demand Planning**: Create demand forecasts
+8. **Schedule Generation**: Generate optimized schedules
+9. **Leave Management**: Handle employee leave requests
 
 ## Next Steps
 
