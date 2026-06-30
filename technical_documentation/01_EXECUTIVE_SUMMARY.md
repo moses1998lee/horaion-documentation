@@ -305,7 +305,7 @@ mindmap
 
 ### Current Capabilities
 - **Entities**: 12 core business entities
-- **Modules**: 12 vertical slice modules
+- **Modules**: 13 vertical slice modules
 - **API Endpoints**: 50+ RESTful endpoints
 - **Database Tables**: 12 main tables + audit/job tracking tables
 - **Async Thread Pools**: 2 dedicated executors (schedule & general tasks)

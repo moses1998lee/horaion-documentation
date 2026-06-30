@@ -61,6 +61,7 @@ modules/{module-name}/
 ### Scheduling Domain
 * [Schedule Module](02_MODULES/schedule/01_OVERVIEW.md) - Roster Generation
 * [Shift Module](02_MODULES/shift/01_OVERVIEW.md) - Template Management
+* [Shift Preference Module](02_MODULES/shiftpreference/01_OVERVIEW.md) - Employee Shift Preferences
 * [Demand Forecast](02_MODULES/demandforecast/01_OVERVIEW.md) - AI Prediction Integration
 * [Rule Module](02_MODULES/rule/01_OVERVIEW.md) - Business Constraints
 

@@ -543,6 +543,7 @@ All endpoints use `/api/v1` prefix. Future breaking changes will use `/api/v2`.
 - **[Company Module](./modules/02-company-module.md)** - Company management
 - **[Employee Module](./modules/05-employee-module.md)** - Employee management and import
 - **[Schedule Module](./modules/09-schedule-module.md)** - Scheduling and engine integration
+- **[Shift Preference Module](./modules/12-shift-preference-module.md)** - Employee preferred shifts
 - **[Rule Module](./rule-module.md)** - Business rules engine
 
 ### Technical Documentation
